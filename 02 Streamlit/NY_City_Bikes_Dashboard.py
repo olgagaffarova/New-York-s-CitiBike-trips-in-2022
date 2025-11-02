@@ -49,7 +49,7 @@ st.set_page_config(page_title="CitiBike 2022 - Introduction", layout="wide")
 # ──────────────────────────────────────────────────────────────────────────────
 
 st.title("NYC CitiBike 2022")
-st.markdown("Goal of the analysis:To reduce bike shortages by up to 50% in 2023 at the top 20% busiest start stations (which together handle 80% of CitiBike demand) by optimizing bike relocation from nearby overloaded stations.".)
+st.markdown("Goal of the analysis:To reduce bike shortages by up to 50% in 2023 at the top 20% busiest start stations (which together handle 80% of CitiBike demand) by optimizing bike relocation from nearby overloaded stations.")
 st.markdown("## Introduction: Understanding the CitiBike System")
 
 
