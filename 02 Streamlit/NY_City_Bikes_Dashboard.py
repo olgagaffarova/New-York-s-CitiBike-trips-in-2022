@@ -99,6 +99,8 @@ fig.show()
 
 ### 2) Add the map -- top 14% routes covering 80% of trips ###
 
+if page == "Overview":
+    show_overview()
 elif page == "Interactive Trip Flows Map":
     st.header("🗺️ Interactive Map — Aggregated Trip Flows")
 
