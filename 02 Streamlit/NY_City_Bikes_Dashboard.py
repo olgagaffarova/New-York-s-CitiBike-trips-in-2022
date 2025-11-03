@@ -156,8 +156,6 @@ while **Old Slip & South St** and **Washington Square E** accumulate bikes durin
 
 **Action:** Relocate bikes from red to blue zones during **7–9 AM** and **5–7 PM**  
 to reduce shortages and full-dock issues by up to **50 %**.
-"""
-)
 
 ### Why this matters
 
