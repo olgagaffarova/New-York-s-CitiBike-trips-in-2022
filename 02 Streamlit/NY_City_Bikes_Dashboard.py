@@ -109,20 +109,19 @@ with open(path_to_html, "r", encoding="utf-8") as f:
 # Display the map
 st.components.v1.html(html_data, height=900, scrolling=True)
 
-    # Add explanatory text under the map
-    st.markdown(
-        """
-        #### 📌 How to interpret this map
+# Add explanatory text under the map
+st.markdown(
+    """
+    #### 📌 How to interpret this map
 
-        - Only **14.5% of all CitiBike routes** account for **80% of total trip volume** (Pareto pattern).
-        - On average, these high-demand routes carry **~163 trips per year each**.
-        - The single busiest start–end pair reached **12,041 trips** in 2022.
+    - Only **14.5% of all CitiBike routes** account for **80% of total trip volume** (Pareto ratio).
+    - On average, these high-demand routes carry **~163 trips per year each**.
+    - The single busiest start–end pair reached **12,041 trips** in 2022.
 
-        👉 These high-traffic routes represent the strongest opportunities for **bike rebalancing and operational optimization**.
-        """,
-    )
+    These high-traffic routes represent the strongest opportunities for **bike rebalancing and operational optimization**.
+    """
+)
 
-    
 ### 2) Add the chart CitiBike Station Imbalance (Rentals - Returns) ###
     
 fig = px.bar(
