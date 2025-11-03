@@ -63,6 +63,44 @@ donors_receivers = pd.read_csv('02 Streamlit/donors_receivers.csv', index_col = 
 
 # ######################################### DEFINE THE CHARTS #####################################################################
 
+st.markdown(
+    """
+### 🚴 Introduction: Understanding the CitiBike System
+
+Since **2013**, New York City has operated a shared bicycle system known as **CitiBike**.  
+The initiative reduces reliance on cars, supports sustainability, and encourages public health through daily cycling.
+
+Today, the network includes more than **33,000 bikes** and **4,600 docking stations** across **Manhattan**, **Brooklyn**, and **Queens**.  
+Riders can pick up a bike at one station and return it at another, making the system flexible and convenient for commuters and visitors alike.
+
+As the system continues to grow, so do the **logistical challenges**: some stations experience persistent **bike shortages**, while others face **dock overflows**.  
+These imbalances disrupt user experience and complicate daily operations.
+
+This dashboard analyzes 2022 CitiBike data to uncover **where and when** these issues occur and how rebalancing strategies can **reduce shortages by up to 50 %**.  
+It presents an **interactive view of New York’s bike-sharing dynamics**, highlighting the most problematic aspects of bike logistics across the city.
+"""
+)
+
+
+### 1) Add the map -- top 14% routes covering 80% of trips ###
+
+st.header("Aggregated Trip Flows in New York -- Only 14.5% of all CitiBike routes account for 80% of total trip volume (Pareto ratio)")
+
+# Add explanatory text above the map
+st.markdown(
+    """
+    These high-traffic routes represent the strongest opportunities for **bike rebalancing and operational optimization**.
+    """
+)
+
+# Load Kepler map HTML
+path_to_html = "02 Streamlit/nyc_bike_map.html"
+with open(path_to_html, "r", encoding="utf-8") as f:
+    html_data = f.read()
+
+# Display the map
+st.components.v1.html(html_data, height=900, scrolling=True)
+
 ### 1) Bar chart — Top 15 Most Popular Start Stations in New York ###
 
 # Create the Plotly figure
@@ -101,30 +139,6 @@ fig.update_layout(
 st.plotly_chart(fig, use_container_width=True)
 
 
-### 2) Add the map -- top 14% routes covering 80% of trips ###
-
-st.header("Interactive Map — Aggregated Trip Flows")
-
-# Load Kepler map HTML
-path_to_html = "02 Streamlit/nyc_bike_map.html"
-with open(path_to_html, "r", encoding="utf-8") as f:
-    html_data = f.read()
-
-# Display the map
-st.components.v1.html(html_data, height=900, scrolling=True)
-
-# Add explanatory text under the map
-st.markdown(
-    """
-    #### 📌 How to interpret this map
-
-    - Only **14.5% of all CitiBike routes** account for **80% of total trip volume** (Pareto ratio).
-    - On average, these high-demand routes carry **~163 trips per year each**.
-    - The single busiest start–end pair reached **12,041 trips** in 2022.
-
-    These high-traffic routes represent the strongest opportunities for **bike rebalancing and operational optimization**.
-    """
-)
 
 ### 3) CitiBike Station Imbalance (Rentals − Returns) ###
 
