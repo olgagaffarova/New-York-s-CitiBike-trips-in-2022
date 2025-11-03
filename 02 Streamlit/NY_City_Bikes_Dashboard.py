@@ -187,8 +187,3 @@ By relocating bikes *from red stations to blue stations* during peak windows
 ✅ optimize redistribution truck mileage  
 """
 )
-
-    
-## Show in webpage
-st.header("Aggregated Bike Trips in New York")
-st.components.v1.html(html_data,height=1000)
