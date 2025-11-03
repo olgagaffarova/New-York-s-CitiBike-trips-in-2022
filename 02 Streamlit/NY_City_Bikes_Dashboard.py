@@ -42,16 +42,14 @@ sns.set_palette(subtle_colors)
 
 ########################### Initial settings for the dashboard ##################################################################
 
-st.set_page_config(page_title="CitiBike 2022 - Introduction", layout="wide")
+st.set_page_config(page_title="CitiBike 2022", layout="wide")
 
 # ──────────────────────────────────────────────────────────────────────────────
 # Header
 # ──────────────────────────────────────────────────────────────────────────────
 
 st.title("NYC CitiBike 2022")
-st.markdown("Goal of the analysis:To reduce bike shortages by up to 50% in 2023 at the top 20% busiest start stations (which together handle 80% of CitiBike demand) by optimizing bike relocation from nearby overloaded stations.")
-st.markdown("## Introduction: Understanding the CitiBike System")
-
+st.markdown("Goal of the analysis: To reduce bike shortages by up to 50% in 2023 at the top 20% busiest start stations (which together handle 80% of CitiBike demand) by optimizing bike relocation from nearby overloaded stations.")
 
 ########################## Import data ###########################################################################################
 
@@ -65,7 +63,7 @@ donors_receivers = pd.read_csv('02 Streamlit/donors_receivers.csv', index_col = 
 
 st.markdown(
     """
-### 🚴 Introduction: Understanding the CitiBike System
+### Understanding the CitiBike System
 
 Since **2013**, New York City has operated a shared bicycle system known as **CitiBike**.  
 The initiative reduces reliance on cars, supports sustainability, and encourages public health through daily cycling.
