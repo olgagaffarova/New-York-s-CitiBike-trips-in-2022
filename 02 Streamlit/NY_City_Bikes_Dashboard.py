@@ -154,13 +154,13 @@ st.markdown(
 Midtown stations such as **Broadway**, **Madison Ave**, and **West End Ave** show consistent *shortages*,  
 while **Old Slip & South St** and **Washington Square E** accumulate bikes during the day.  
 
-**Action:** Relocate bikes from red to blue zones during **7–9 AM** and **5–7 PM**  
-to reduce shortages and full-dock issues by up to **50 %**.
+**Action:** Relocate bikes from red to blue zones during **7-9 AM** and **5-7 PM**  
+to reduce shortages and full-dock issues by up to **50%**.
 
 ### Why this matters
 
 By relocating bikes *from red stations to blue stations* during peak windows  
-(morning 7-9 AM, evening 5-7 PM), CitiBike can: 
+(morning 7-9 AM, evening 5-7 PM), CitiBike can:
 
 - reduce shortages and full-dock issues by **up to 50%**  
 - increase rider satisfaction  
