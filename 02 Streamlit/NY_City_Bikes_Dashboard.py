@@ -89,7 +89,17 @@ fig.update_layout(
     plot_bgcolor='white',
     paper_bgcolor='white',
     font=dict(color='black', size=11),
-    x
+    xaxis=dict(
+        tickangle=-45,
+        categoryorder='total descending'
+    ),
+    height=600,
+    margin=dict(l=40, r=40, t=80, b=120)
+)
+
+# Display the chart in Streamlit
+st.plotly_chart(fig, use_container_width=True)
+
 
 ### 2) Add the map -- top 14% routes covering 80% of trips ###
 
