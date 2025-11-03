@@ -102,7 +102,7 @@ fig.show()
 st.header("Interactive Map — Aggregated Trip Flows")
 
 # Load Kepler map HTML
-path_to_html = "nyc_bike_map.html"
+path_to_html = "02 Streamlit/nyc_bike_map.html"
 with open(path_to_html, "r", encoding="utf-8") as f:
     html_data = f.read()
 
