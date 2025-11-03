@@ -164,8 +164,8 @@ to reduce shortages and full-dock issues by up to **50 %**.
 By relocating bikes *from red stations to blue stations* during peak windows  
 (morning 7-9 AM, evening 5-7 PM), CitiBike can: 
 
-✅ reduce shortages and full-dock issues by **up to 50%**  
-✅ increase rider satisfaction  
-✅ optimize redistribution truck mileage  
+- reduce shortages and full-dock issues by **up to 50%**  
+- increase rider satisfaction  
+- optimize redistribution truck mileage  
 """
 )
