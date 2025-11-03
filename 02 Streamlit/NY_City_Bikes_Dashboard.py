@@ -55,10 +55,10 @@ st.markdown("## Introduction: Understanding the CitiBike System")
 
 ########################## Import data ###########################################################################################
 
-top15 = pd.read_csv('top15_dashboard.csv', index_col = 0)
-df_group = pd.read_csv('df_group_dashboard.csv', index_col = 0)
-df_daily_weather = pd.read_csv('df_daily_weather_dashboard.csv', index_col = 0)
-donors_receivers = pd.read_csv('donors_receivers.csv', index_col = 0)
+top15 = pd.read_csv('02 Streamlit/top15_dashboard.csv', index_col = 0)
+df_group = pd.read_csv('02 Streamlit/df_group_dashboard.csv', index_col = 0)
+df_daily_weather = pd.read_csv('02 Streamlit/df_daily_weather_dashboard.csv', index_col = 0)
+donors_receivers = pd.read_csv('02 Streamlit/donors_receivers.csv', index_col = 0)
 
 
 # ######################################### DEFINE THE CHARTS #####################################################################
