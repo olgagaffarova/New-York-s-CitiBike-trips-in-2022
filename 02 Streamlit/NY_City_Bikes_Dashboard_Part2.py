@@ -118,8 +118,8 @@ elif page == "Seasonality & Weather":
     # Right Y-axis — Average Temperature
     fig.add_trace(
         go.Scatter(
-            x=df['date'],
-            y=df['avgTemp'],
+            x=df_daily_weather['date'],
+            y=df_daily_weather['avgTemp'],
             name='Avg Temperature (°C)',
             mode='lines',
             line=dict(color='#a855f7', width=2, dash='dot')
