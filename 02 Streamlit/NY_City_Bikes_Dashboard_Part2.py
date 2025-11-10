@@ -36,7 +36,7 @@ top15 = pd.read_csv('02 Streamlit/top15_dashboard.csv', index_col=0)
 df_group = pd.read_csv('02 Streamlit/df_group_dashboard.csv', index_col=0)
 df_daily_weather = pd.read_csv('02 Streamlit/df_daily_weather_dashboard.csv', index_col=0)
 donors_receivers = pd.read_csv('02 Streamlit/donors_receivers.csv', index_col=0)
-df_daily_precipitations = pd.read_csv('02 Streamlit/df_daily_precipitations.csv', index_col=0)
+df_daily_precipitations = pd.read_csv('02 Streamlit/df_daily_precipitations.csv', index_col=0, parse_dates=True)
 
 # ───────────────────────────────────────────────
 # PAGE 1: INTRO
@@ -142,54 +142,30 @@ elif page == "Seasonality & Weather":
     st.plotly_chart(fig, use_container_width=True)
 
 
-
-    
-
-    
     # --- DAILY RIDES VS PRECIPITATION ---
-    st.title("☔ Daily Bike Rides and Precipitation (2022)")
-
-    fig = make_subplots(specs=[[{"secondary_y": True}]])
-
     # --- Bike rides (left y-axis) ---
     fig.add_trace(
-        go.Scatter(
-            x=df_daily_precipitations['date'],
-            y=df_daily_precipitations['bike_rides_daily'],
-            name='Bike Rides',
-            mode='lines',
-            line=dict(color='#0ea5e9', width=2)
-        ),
-        secondary_y=False
+    go.Scatter(
+        x=df_daily_precipitations.index,
+        y=df_daily_precipitations['bike_rides_daily'],
+        name='Bike Rides',
+        mode='lines',
+        line=dict(color='#0ea5e9', width=2)
+    ),
+    secondary_y=False
     )
 
-    # --- Precipitation (right y-axis) ---
-    fig.add_trace(
-        go.Scatter(
-            x=df_daily_precipitations['date'],
-            y=df_daily_precipitations['total_precipitation'],
-            name='Total Precipitation (mm)',
-            mode='lines',
-            line=dict(color='#a855f7', width=2, dash='dot')
-        ),
-        secondary_y=True
-    )
-
-    fig.update_layout(
-        title='Daily Bike Rides and Total Precipitation — 2022',
-        template='plotly_white',
-        hovermode='x unified',
-        legend=dict(orientation='h', yanchor='bottom', y=1.02, xanchor='right', x=1),
-        height=600,
-        margin=dict(l=40, r=40, t=80, b=40)
-    )
-
-    fig.update_xaxes(title_text="Date")
-    fig.update_yaxes(title_text="Number of Bike Rides", secondary_y=False)
-    fig.update_yaxes(title_text="Total Precipitation (mm)", secondary_y=True)
-
-    st.plotly_chart(fig, use_container_width=True)
-
+   # --- Precipitation (right y-axis) ---
+   fig.add_trace(
+    go.Scatter(
+        x=df_daily_precipitations.index,
+        y=df_daily_precipitations['total_precipitation'],
+        name='Total Precipitation (mm)',
+        mode='lines',
+        line=dict(color='#a855f7', width=2, dash='dot')
+    ),
+    secondary_y=True
+)
 
 
 # ───────────────────────────────────────────────
