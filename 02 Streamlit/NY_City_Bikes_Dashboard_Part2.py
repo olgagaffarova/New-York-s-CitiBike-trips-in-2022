@@ -90,6 +90,7 @@ if page == "Intro":
 # ───────────────────────────────────────────────
 # PAGE 2: SEASONALITY & WEATHER
 # ───────────────────────────────────────────────
+
 elif page == "Seasonality & Weather":
     st.title("🌦️ Seasonality and Weather Impact on CitiBike Demand")
     st.markdown("""
@@ -98,7 +99,8 @@ elif page == "Seasonality & Weather":
     """)
 
     # --- DAILY RIDES VS AVERAGE TEMPERATURE ---
-    st.subheader("🚴 Daily Bike Rides and Average Temperature (2022)")
+    st.markdown("🚴 Daily Bike Rides and Average Temperature (2022)"")
+
     fig = make_subplots(specs=[[{"secondary_y": True}]])
 
     fig.add_trace(
@@ -140,7 +142,6 @@ elif page == "Seasonality & Weather":
     
     
     # --- DAILY RIDES VS PRECIPITATION ---
-  
 st.subheader("☔ Daily Bike Rides and Precipitation (2022)")
 
 # Merge rides and weather data
