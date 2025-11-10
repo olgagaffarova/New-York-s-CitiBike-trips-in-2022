@@ -26,7 +26,7 @@ st.set_page_config(page_title="CitiBike 2022", layout="wide")
 st.sidebar.title("Dashboard Navigation")
 page = st.sidebar.radio(
     "Go to:",
-    ["About Citibike", "Weather Impact", "Identifying Main Routes and Problem Stations", "Recommendations"]
+    ["About Citibike", "Member vs Casual Patterns", "Weather Impact", "Identifying Main Routes and Problem Stations", "Recommendations"]
 )
 
 # ───────────────────────────────────────────────
@@ -38,6 +38,8 @@ df_daily_weather = pd.read_csv('02 Streamlit/df_daily_weather_dashboard.csv', in
 donors_receivers = pd.read_csv('02 Streamlit/donors_receivers.csv', index_col=0)
 df_heat = pd.read_csv('02 Streamlit/df_heat.csv', index_col=0)
 df_daily_precipitations = pd.read_csv('02 Streamlit/df_daily_precipitations.csv', index_col=0, parse_dates=True)
+hours_member_casual = pd.read_csv('02 Streamlit/hours_member_casual.csv', index_col=0)
+
 
 # ───────────────────────────────────────────────
 # PAGE 1: INTRO + HOURLY & MONTHLY RIDERSHIP
@@ -133,7 +135,51 @@ if page == "About Citibike":
 
 
 # ───────────────────────────────────────────────
-# PAGE 2: SEASONALITY & WEATHER
+# PAGE 2: MEMBER VS CASUAL PATTERNS
+# ───────────────────────────────────────────────
+
+elif page == "Member vs Casual Patterns":
+    st.title("👥 Member vs Casual User Ride Patterns")
+
+    st.markdown("""
+    This section compares the **hourly usage patterns** of CitiBike members and casual users,
+    further broken down by the **type of bike** used (classic, electric, or docked).  
+    Members show strong commuting peaks on weekdays, while casual users favor late morning
+    and afternoon leisure rides.
+    """)
+
+    # --- Plotly Facet Bar Chart by Member Type and Bike Type ---
+    fig = px.bar(
+        hours_member_casual,
+        x='hour',
+        y='ride_id',
+        color='rideable_type',         # adds bike type breakdown
+        facet_col='member_casual',     # members vs casual
+        labels={
+            'hour': 'Hour of Day',
+            'ride_id': 'Number of Rides',
+            'rideable_type': 'Bike Type'
+        },
+        title='Hourly Ride Patterns by User Type and Bike Type',
+        color_discrete_sequence=px.colors.qualitative.Set2  # soft, distinct colors
+    )
+
+    fig.update_layout(
+        barmode='stack',              # stack bike types in each hour
+        showlegend=True,
+        height=550,
+        margin=dict(t=80, l=40, r=40, b=40),
+        title_font=dict(size=16),
+        legend_title_text='Bike Type'
+    )
+
+    fig.update_xaxes(dtick=1)
+
+    st.plotly_chart(fig, use_container_width=True)
+
+
+# ───────────────────────────────────────────────
+# PAGE 3: SEASONALITY & WEATHER
 # ───────────────────────────────────────────────
 
 elif page == "Weather Impact":
@@ -236,7 +282,7 @@ elif page == "Weather Impact":
 
 
 # ───────────────────────────────────────────────
-# PAGE 3: Identifying Main Routes and Problem Stations 
+# PAGE 4: Identifying Main Routes and Problem Stations 
 # ───────────────────────────────────────────────
 elif page == "Identifying Main Routes and Problem Stations":
     st.title("Pareto Analysis: Top 14% Routes Covering 80% of Trips")
@@ -304,7 +350,7 @@ elif page == "Identifying Main Routes and Problem Stations":
 
 
 # ───────────────────────────────────────────────
-# PAGE 4: RECOMMENDATIONS
+# PAGE 5: RECOMMENDATIONS
 # ───────────────────────────────────────────────
 elif page == "Recommendations":
     st.title("💡 Strategic Recommendations")
