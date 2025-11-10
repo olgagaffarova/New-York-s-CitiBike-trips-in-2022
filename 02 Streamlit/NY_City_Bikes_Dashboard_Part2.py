@@ -218,35 +218,43 @@ elif page == "Identifying Main Routes and Problem Stations":
     - **Negative net flow → Receiver stations** (bikes accumulate → overflow risk)
     """)
 
-    # Split into two groups
-    donors = donors_receivers[donors_receivers['mean_net_flow'] > 0]
-    receivers = donors_receivers[donors_receivers['mean_net_flow'] < 0]
+    # ───────────────────────────────────────────────
+    # STATION IMBALANCE
+    # ───────────────────────────────────────────────
+    st.title("🚲 CitiBike Station Imbalance (Rentals − Returns)")
 
     fig = go.Figure()
-    fig.add_trace(go.Bar(
-        y=donors['station_name'],
-        x=donors['mean_net_flow'],
-        name='Donor Stations (Shortage Risk)',
-        orientation='h',
-        marker_color='royalblue'
-    ))
+
+    # Color stations by net flow: red = shortage, blue = overflow
+    colors = [
+        'tomato' if x > 0 else 'royalblue'
+        for x in donors_receivers['mean_net_flow']
+    ]
 
     fig.add_trace(go.Bar(
-        y=receivers['station_name'],
-        x=receivers['mean_net_flow'],
-        name='Receiver Stations (Overflow Risk)',
+        y=donors_receivers['station_name'],
+        x=donors_receivers['mean_net_flow'],
         orientation='h',
-        marker_color='tomato'
+        marker_color=colors,
+        text=donors_receivers['mean_net_flow'].round(1),
+        textposition='outside',
     ))
 
     fig.update_layout(
-        title="CitiBike Station Imbalance (Donors vs Receivers)",
+        title="CitiBike Station Imbalance (Positive = Shortage Risk, Negative = Overflow)",
         xaxis_title="Mean Net Flow (Rentals − Returns)",
         yaxis_title="Station",
         height=800,
-        barmode='overlay',
-        xaxis=dict(zeroline=True, zerolinewidth=2, zerolinecolor='black'),
-        legend=dict(yanchor="bottom", y=0.01, xanchor="right", x=0.95)
+        plot_bgcolor='white',
+        paper_bgcolor='white',
+        font=dict(color='black', size=11),
+        xaxis=dict(
+            zeroline=True,
+            zerolinewidth=2,
+            zerolinecolor='black'
+        ),
+        showlegend=False,
+        margin=dict(l=220, r=40, t=80, b=40)
     )
 
     st.plotly_chart(fig, use_container_width=True)
