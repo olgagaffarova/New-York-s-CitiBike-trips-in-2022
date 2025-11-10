@@ -321,4 +321,10 @@ elif page == "Recommendations":
     **4. Prioritize top imbalance clusters:**  
     Focus on ~600 busiest stations (handling 80% of rides) to maximize efficiency and improve rider satisfaction.
     """)
+    st.markdown("### Suggested Plan to Improve Future Analysis")
+    To extend and enhance the City Bike research, future analyses could include the following directions:
+    Transport Service Disruptions: Incorporate data on temporary service interruptions caused by construction, maintenance, or street closures—particularly during nighttime hours—to better understand their effect on trip volume and route selection.
+    Event and Seasonal Planning: Analyze areas near main routes and major venues by integrating city event calendars (e.g., concerts, festivals, sports events). This would help anticipate demand spikes and optimize bike availability in advance of large gatherings.
+     """)
+
 
