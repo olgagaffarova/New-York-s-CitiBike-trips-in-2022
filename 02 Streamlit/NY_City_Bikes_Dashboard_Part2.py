@@ -307,24 +307,38 @@ elif page == "Identifying Main Routes and Problem Stations":
 # PAGE 4: RECOMMENDATIONS
 # ───────────────────────────────────────────────
 elif page == "Recommendations":
-    st.markdown("### Strategic Recommendations")
+    st.title("💡 Strategic Recommendations")
+
     st.markdown("""
-    **1. Scale back fleet during off-season (Nov–Apr):**  
-    Reduce active bikes by **30–40%**, matching seasonal demand drops while cutting maintenance costs.
-    
-    **2. Add docking stations along the waterfront:**  
-    High trip density near riverside routes indicates expansion potential to reduce congestion at inner-city docks.
-    
-    **3. Implement predictive redistribution:**  
-    Rebalance bikes between **7–9 AM** and **5–7 PM** from overflow → shortage zones using current fleet.
-    
-    **4. Prioritize top imbalance clusters:**  
-    Focus on ~600 busiest stations (handling 80% of rides) to maximize efficiency and improve rider satisfaction.
+    ### 1️⃣ Scale Back Fleet During Off-Season (Nov–Apr)
+    Reduce active bikes by **30–40%**, matching seasonal demand drops while lowering maintenance and storage costs.  
+    This aligns supply with reduced winter ridership and helps free up resources for high-demand months.
+
+    ### 2️⃣ Expand Docking Stations Along the Waterfront
+    High trip density along riverside routes (Hudson & East River) indicates strong potential for **new docking points**.  
+    Expanding capacity in these zones will ease congestion at inner-city stations and attract more leisure riders.
+
+    ### 3️⃣ Implement Predictive Redistribution
+    Rebalance bikes between **7–9 AM** and **5–7 PM** — from overflow to shortage areas — using existing fleet data.  
+    Integrating weather and demand forecasts can make daily relocation more efficient and responsive.
+
+    ### 4️⃣ Focus on Top Imbalance Clusters
+    Prioritize the **~600 busiest stations** (covering 80% of all rides) for redistribution scheduling.  
+    Targeting this core network can improve reliability and rider satisfaction with minimal resource expansion.
     """)
-    st.markdown("### Suggested Plan to Improve Future Analysis")
-    To extend and enhance the City Bike research, future analyses could include the following directions:
-    Transport Service Disruptions: Incorporate data on temporary service interruptions caused by construction, maintenance, or street closures—particularly during nighttime hours—to better understand their effect on trip volume and route selection.
-    Event and Seasonal Planning: Analyze areas near main routes and major venues by integrating city event calendars (e.g., concerts, festivals, sports events). This would help anticipate demand spikes and optimize bike availability in advance of large gatherings.
-     """)
+
+    st.markdown("---")
+    st.subheader("🔍 Suggested Directions for Future Analysis")
+    st.markdown("""
+    **• Transport Service Disruptions**  
+    Incorporate data on temporary construction, maintenance, or street closures — especially at night — to assess their impact on trip volume and route selection.
+
+    **• Event and Seasonal Planning**  
+    Cross-reference trip data with **city event calendars** (concerts, parades, sports games, festivals) to anticipate demand surges and pre-position bikes in nearby zones.
+
+    **• Integration with Other Mobility Data**  
+    Combine CitiBike data with public transport usage (MTA turnstile or bus ridership) to explore multimodal patterns and support city-wide mobility optimization.
+    """)
+
 
 
