@@ -36,7 +36,7 @@ top15 = pd.read_csv('02 Streamlit/top15_dashboard.csv', index_col=0)
 df_group = pd.read_csv('02 Streamlit/df_group_dashboard.csv', index_col=0)
 df_daily_weather = pd.read_csv('02 Streamlit/df_daily_weather_dashboard.csv', index_col=0)
 donors_receivers = pd.read_csv('02 Streamlit/donors_receivers.csv', index_col=0)
-df_daily_precipitations =  = pd.read_csv('02 Streamlit/df_daily_precipitations.csv', index_col=0)
+df_daily_precipitations = pd.read_csv('02 Streamlit/df_daily_precipitations.csv', index_col=0)
 
 # ───────────────────────────────────────────────
 # PAGE 1: INTRO
