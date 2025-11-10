@@ -99,7 +99,7 @@ elif page == "Seasonality & Weather":
     """)
 
     # --- DAILY RIDES VS AVERAGE TEMPERATURE ---
-    st.markdown("🚴 Daily Bike Rides and Average Temperature (2022)"")
+    st.markdown("🚴 Daily Bike Rides and Average Temperature (2022)")
 
     fig = make_subplots(specs=[[{"secondary_y": True}]])
 
