@@ -26,7 +26,7 @@ st.set_page_config(page_title="CitiBike 2022", layout="wide")
 st.sidebar.title("📊 Dashboard Navigation")
 page = st.sidebar.radio(
     "Go to:",
-    ["Intro", "Seasonality & Weather", "Top 14% Routes (Pareto)", "Recommendations"]
+    ["Intro", "Seasonality & Weather", "Identifying Main Routes and Problem Stations", "Recommendations"]
 )
 
 # ───────────────────────────────────────────────
@@ -193,9 +193,9 @@ st.plotly_chart(fig, use_container_width=True)
 
     
 # ───────────────────────────────────────────────
-# PAGE 3: PARETO MAP
+# PAGE 3: Identifying Main Routes and Problem Stations 
 # ───────────────────────────────────────────────
-elif page == "Top 14% Routes (Pareto)":
+elif page == "Identifying Main Routes and Problem Stations":
     st.title("📍 Pareto Analysis: Top 14% Routes Covering 80% of Trips")
     st.markdown("""
     Applying the **Pareto Principle (80/20 rule)** helps focus on the most significant routes.  
@@ -209,10 +209,6 @@ elif page == "Top 14% Routes (Pareto)":
         html_data = f.read()
     st.components.v1.html(html_data, height=900, scrolling=True)
 
-# ───────────────────────────────────────────────
-# PAGE 4: RECOMMENDATIONS
-# ───────────────────────────────────────────────
-elif page == "Recommendations":
     st.title("🚲 Identifying Problem Stations and Strategic Recommendations")
     st.markdown("""
     This section identifies **stations with persistent bike shortages or overflows**  
@@ -255,6 +251,11 @@ elif page == "Recommendations":
 
     st.plotly_chart(fig, use_container_width=True)
 
+
+# ───────────────────────────────────────────────
+# PAGE 4: RECOMMENDATIONS
+# ───────────────────────────────────────────────
+elif page == "Recommendations":
     st.markdown("### 💡 Strategic Recommendations")
     st.markdown("""
     **1. Scale back fleet during off-season (Nov–Apr):**  
