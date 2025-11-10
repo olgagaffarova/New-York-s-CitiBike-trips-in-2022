@@ -98,8 +98,7 @@ elif page == "Seasonality & Weather":
     """)
 
     # --- DAILY RIDES VS AVERAGE TEMPERATURE ---
-    st.title("Daily Bike Rides and Average Temperature (2022)")
-
+    st.markdown("### Daily Bike Rides and Average Temperature (2022)")
     fig = make_subplots(specs=[[{"secondary_y": True}]])
 
     # Left Y-axis — Bike Rides
@@ -127,7 +126,6 @@ elif page == "Seasonality & Weather":
     )
 
     fig.update_layout(
-        title='Daily Bike Rides and Average Temperature — 2022',
         template='plotly_white',
         hovermode='x unified',
         legend=dict(orientation='h', yanchor='bottom', y=1.02, xanchor='right', x=1),
