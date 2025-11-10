@@ -26,7 +26,7 @@ st.set_page_config(page_title="CitiBike 2022", layout="wide")
 st.sidebar.title("Dashboard Navigation")
 page = st.sidebar.radio(
     "Go to:",
-    ["Intro", "Seasonality & Weather", "Identifying Main Routes and Problem Stations", "Recommendations"]
+    ["About Citibike", "Weather Impact", "Identifying Main Routes and Problem Stations", "Recommendations"]
 )
 
 # ───────────────────────────────────────────────
@@ -42,7 +42,7 @@ df_daily_precipitations = pd.read_csv('02 Streamlit/df_daily_precipitations.csv'
 # ───────────────────────────────────────────────
 # PAGE 1: INTRO + HOURLY & MONTHLY RIDERSHIP
 # ───────────────────────────────────────────────
-if page == "Intro":
+if page == "About Citibike":
 
     st.title("🚴 CitiBike 2022: Understanding New York’s Bike Network")
 
@@ -136,8 +136,8 @@ if page == "Intro":
 # PAGE 2: SEASONALITY & WEATHER
 # ───────────────────────────────────────────────
 
-elif page == "Seasonality & Weather":
-    st.title("Seasonality and Weather Impact on CitiBike Demand")
+elif page == "Weather Impact":
+    st.title("Weather Impact on CitiBike Demand")
     st.markdown("""
     This section explores how **temperature** and **precipitation** affect CitiBike ridership.  
     Colder or rainy days tend to reduce daily rides, while warm and dry conditions encourage more cycling.
