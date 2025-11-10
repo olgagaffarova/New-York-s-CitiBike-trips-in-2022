@@ -164,7 +164,7 @@ elif page == "Seasonality & Weather":
     fig_precip.add_trace(
         go.Scatter(
             x=df_daily_precipitations.index,
-            y=df_daily_precipitations['total_precipitation'],
+            y=df_daily_precipitations['daily_rain_mm'],
             name='Total Precipitation (mm)',
             mode='lines',
             line=dict(color='#a855f7', width=2, dash='dot')
