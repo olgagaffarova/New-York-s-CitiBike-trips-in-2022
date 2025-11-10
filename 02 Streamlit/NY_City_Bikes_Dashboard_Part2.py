@@ -140,32 +140,56 @@ elif page == "Seasonality & Weather":
     fig.update_yaxes(title_text="Number of Bike Rides", secondary_y=False)
     fig.update_yaxes(title_text="Average Temperature (°C)", secondary_y=True)
     st.plotly_chart(fig, use_container_width=True)
+    
+    # ================================================================
+    # DAILY RIDES VS PRECIPITATION
+    # ================================================================
+    st.subheader("☔ Daily Bike Rides and Precipitation (2022)")
 
+    fig_precip = make_subplots(specs=[[{"secondary_y": True}]])
 
-    # --- DAILY RIDES VS PRECIPITATION ---
-    # --- Bike rides (left y-axis) ---
-    fig.add_trace(
-    go.Scatter(
-        x=df_daily_precipitations.index,
-        y=df_daily_precipitations['bike_rides_daily'],
-        name='Bike Rides',
-        mode='lines',
-        line=dict(color='#0ea5e9', width=2)
-    ),
-    secondary_y=False
+    # Left Y-axis — Bike Rides
+    fig_precip.add_trace(
+        go.Scatter(
+            x=df_daily_precipitations.index,
+            y=df_daily_precipitations['bike_rides_daily'],
+            name='Bike Rides',
+            mode='lines',
+            line=dict(color='#0ea5e9', width=2)
+        ),
+        secondary_y=False
     )
 
-   # --- Precipitation (right y-axis) ---
-   fig.add_trace(
-    go.Scatter(
-        x=df_daily_precipitations.index,
-        y=df_daily_precipitations['total_precipitation'],
-        name='Total Precipitation (mm)',
-        mode='lines',
-        line=dict(color='#a855f7', width=2, dash='dot')
-    ),
-    secondary_y=True
-)
+    # Right Y-axis — Precipitation
+    fig_precip.add_trace(
+        go.Scatter(
+            x=df_daily_precipitations.index,
+            y=df_daily_precipitations['total_precipitation'],
+            name='Total Precipitation (mm)',
+            mode='lines',
+            line=dict(color='#a855f7', width=2, dash='dot')
+        ),
+        secondary_y=True
+    )
+
+    fig_precip.update_layout(
+        title='Daily Bike Rides and Total Precipitation — 2022',
+        template='plotly_white',
+        hovermode='x unified',
+        legend=dict(orientation='h', yanchor='bottom', y=1.02, xanchor='right', x=1),
+        height=600,
+        margin=dict(l=40, r=40, t=80, b=40)
+    )
+
+    fig_precip.update_xaxes(title_text="Date")
+    fig_precip.update_yaxes(title_text="Number of Bike Rides", secondary_y=False)
+    fig_precip.update_yaxes(title_text="Total Precipitation (mm)", secondary_y=True)
+
+    st.plotly_chart(fig_precip, use_container_width=True)
+
+
+
+
 
 
 # ───────────────────────────────────────────────
