@@ -180,9 +180,16 @@ fig.update_layout(
     hovermode='x unified',
     legend=dict(orientation='h', yanchor='bottom', y=1.02, xanchor='right', x=1),
     height=600,
-    margin=dict(l=40
+    margin=dict(l=40, r=40, t=80, b=40)
+)
 
-    
+fig.update_xaxes(title_text="Date")
+fig.update_yaxes(title_text="Number of Bike Rides", secondary_y=False)
+fig.update_yaxes(title_text="Total Precipitation (mm)", secondary_y=True)
+
+# Display chart
+st.plotly_chart(fig, use_container_width=True)
+
     
     
 # ───────────────────────────────────────────────
