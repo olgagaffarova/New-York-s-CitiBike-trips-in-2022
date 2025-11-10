@@ -191,7 +191,6 @@ fig.update_yaxes(title_text="Total Precipitation (mm)", secondary_y=True)
 st.plotly_chart(fig, use_container_width=True)
 
     
-    
 # ───────────────────────────────────────────────
 # PAGE 3: PARETO MAP
 # ───────────────────────────────────────────────
