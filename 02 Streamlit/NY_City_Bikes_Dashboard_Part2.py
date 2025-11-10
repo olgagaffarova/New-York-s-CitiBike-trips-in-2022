@@ -74,7 +74,6 @@ if page == "Intro":
     )
 
     fig.update_layout(
-        title='Top 15 Most Popular Start Stations in New York',
         xaxis_title='Station Name',
         yaxis_title='Number of Trips',
         plot_bgcolor='white',
