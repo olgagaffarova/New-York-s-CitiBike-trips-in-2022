@@ -142,7 +142,7 @@ elif page == "Seasonality & Weather":
     
     
     # --- DAILY RIDES VS PRECIPITATION ---
-st.subheader("☔ Daily Bike Rides and Precipitation (2022)")
+st.title("☔ Daily Bike Rides and Precipitation (2022)")
 
 # Merge rides and weather data
 df_daily_precipitations = pd.merge(df_group, df, on="date", how="inner")
