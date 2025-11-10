@@ -36,13 +36,17 @@ top15 = pd.read_csv('02 Streamlit/top15_dashboard.csv', index_col=0)
 df_group = pd.read_csv('02 Streamlit/df_group_dashboard.csv', index_col=0)
 df_daily_weather = pd.read_csv('02 Streamlit/df_daily_weather_dashboard.csv', index_col=0)
 donors_receivers = pd.read_csv('02 Streamlit/donors_receivers.csv', index_col=0)
+df_heat = pd.read_csv('02 Streamlit/df_heat.csv', index_col=0)
 df_daily_precipitations = pd.read_csv('02 Streamlit/df_daily_precipitations.csv', index_col=0, parse_dates=True)
 
 # ───────────────────────────────────────────────
-# PAGE 1: INTRO
+# PAGE 1: INTRO + HOURLY & MONTHLY RIDERSHIP
 # ───────────────────────────────────────────────
 if page == "Intro":
-    st.title("CitiBike 2022: Understanding New York’s Bike Network")
+
+    st.title("🚴 CitiBike 2022: Understanding New York’s Bike Network")
+
+    # --- Intro text ---
     st.markdown("""
     **Goal:** Reduce bike shortages by up to **50%** in 2023 at the **top 20% busiest stations**, 
     which together handle **80% of all CitiBike demand**, by optimizing redistribution.
@@ -56,7 +60,8 @@ if page == "Intro":
     - Which stations face shortages or overflow (imbalance analysis)
     """)
 
-    st.markdown("### Top 15 Most Popular Start Stations in New York")
+    # --- Top 15 stations bar chart ---
+    st.markdown("### 🏙️ Top 15 Most Popular Start Stations in New York")
 
     fig = go.Figure(
         go.Bar(
@@ -85,6 +90,47 @@ if page == "Intro":
     )
 
     st.plotly_chart(fig, use_container_width=True)
+
+    # --- Divider between charts ---
+    st.markdown("---")
+
+    # --- Hourly & Monthly Heatmap section ---
+    st.markdown("### 🕒 Hourly and Monthly CitiBike Demand")
+
+    st.markdown("""
+    The heatmap visualizes how **CitiBike demand** varies by hour and month in **2022**.  
+    Morning (**7–9 a.m.**) and evening (**5–7 p.m.**) peaks dominate across all seasons, with the highest activity between **June and August**.  
+    These patterns highlight the **commuter-driven nature** of CitiBike use and the need for **efficient bike redistribution** during rush hours, especially in summer months.
+    """)
+
+    # Order months chronologically
+    month_order = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ]
+    df_heat["month"] = pd.Categorical(df_heat["month"], categories=month_order, ordered=True)
+
+    # --- Plotly heatmap ---
+    fig = px.density_heatmap(
+        df_heat,
+        x="hour",
+        y="month",
+        z="rides",
+        color_continuous_scale="Blues",
+        title="CitiBike Rides by Hour and Month (2022)"
+    )
+
+    fig.update_layout(
+        template="plotly_white",
+        title_x=0.5,
+        font=dict(size=14),
+        coloraxis_colorbar=dict(title="Number of Rides"),
+        margin=dict(l=80, r=60, t=60, b=60)
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
+
+
 
 # ───────────────────────────────────────────────
 # PAGE 2: SEASONALITY & WEATHER
