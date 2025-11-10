@@ -99,14 +99,15 @@ elif page == "Seasonality & Weather":
     """)
 
     # --- DAILY RIDES VS AVERAGE TEMPERATURE ---
-    st.markdown("🚴 Daily Bike Rides and Average Temperature (2022)")
+    st.title("🚴 Daily Bike Rides and Average Temperature (2022)")
 
     fig = make_subplots(specs=[[{"secondary_y": True}]])
 
+    # Left Y-axis — Bike Rides
     fig.add_trace(
         go.Scatter(
-            x=df_daily_weather['date'],
-            y=df_daily_weather['bike_rides_daily'],
+            x=df_group['date'],
+            y=df_group['bike_rides_daily'],
             name='Bike Rides',
             mode='lines',
             line=dict(color='#0ea5e9', width=2)
@@ -114,10 +115,11 @@ elif page == "Seasonality & Weather":
         secondary_y=False
     )
 
+    # Right Y-axis — Average Temperature
     fig.add_trace(
         go.Scatter(
-            x=df_daily_weather['date'],
-            y=df_daily_weather['avgTemp'],
+            x=df['date'],
+            y=df['avgTemp'],
             name='Avg Temperature (°C)',
             mode='lines',
             line=dict(color='#a855f7', width=2, dash='dot')
@@ -139,6 +141,11 @@ elif page == "Seasonality & Weather":
     fig.update_yaxes(title_text="Average Temperature (°C)", secondary_y=True)
     st.plotly_chart(fig, use_container_width=True)
 
+
+
+    
+
+    
     # --- DAILY RIDES VS PRECIPITATION ---
     st.title("☔ Daily Bike Rides and Precipitation (2022)")
 
