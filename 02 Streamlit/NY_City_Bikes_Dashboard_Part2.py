@@ -23,7 +23,7 @@ plt.style.use('dark_background')
 st.set_page_config(page_title="CitiBike 2022", layout="wide")
 
 # Sidebar Navigation
-st.sidebar.title("📊 Dashboard Navigation")
+st.sidebar.title("Dashboard Navigation")
 page = st.sidebar.radio(
     "Go to:",
     ["Intro", "Seasonality & Weather", "Identifying Main Routes and Problem Stations", "Recommendations"]
@@ -42,7 +42,7 @@ df_daily_precipitations = pd.read_csv('02 Streamlit/df_daily_precipitations.csv'
 # PAGE 1: INTRO
 # ───────────────────────────────────────────────
 if page == "Intro":
-    st.title("🚴 CitiBike 2022: Understanding New York’s Bike Network")
+    st.title("CitiBike 2022: Understanding New York’s Bike Network")
     st.markdown("""
     **Goal:** Reduce bike shortages by up to **50%** in 2023 at the **top 20% busiest stations**, 
     which together handle **80% of all CitiBike demand**, by optimizing redistribution.
@@ -92,14 +92,14 @@ if page == "Intro":
 # ───────────────────────────────────────────────
 
 elif page == "Seasonality & Weather":
-    st.title("🌦️ Seasonality and Weather Impact on CitiBike Demand")
+    st.title("Seasonality and Weather Impact on CitiBike Demand")
     st.markdown("""
     This section explores how **temperature** and **precipitation** affect CitiBike ridership.  
     Colder or rainy days tend to reduce daily rides, while warm and dry conditions encourage more cycling.
     """)
 
     # --- DAILY RIDES VS AVERAGE TEMPERATURE ---
-    st.title("🚴 Daily Bike Rides and Average Temperature (2022)")
+    st.title("Daily Bike Rides and Average Temperature (2022)")
 
     fig = make_subplots(specs=[[{"secondary_y": True}]])
 
@@ -144,7 +144,7 @@ elif page == "Seasonality & Weather":
     # ================================================================
     # DAILY RIDES VS PRECIPITATION
     # ================================================================
-    st.subheader("☔ Daily Bike Rides and Precipitation (2022)")
+    st.subheader("Daily Bike Rides and Precipitation (2022)")
 
     fig_precip = make_subplots(specs=[[{"secondary_y": True}]])
 
@@ -196,7 +196,7 @@ elif page == "Seasonality & Weather":
 # PAGE 3: Identifying Main Routes and Problem Stations 
 # ───────────────────────────────────────────────
 elif page == "Identifying Main Routes and Problem Stations":
-    st.title("📍 Pareto Analysis: Top 14% Routes Covering 80% of Trips")
+    st.title("Pareto Analysis: Top 14% Routes Covering 80% of Trips")
     st.markdown("""
     Applying the **Pareto Principle (80/20 rule)** helps focus on the most significant routes.  
     The **top 14% of all routes** in 2022 account for **80% of total CitiBike trips**.  
@@ -221,7 +221,7 @@ elif page == "Identifying Main Routes and Problem Stations":
     # ───────────────────────────────────────────────
     # STATION IMBALANCE
     # ───────────────────────────────────────────────
-    st.title("🚲 CitiBike Station Imbalance (Rentals − Returns)")
+    st.title("CitiBike Station Imbalance (Rentals − Returns)")
 
     fig = go.Figure()
 
@@ -264,7 +264,7 @@ elif page == "Identifying Main Routes and Problem Stations":
 # PAGE 4: RECOMMENDATIONS
 # ───────────────────────────────────────────────
 elif page == "Recommendations":
-    st.markdown("### 💡 Strategic Recommendations")
+    st.markdown("### Strategic Recommendations")
     st.markdown("""
     **1. Scale back fleet during off-season (Nov–Apr):**  
     Reduce active bikes by **30–40%**, matching seasonal demand drops while cutting maintenance costs.
