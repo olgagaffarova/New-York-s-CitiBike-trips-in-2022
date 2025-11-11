@@ -162,18 +162,6 @@ Demand rises sharply from May to September, while winter months (Nov–Apr) show
 # ───────────────────────────────────────────────
 # PAGE 2: MEMBER VS CASUAL PATTERNS
 # ───────────────────────────────────────────────
-elif page == "Members vs Casual Users Patterns":
-    st.title("👥 Members vs Casual Users Ride Patterns")
-
-
-
-
-
-
-
-# ───────────────────────────────────────────────
-# PAGE 2: MEMBER VS CASUAL PATTERNS
-# ───────────────────────────────────────────────
 
 elif page == "Members vs Casual Users Patterns":
     st.title("👥 Members vs Casual Users Ride Patterns")
