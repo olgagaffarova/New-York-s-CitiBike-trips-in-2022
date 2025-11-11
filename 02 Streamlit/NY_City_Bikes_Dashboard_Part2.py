@@ -44,9 +44,6 @@ hours_member_casual = pd.read_csv('02 Streamlit/hours_member_casual.csv', index_
 # PAGE 1: INTRO + HOURLY & MONTHLY RIDERSHIP
 # ───────────────────────────────────────────────
 
-# ───────────────────────────────────────────────
-# PAGE 1: INTRO + HOURLY & MONTHLY RIDERSHIP
-# ───────────────────────────────────────────────
 if page == "About Citibike":
 
     st.title("🚴 CitiBike 2022: Understanding New York’s Bike Network")
@@ -66,7 +63,7 @@ This dashboard explores how, when, and where riders use the system to support sm
 """)
 
     # --- 🏙️ Top 15 Most Popular Start Stations ---
-    st.markdown("### 🏙️ Top 15 Most Popular Start Stations in New York")
+    st.markdown("### Top 15 Most Popular Start Stations in New York")
 
     st.markdown("""
 The analysis begins by examining overall **CitiBike activity** across New York City to identify **where most trips start**.  
@@ -92,6 +89,7 @@ Understanding these high-demand areas provides a clear picture of the **core net
     )
 
     fig.update_layout(
+        title="Top 15 Most Popular Start Stations in New York",
         xaxis_title='Station Name',
         yaxis_title='Number of Trips',
         plot_bgcolor='white',
