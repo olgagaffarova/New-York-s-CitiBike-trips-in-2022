@@ -106,8 +106,8 @@ Understanding these high-demand areas provides a clear picture of the **core net
     # --- Divider between charts ---
     st.markdown("---")
 
-    # --- 🕒 Hourly and Monthly CitiBike Demand ---
-    st.markdown("### 🕒 Hourly and Monthly CitiBike Demand")
+    # --- Hourly and Monthly CitiBike Demand ---
+    st.markdown("### Hourly and Monthly CitiBike Demand")
 
     st.markdown("""
 The heatmap visualizes how **CitiBike demand** varies by hour and month in **2022**.  
@@ -137,6 +137,7 @@ Strong commuter pattern: clear ridership peaks between **8–9 AM** and **5–7 
     )
 
     fig.update_layout(
+        title="CitiBike Rides by Hour and Month (2022)"
         template="plotly_white",
         title_x=0.5,
         font=dict(size=14),
@@ -150,8 +151,6 @@ Strong commuter pattern: clear ridership peaks between **8–9 AM** and **5–7 
         categoryorder='array',
         categoryarray=[str(h) for h in range(24)]
     )
-
-    st.markdown("#### CitiBike Rides by Hour and Month (2022)")
     st.plotly_chart(fig, use_container_width=True)
 
 
