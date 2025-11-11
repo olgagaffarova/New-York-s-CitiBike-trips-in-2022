@@ -137,7 +137,7 @@ Demand rises sharply from May to September, while winter months (Nov–Apr) show
     )
 
     fig.update_layout(
-        title="CitiBike Rides by Hour and Month (2022)"
+        title="CitiBike Rides by Hour and Month (2022)",
         template="plotly_white",
         title_x=0.5,
         font=dict(size=14),
