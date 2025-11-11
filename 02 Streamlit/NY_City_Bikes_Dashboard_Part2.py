@@ -62,51 +62,60 @@ This dashboard explores how, when, and where riders use the system to support sm
 3. **Redistribution Strategy:** What operational strategies can ensure bikes remain **available at the busiest stations**, especially during peak morning and evening hours?  
 
     """)
+    # --- 🏙️ Top 15 Most Popular Start Stations ---
+st.markdown("### 🏙️ Top 15 Most Popular Start Stations in New York")
 
-    # --- Top 15 stations bar chart ---
-    st.markdown("""
-    ### Top 15 Most Popular Start Stations in New York")
-
-The analysis begins by examining overall CitiBike activity across New York City to identify **where most trips start**.  
+st.markdown("""
+The analysis begins by examining overall **CitiBike activity** across New York City to identify **where most trips start**.  
 The chart below shows the **15 most popular start stations** in 2022 — areas with the **highest ridership volumes** throughout the year.  
 
 These stations are mainly located in **central Manhattan**, close to business districts, parks, and major transportation hubs.  
-Understanding these high-demand areas provides a clear picture of the **core network structure** and highlights where maintaining a steady bike supply is essential to meet daily commuter demand.  
-   """)
+Understanding these high-demand areas provides a clear picture of the **core network structure** and highlights where maintaining a steady bike supply is essential to meet daily commuter demand.
+""")
 
-
-    fig = go.Figure(
-        go.Bar(
-            x=top15['start_station_name'],
-            y=top15['trips_per_station'],
-            marker=dict(
-                color=top15['trips_per_station'],
-                colorscale='Blues',
-                showscale=True,
-                colorbar=dict(title='Trip Count')
-            ),
-            text=top15['trips_per_station'],
-            textposition='outside'
-        )
+fig = go.Figure(
+    go.Bar(
+        x=top15['start_station_name'],
+        y=top15['trips_per_station'],
+        marker=dict(
+            color=top15['trips_per_station'],
+            colorscale='Blues',
+            showscale=True,
+            colorbar=dict(title='Trip Count')
+        ),
+        text=top15['trips_per_station'],
+        textposition='outside'
     )
+)
 
-    fig.update_layout(
-        xaxis_title='Station Name',
-        yaxis_title='Number of Trips',
-        plot_bgcolor='white',
-        paper_bgcolor='white',
-        font=dict(color='black', size=11),
-        xaxis=dict(tickangle=-45, categoryorder='total descending'),
-        height=600,
-        margin=dict(l=40, r=40, t=80, b=120)
-    )
+fig.update_layout(
+    xaxis_title='Station Name',
+    yaxis_title='Number of Trips',
+    plot_bgcolor='white',
+    paper_bgcolor='white',
+    font=dict(color='black', size=11),
+    xaxis=dict(tickangle=-45, categoryorder='total descending'),
+    height=600,
+    margin=dict(l=40, r=40, t=80, b=120),
+    title_x=0.5
+)
 
-    st.plotly_chart(fig, use_container_width=True)
+st.plotly_chart(fig, use_container_width=True)
 
-    # --- Divider between charts ---
-    st.markdown("---")
-    # Prepare data
 
+# --- Divider between charts ---
+st.markdown("---")
+
+
+# --- 🕒 Hourly and Monthly CitiBike Demand ---
+st.markdown("### 🕒 Hourly and Monthly CitiBike Demand")
+
+st.markdown("""
+The heatmap visualizes how **CitiBike demand** varies by hour and month in **2022**.  
+These patterns highlight the **commuter-driven nature** of CitiBike use and the need for **efficient bike redistribution** during rush hours, especially in summer months.
+""")
+
+# Prepare data
 df_heat["hour"] = df_heat["hour"].astype(str)
 df_heat["month"] = pd.Categorical(
     df_heat["month"],
@@ -143,7 +152,6 @@ fig.update_xaxes(
 )
 
 st.plotly_chart(fig, use_container_width=True)
-
 
 
 
