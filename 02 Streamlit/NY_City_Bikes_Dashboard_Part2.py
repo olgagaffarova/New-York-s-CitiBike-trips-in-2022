@@ -112,8 +112,12 @@ This dashboard explores how, when, and where riders use the system to support sm
     st.markdown("### 🕒 Hourly and Monthly CitiBike Demand")
 
     st.markdown("""
-    The heatmap visualizes how **CitiBike demand** varies by hour and month in **2022**.  
-    These patterns highlight the **commuter-driven nature** of CitiBike use and the need for **efficient bike redistribution** during rush hours, especially in summer months.
+    The heatmap visualizes how **CitiBike demand** varies by hour and month in **2022**.
+    Strong commuter pattern:
+Clear ridership peaks between **8–9 AM** and **5–7 PM**, matching New York’s workday commute.
+
+**Seasonal variation**:
+Demand rises sharply from May to September, while winter months (Nov–Apr) show low activity — confirming the need to reduce active fleet in the off-season.
     """)
 
     # Prepare data
@@ -389,21 +393,27 @@ elif page == "Recommendations":
     st.title("💡 Strategic Recommendations")
 
     st.markdown("""
-    ### 1️⃣ Scale Back Fleet During Off-Season (Nov–Apr)
+    ### Scale Back Fleet During Off-Season (Nov–Apr)
     Reduce active bikes by **30–40%**, matching seasonal demand drops while lowering maintenance and storage costs.  
     This aligns supply with reduced winter ridership and helps free up resources for high-demand months.
 
-    ### 2️⃣ Expand Docking Stations Along the Waterfront
+
+    ### Expand Docking Stations Along the Waterfront
     High trip density along riverside routes (Hudson & East River) indicates strong potential for **new docking points**.  
     Expanding capacity in these zones will ease congestion at inner-city stations and attract more leisure riders.
 
-    ### 3️⃣ Implement Predictive Redistribution
+    ### Implement Predictive Redistribution
     Rebalance bikes between **7–9 AM** and **5–7 PM** — from overflow to shortage areas — using existing fleet data.  
     Integrating weather and demand forecasts can make daily relocation more efficient and responsive.
 
-    ### 4️⃣ Focus on Top Imbalance Clusters
+    ### Focus on Top Imbalance Clusters
     Prioritize the **~600 busiest stations** (covering 80% of all rides) for redistribution scheduling.  
     Targeting this core network can improve reliability and rider satisfaction with minimal resource expansion.
+
+    ### Operational takeaway
+    Focus bike redistribution during rush hours in summer, when system pressure is highest, and adjust maintenance schedules 
+    during low-demand months.
+
     """)
 
     st.markdown("---")
