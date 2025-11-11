@@ -121,27 +121,19 @@ Understanding these high-demand areas provides a clear picture of the **core net
         "July", "August", "September", "October", "November", "December"
     ]
     df_heat["month"] = pd.Categorical(df_heat["month"], categories=month_order, ordered=True)
+    
+    
 
     # --- Plotly heatmap ---
+    
     fig = px.density_heatmap(
-        df_heat,
-        x="hour",
-        y="month",
-        z="rides",
-        color_continuous_scale="Blues",
-        title="CitiBike Rides by Hour and Month (2022)"
-    )
-
-    fig.update_layout(
-        template="plotly_white",
-        title_x=0.5,
-        font=dict(size=14),
-        coloraxis_colorbar=dict(title="Number of Rides"),
-        margin=dict(l=80, r=60, t=60, b=60)
-    )
-
-    st.plotly_chart(fig, use_container_width=True)
-
+    df_heat,
+    x=df_heat["hour"].astype(str),  
+    y="month",
+    z="rides",
+    color_continuous_scale="Blues",
+    title="CitiBike Rides by Hour and Month (2022)"
+)
 
 
 # ───────────────────────────────────────────────
