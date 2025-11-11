@@ -64,7 +64,16 @@ This dashboard explores how, when, and where riders use the system to support sm
     """)
 
     # --- Top 15 stations bar chart ---
-    st.markdown("### 🏙️ Top 15 Most Popular Start Stations in New York")
+    st.markdown("""
+    ### 🏙️ Top 15 Most Popular Start Stations in New York")
+
+The analysis begins by examining overall CitiBike activity across New York City to identify **where most trips start**.  
+The chart below shows the **15 most popular start stations** in 2022 — areas with the **highest ridership volumes** throughout the year.  
+
+These stations are mainly located in **central Manhattan**, close to business districts, parks, and major transportation hubs.  
+Understanding these high-demand areas provides a clear picture of the **core network structure** and highlights where maintaining a steady bike supply is essential to meet daily commuter demand.  
+   """)
+---
 
     fig = go.Figure(
         go.Bar(
