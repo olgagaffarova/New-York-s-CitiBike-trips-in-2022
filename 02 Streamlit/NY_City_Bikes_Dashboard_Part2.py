@@ -371,8 +371,72 @@ using the **mean net flow** (rentals − returns) metric across 2022.
     st.plotly_chart(fig, use_container_width=True)
 
 
+
+
+
 # ───────────────────────────────────────────────
-# PAGE 5: RECOMMENDATIONS
+# PAGE 5: Fleet Optimization (Nov–Apr)
+# ───────────────────────────────────────────────
+elif page == "Fleet Optimization (Nov–Apr)":
+    st.title("🚴 Fleet Optimization (Nov–Apr)")
+    st.markdown("""
+    **How much should CitiBike scale back its fleet during the off-season?**  
+
+    This section analyzes **seasonal ridership patterns** to recommend scaling back the fleet by **30–40%** between **November and April**.  
+    The goal is to **align bike availability with lower winter demand**, reducing **maintenance and operational costs** without affecting service quality.
+
+    Key insights:
+    - Significant demand drop from November to March (up to 40%).
+    - Reduced daylight hours and colder weather impact casual users more than members.
+    - Optimal approach: temporarily store or service part of the fleet during off-season, redeploying it in April.
+
+    """)
+
+# ───────────────────────────────────────────────
+# PAGE 6: Waterfront Expansion Opportunities
+# ───────────────────────────────────────────────
+elif page == "Waterfront Expansion Opportunities":
+    st.title("🌊 Waterfront Expansion Opportunities")
+    st.markdown("""
+    **How to determine where to add more stations along the waterfront?**  
+
+    This analysis explores **spatial density** and **rider demand clusters** along **Manhattan’s and Brooklyn’s waterfronts**.  
+    Adding new stations in these zones can **relieve pressure on inner-city docks** and expand CitiBike’s reach into **high-traffic recreational and commuter routes**.
+
+    Key insights:
+    - Riverside areas show **persistent trip surpluses** during weekends and summer months.
+    - High demand near **Hudson River Greenway** and **East River Park** corridors.
+    - Expansion can improve accessibility and system balance, particularly during peak leisure hours.
+
+    """)
+
+# ───────────────────────────────────────────────
+# PAGE 7: Predictive Rebalancing Strategy
+# ───────────────────────────────────────────────
+elif page == "Predictive Rebalancing Strategy":
+    st.title("🔁 Predictive Rebalancing Strategy")
+    st.markdown("""
+    **How to ensure bikes are always stocked at the most popular stations?**  
+
+    This section presents recommendations for **dynamic bike redistribution** and **predictive rebalancing** based on peak-hour demand trends.  
+    The strategy focuses on minimizing shortages at key **origin stations** and preventing **dock overflow** at popular **destination stations**.
+
+    Key insights:
+    - Implement **two main redistribution windows**: **7–9 AM** and **5–7 PM**.
+    - Prioritize the **top 600 busiest stations** (covering ~80% of all rides).
+    - Apply predictive models to anticipate **morning departures** and **evening arrivals**.
+    - Focus relocation efforts within a **2–4 km radius** between donor and receiver stations.
+
+    """)
+
+
+
+
+
+
+
+# ───────────────────────────────────────────────
+# PAGE 8: RECOMMENDATIONS
 # ───────────────────────────────────────────────
 elif page == "Recommendations":
     st.title("💡 Strategic Recommendations")
