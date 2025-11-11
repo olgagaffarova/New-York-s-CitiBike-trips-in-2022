@@ -111,7 +111,6 @@ Understanding these high-demand areas provides a clear picture of the **core net
 
     st.markdown("""
     The heatmap visualizes how **CitiBike demand** varies by hour and month in **2022**.  
-    Morning (**7–9 a.m.**) and evening (**5–7 p.m.**) peaks dominate across all seasons, with the highest activity between **June and August**.  
     These patterns highlight the **commuter-driven nature** of CitiBike use and the need for **efficient bike redistribution** during rush hours, especially in summer months.
     """)
 
@@ -122,10 +121,8 @@ Understanding these high-demand areas provides a clear picture of the **core net
     ]
     df_heat["month"] = pd.Categorical(df_heat["month"], categories=month_order, ordered=True)
     
-    
-
     # --- Plotly heatmap ---
-    
+
     fig = px.density_heatmap(
     df_heat,
     x=df_heat["hour"].astype(str),  
@@ -134,6 +131,7 @@ Understanding these high-demand areas provides a clear picture of the **core net
     color_continuous_scale="Blues",
     title="CitiBike Rides by Hour and Month (2022)"
 )
+    st.plotly_chart(fig, use_container_width=True)
 
 
 # ───────────────────────────────────────────────
