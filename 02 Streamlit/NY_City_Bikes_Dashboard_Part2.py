@@ -73,7 +73,7 @@ The chart below shows the **15 most popular start stations** in 2022 — areas w
 These stations are mainly located in **central Manhattan**, close to business districts, parks, and major transportation hubs.  
 Understanding these high-demand areas provides a clear picture of the **core network structure** and highlights where maintaining a steady bike supply is essential to meet daily commuter demand.  
    """)
----
+
 
     fig = go.Figure(
         go.Bar(
