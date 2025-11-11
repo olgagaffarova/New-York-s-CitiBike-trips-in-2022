@@ -65,11 +65,11 @@ This dashboard explores how, when, and where riders use the system to support sm
     st.markdown("### 🏙️ Top 15 Most Popular Start Stations in New York")
 
     st.markdown("""
-    The analysis begins by examining overall **CitiBike activity** across New York City to identify **where most trips start**.  
-    The chart below shows the **15 most popular start stations** in 2022 — areas with the **highest ridership volumes** throughout the year.  
+The analysis begins by examining overall **CitiBike activity** across New York City to identify **where most trips start**.  
+The chart below shows the **15 most popular start stations** in 2022 — areas with the **highest ridership volumes** throughout the year.  
 
-    These stations are mainly located in **central Manhattan**, close to business districts, parks, and major transportation hubs.  
-    Understanding these high-demand areas provides a clear picture of the **core network structure** and highlights where maintaining a steady bike supply is essential to meet daily commuter demand.
+These stations are mainly located in **central Manhattan**, close to business districts, parks, and major transportation hubs.  
+Understanding these high-demand areas provides a clear picture of the **core network structure** and highlights where maintaining a steady bike supply is essential to meet daily commuter demand.
     """)
 
     fig = go.Figure(
@@ -111,8 +111,8 @@ This dashboard explores how, when, and where riders use the system to support sm
     st.markdown("### 🕒 Hourly and Monthly CitiBike Demand")
 
     st.markdown("""
-    The heatmap visualizes how **CitiBike demand** varies by hour and month in **2022**.
-    Strong commuter pattern:
+The heatmap visualizes how **CitiBike demand** varies by hour and month in **2022**.
+Strong commuter pattern:
 Clear ridership peaks between **8–9 AM** and **5–7 PM**, matching New York’s workday commute.
 
 **Seasonal variation**:
