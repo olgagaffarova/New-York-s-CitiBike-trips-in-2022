@@ -1,7 +1,6 @@
 ############################################################
 # 🗽 NYC CITIBIKE 2022 DASHBOARD
 # Author: Olga Gaffarova
-# Goal: Reduce bike shortages by 50% at top 20% busiest stations
 ############################################################
 
 import streamlit as st
