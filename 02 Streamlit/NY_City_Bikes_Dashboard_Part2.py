@@ -115,7 +115,10 @@ Clear ridership peaks between **8–9 AM** and **5–7 PM**, matching New York�
 **Seasonal variation**:
 Demand rises sharply from May to September, while winter months (Nov–Apr) show low activity — confirming the need to reduce active fleet in the off-season.
     """)
+    st.markdown("#### 🚴 CitiBike Rides by Hour and Month (2022)")
+    st.plotly_chart(fig, use_container_width=True)
 
+    
     # Prepare data
     df_heat["hour"] = df_heat["hour"].astype(str)
     df_heat["month"] = pd.Categorical(
@@ -137,7 +140,6 @@ Demand rises sharply from May to September, while winter months (Nov–Apr) show
     )
 
     fig.update_layout(
-        title="CitiBike Rides by Hour and Month (2022)",
         template="plotly_white",
         title_x=0.5,
         font=dict(size=14),
