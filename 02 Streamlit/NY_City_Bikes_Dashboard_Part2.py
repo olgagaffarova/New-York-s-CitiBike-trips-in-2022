@@ -137,7 +137,7 @@ Strong commuter pattern: clear ridership peaks between **8–9 AM** and **5–7 
     )
 
     fig.update_layout(
-        title="CitiBike Rides by Hour and Month (2022)"
+        title="CitiBike Rides by Hour and Month (2022)",
         template="plotly_white",
         title_x=0.5,
         font=dict(size=14),
