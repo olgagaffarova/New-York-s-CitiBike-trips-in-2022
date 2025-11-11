@@ -40,10 +40,6 @@ df_heat = pd.read_csv('02 Streamlit/df_heat.csv', index_col=0)
 df_daily_precipitations = pd.read_csv('02 Streamlit/df_daily_precipitations.csv', index_col=0, parse_dates=True)
 hours_member_casual = pd.read_csv('02 Streamlit/hours_member_casual.csv', index_col=0)
 
-
-# ───────────────────────────────────────────────
-# PAGE 1: INTRO + HOURLY & MONTHLY RIDERSHIP
-# ───────────────────────────────────────────────
 # ───────────────────────────────────────────────
 # PAGE 1: INTRO + HOURLY & MONTHLY RIDERSHIP
 # ───────────────────────────────────────────────
@@ -137,11 +133,11 @@ Demand rises sharply from May to September, while winter months (Nov–Apr) show
         x="hour",
         y="month",
         z="rides",
-        color_continuous_scale="Blues",
-        title="CitiBike Rides by Hour and Month (2022)"
+        color_continuous_scale="Blues"
     )
 
     fig.update_layout(
+        title="CitiBike Rides by Hour and Month (2022)"
         template="plotly_white",
         title_x=0.5,
         font=dict(size=14),
