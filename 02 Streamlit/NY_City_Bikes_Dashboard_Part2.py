@@ -43,13 +43,17 @@ hours_member_casual = pd.read_csv('02 Streamlit/hours_member_casual.csv', index_
 # ───────────────────────────────────────────────
 # PAGE 1: INTRO + HOURLY & MONTHLY RIDERSHIP
 # ───────────────────────────────────────────────
+
+# ───────────────────────────────────────────────
+# PAGE 1: INTRO + HOURLY & MONTHLY RIDERSHIP
+# ───────────────────────────────────────────────
 if page == "About Citibike":
 
     st.title("🚴 CitiBike 2022: Understanding New York’s Bike Network")
 
     # --- Intro text ---
     st.markdown("""
-###**Project Objective:**  
+### **Project Objective:**  
 As the lead analyst for New York City’s **CitiBike**, this project aims to conduct a **descriptive analysis** of 2022 usage data to help the business strategy team assess the **bike distribution model** and identify **expansion opportunities**. The goal is to uncover **actionable insights** that prevent bike shortages and ensure CitiBike’s continued leadership in **sustainable urban mobility**.  
 
 Since launching in **2013**, CitiBike has grown into a network of **33,000 bikes** and **4,600 docking stations** across **Manhattan, Brooklyn, and Queens**. However, uneven demand, seasonal patterns, and capacity limits have created persistent **availability issues** at key stations.  
@@ -104,21 +108,16 @@ Understanding these high-demand areas provides a clear picture of the **core net
     # --- Divider between charts ---
     st.markdown("---")
 
-    
-    
-    
     # --- 🕒 Hourly and Monthly CitiBike Demand ---
     st.markdown("### 🕒 Hourly and Monthly CitiBike Demand")
 
     st.markdown("""
-The heatmap visualizes how **CitiBike demand** varies by hour and month in **2022**.
-Strong commuter pattern:
-Clear ridership peaks between **8–9 AM** and **5–7 PM**, matching New York’s workday commute.
+The heatmap visualizes how **CitiBike demand** varies by hour and month in **2022**.  
+Strong commuter pattern: clear ridership peaks between **8–9 AM** and **5–7 PM**, matching New York’s workday commute.  
 
-**Seasonal variation**:
-Demand rises sharply from May to September, while winter months (Nov–Apr) show low activity — confirming the need to reduce active fleet in the off-season.
+**Seasonal variation:** demand rises sharply from **May to September**, while winter months (Nov–Apr) show low activity — confirming the need to reduce active fleet in the off-season.
 """)
-    
+
     # Prepare data
     df_heat["hour"] = df_heat["hour"].astype(str)
     df_heat["month"] = pd.Categorical(
@@ -154,9 +153,9 @@ Demand rises sharply from May to September, while winter months (Nov–Apr) show
         categoryarray=[str(h) for h in range(24)]
     )
 
-    
     st.markdown("#### CitiBike Rides by Hour and Month (2022)")
     st.plotly_chart(fig, use_container_width=True)
+
 
 
 
