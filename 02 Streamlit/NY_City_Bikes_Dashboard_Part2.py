@@ -104,6 +104,9 @@ This dashboard explores how, when, and where riders use the system to support sm
     # --- Divider between charts ---
     st.markdown("---")
 
+    
+    
+    
     # --- 🕒 Hourly and Monthly CitiBike Demand ---
     st.markdown("### 🕒 Hourly and Monthly CitiBike Demand")
 
@@ -115,9 +118,6 @@ Clear ridership peaks between **8–9 AM** and **5–7 PM**, matching New York�
 **Seasonal variation**:
 Demand rises sharply from May to September, while winter months (Nov–Apr) show low activity — confirming the need to reduce active fleet in the off-season.
     """)
-    st.markdown("#### 🚴 CitiBike Rides by Hour and Month (2022)")
-    st.plotly_chart(fig, use_container_width=True)
-
     
     # Prepare data
     df_heat["hour"] = df_heat["hour"].astype(str)
@@ -154,7 +154,10 @@ Demand rises sharply from May to September, while winter months (Nov–Apr) show
         categoryarray=[str(h) for h in range(24)]
     )
 
+    
+    st.markdown("#### CitiBike Rides by Hour and Month (2022)")
     st.plotly_chart(fig, use_container_width=True)
+
 
 
 # ───────────────────────────────────────────────
