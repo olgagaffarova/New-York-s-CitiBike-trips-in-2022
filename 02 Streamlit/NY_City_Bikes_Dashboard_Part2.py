@@ -165,13 +165,13 @@ Demand rises sharply from May to September, while winter months (Nov–Apr) show
 # ───────────────────────────────────────────────
 
 elif page == "Members vs Casual Users Patterns":
-    st.title("👥 Members vs Casual Users Ride Patterns")
+    st.title("Members vs Casual Users Ride Patterns")
 
     st.markdown("""
-    This section compares the **hourly usage patterns** of CitiBike members and casual users,
-    further broken down by the **type of bike** used (classic or electric).  
-    Members show strong commuting peaks on weekdays, while casual users favor late morning
-    and afternoon leisure rides.
+This section compares the **hourly usage patterns** of CitiBike members and casual users,
+further broken down by the **type of bike** used (classic or electric).  
+Members show strong commuting peaks on weekdays, while casual users favor late morning
+and afternoon leisure rides.
     """)
 
     # --- Plotly Facet Bar Chart by Member Type and Bike Type ---
@@ -211,8 +211,8 @@ elif page == "Members vs Casual Users Patterns":
 elif page == "Weather Impact":
     st.title("Weather Impact on CitiBike Demand")
     st.markdown("""
-    This section explores how **temperature** and **precipitation** affect CitiBike ridership.  
-    Colder or rainy days tend to reduce daily rides, while warm and dry conditions encourage more cycling.
+This section explores how **temperature** and **precipitation** affect CitiBike ridership.  
+Colder or rainy days tend to reduce daily rides, while warm and dry conditions encourage more cycling.
     """)
 
     # --- DAILY RIDES VS AVERAGE TEMPERATURE ---
@@ -313,9 +313,9 @@ elif page == "Weather Impact":
 elif page == "Identifying Main Routes and Problem Stations":
     st.title("Pareto Analysis: Top 14% Routes Covering 80% of Trips")
     st.markdown("""
-    Applying the **Pareto Principle (80/20 rule)** helps focus on the most significant routes.  
-    The **top 14% of all routes** in 2022 account for **80% of total CitiBike trips**.  
-    These high-traffic routes reveal where rebalancing and optimization bring the most benefit.
+Applying the **Pareto Principle (80/20 rule)** helps focus on the most significant routes.  
+The **top 14% of all routes** in 2022 account for **80% of total CitiBike trips**.  
+These high-traffic routes reveal where rebalancing and optimization bring the most benefit.
     """)
 
     st.markdown("### Aggregated Trip Flows in New York (Pareto Ratio)")
@@ -326,11 +326,11 @@ elif page == "Identifying Main Routes and Problem Stations":
 
     st.title("🚲 Identifying Problem Stations and Strategic Recommendations")
     st.markdown("""
-    This section identifies **stations with persistent bike shortages or overflows**  
-    using the **mean net flow** (rentals − returns) metric across 2022.
+This section identifies **stations with persistent bike shortages or overflows**  
+using the **mean net flow** (rentals − returns) metric across 2022.
     
-    - **Positive net flow → Donor stations** (bikes leave → shortage risk)  
-    - **Negative net flow → Receiver stations** (bikes accumulate → overflow risk)
+- **Positive net flow → Donor stations** (bikes leave → shortage risk)  
+- **Negative net flow → Receiver stations** (bikes accumulate → overflow risk)
     """)
 
     # ───────────────────────────────────────────────
