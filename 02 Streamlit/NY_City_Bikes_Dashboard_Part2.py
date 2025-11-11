@@ -50,9 +50,7 @@ if page == "About Citibike":
 
     # --- Intro text ---
     st.markdown("""
-    ### 🚴 CitiBike Network Overview  
-
-**Objective:**  
+    ### **Project Objective:**  
 As the lead analyst for New York City’s **CitiBike**, this project aims to conduct a **descriptive analysis** of 2022 usage data to help the business strategy team assess the **bike distribution model** and identify **expansion opportunities**. The goal is to uncover **actionable insights** that prevent bike shortages and ensure CitiBike’s continued leadership in **sustainable urban mobility**.  
 
 Since launching in **2013**, CitiBike has grown into a network of **33,000 bikes** and **4,600 docking stations** across **Manhattan, Brooklyn, and Queens**. However, uneven demand, seasonal patterns, and capacity limits have created persistent **availability issues** at key stations.  
