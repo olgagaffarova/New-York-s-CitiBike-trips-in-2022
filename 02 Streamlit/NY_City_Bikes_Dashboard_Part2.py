@@ -49,7 +49,7 @@ if page == "About Citibike":
 
     # --- Intro text ---
     st.markdown("""
-    ### **Project Objective:**  
+###**Project Objective:**  
 As the lead analyst for New York City’s **CitiBike**, this project aims to conduct a **descriptive analysis** of 2022 usage data to help the business strategy team assess the **bike distribution model** and identify **expansion opportunities**. The goal is to uncover **actionable insights** that prevent bike shortages and ensure CitiBike’s continued leadership in **sustainable urban mobility**.  
 
 Since launching in **2013**, CitiBike has grown into a network of **33,000 bikes** and **4,600 docking stations** across **Manhattan, Brooklyn, and Queens**. However, uneven demand, seasonal patterns, and capacity limits have created persistent **availability issues** at key stations.  
@@ -59,7 +59,7 @@ This dashboard explores how, when, and where riders use the system to support sm
 1. **Seasonal Scaling:** How much should the fleet be **scaled back between November and April** to match lower demand while reducing maintenance costs?  
 2. **Network Expansion:** How can data guide the decision on **adding new stations** along high-demand **waterfront routes**?  
 3. **Redistribution Strategy:** What operational strategies can ensure bikes remain **available at the busiest stations**, especially during peak morning and evening hours?  
-    """)
+""")
 
     # --- 🏙️ Top 15 Most Popular Start Stations ---
     st.markdown("### 🏙️ Top 15 Most Popular Start Stations in New York")
@@ -70,7 +70,7 @@ The chart below shows the **15 most popular start stations** in 2022 — areas w
 
 These stations are mainly located in **central Manhattan**, close to business districts, parks, and major transportation hubs.  
 Understanding these high-demand areas provides a clear picture of the **core network structure** and highlights where maintaining a steady bike supply is essential to meet daily commuter demand.
-    """)
+""")
 
     fig = go.Figure(
         go.Bar(
@@ -117,7 +117,7 @@ Clear ridership peaks between **8–9 AM** and **5–7 PM**, matching New York�
 
 **Seasonal variation**:
 Demand rises sharply from May to September, while winter months (Nov–Apr) show low activity — confirming the need to reduce active fleet in the off-season.
-    """)
+""")
     
     # Prepare data
     df_heat["hour"] = df_heat["hour"].astype(str)
