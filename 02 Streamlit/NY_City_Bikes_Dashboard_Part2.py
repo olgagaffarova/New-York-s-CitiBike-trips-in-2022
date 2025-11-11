@@ -50,16 +50,19 @@ if page == "About Citibike":
 
     # --- Intro text ---
     st.markdown("""
-    **Goal:** Reduce bike shortages by up to **50%** in 2023 at the **top 20% busiest stations**, 
-    which together handle **80% of all CitiBike demand**, by optimizing redistribution.
+    ### 🚴 CitiBike Network Overview  
 
-    Since **2013**, New York City’s *CitiBike* has grown into a network of **33,000 bikes**
-    and **4,600 docking stations** across **Manhattan**, **Brooklyn**, and **Queens**.
-    
-    This dashboard explores CitiBike’s 2022 usage data to understand:
-    - When people ride (seasonal and weather effects)  
-    - Where the busiest routes are (Pareto analysis)  
-    - Which stations face shortages or overflow (imbalance analysis)
+**Objective:**  
+As the lead analyst for New York City’s **CitiBike**, this project aims to conduct a **descriptive analysis** of 2022 usage data to help the business strategy team assess the **bike distribution model** and identify **expansion opportunities**. The goal is to uncover **actionable insights** that prevent bike shortages and ensure CitiBike’s continued leadership in **sustainable urban mobility**.  
+
+Since launching in **2013**, CitiBike has grown into a network of **33,000 bikes** and **4,600 docking stations** across **Manhattan, Brooklyn, and Queens**. However, uneven demand, seasonal patterns, and capacity limits have created persistent **availability issues** at key stations.  
+
+This dashboard explores how, when, and where riders use the system to support smarter decision-making around fleet management and station planning. It focuses on three key business questions:  
+
+1. **Seasonal Scaling:** How much should the fleet be **scaled back between November and April** to match lower demand while reducing maintenance costs?  
+2. **Network Expansion:** How can data guide the decision on **adding new stations** along high-demand **waterfront routes**?  
+3. **Redistribution Strategy:** What operational strategies can ensure bikes remain **available at the busiest stations**, especially during peak morning and evening hours?  
+
     """)
 
     # --- Top 15 stations bar chart ---
@@ -138,12 +141,12 @@ if page == "About Citibike":
 # PAGE 2: MEMBER VS CASUAL PATTERNS
 # ───────────────────────────────────────────────
 
-elif page == "Member vs Casual Patterns":
-    st.title("👥 Member vs Casual User Ride Patterns")
+elif page == "Members vs Casual Users Patterns":
+    st.title("👥 Members vs Casual Users Ride Patterns")
 
     st.markdown("""
     This section compares the **hourly usage patterns** of CitiBike members and casual users,
-    further broken down by the **type of bike** used (classic, electric, or docked).  
+    further broken down by the **type of bike** used (classic or electric).  
     Members show strong commuting peaks on weekdays, while casual users favor late morning
     and afternoon leisure rides.
     """)
