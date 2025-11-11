@@ -65,7 +65,7 @@ This dashboard explores how, when, and where riders use the system to support sm
 
     # --- Top 15 stations bar chart ---
     st.markdown("""
-    ### 🏙️ Top 15 Most Popular Start Stations in New York")
+    ### Top 15 Most Popular Start Stations in New York")
 
 The analysis begins by examining overall CitiBike activity across New York City to identify **where most trips start**.  
 The chart below shows the **15 most popular start stations** in 2022 — areas with the **highest ridership volumes** throughout the year.  
@@ -105,33 +105,52 @@ Understanding these high-demand areas provides a clear picture of the **core net
 
     # --- Divider between charts ---
     st.markdown("---")
+    # Prepare data
 
-    # --- Hourly & Monthly Heatmap section ---
-    st.markdown("### 🕒 Hourly and Monthly CitiBike Demand")
-
-    st.markdown("""
-    The heatmap visualizes how **CitiBike demand** varies by hour and month in **2022**.  
-    These patterns highlight the **commuter-driven nature** of CitiBike use and the need for **efficient bike redistribution** during rush hours, especially in summer months.
-    """)
-
-    # Order months chronologically
-    month_order = [
+df_heat["hour"] = df_heat["hour"].astype(str)
+df_heat["month"] = pd.Categorical(
+    df_heat["month"],
+    categories=[
         "January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"
-    ]
-    df_heat["month"] = pd.Categorical(df_heat["month"], categories=month_order, ordered=True)
-    
-    # --- Plotly heatmap ---
+    ],
+    ordered=True
+)
 
-    fig = px.density_heatmap(
+# Plotly heatmap
+fig = px.density_heatmap(
     df_heat,
-    x=df_heat["hour"].astype(str),  
+    x="hour",
     y="month",
     z="rides",
     color_continuous_scale="Blues",
     title="CitiBike Rides by Hour and Month (2022)"
 )
-    st.plotly_chart(fig, use_container_width=True)
+
+fig.update_layout(
+    template="plotly_white",
+    title_x=0.5,
+    font=dict(size=14),
+    coloraxis_colorbar=dict(title="Number of Rides"),
+    margin=dict(l=80, r=60, t=60, b=60)
+)
+
+# Force discrete hourly scale (no binning)
+fig.update_xaxes(
+    type='category',
+    categoryorder='array',
+    categoryarray=[str(h) for h in range(24)]
+)
+
+st.plotly_chart(fig, use_container_width=True)
+
+
+
+
+
+
+
+
 
 
 # ───────────────────────────────────────────────
