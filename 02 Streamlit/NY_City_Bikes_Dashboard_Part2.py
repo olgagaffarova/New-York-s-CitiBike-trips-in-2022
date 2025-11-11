@@ -44,6 +44,9 @@ hours_member_casual = pd.read_csv('02 Streamlit/hours_member_casual.csv', index_
 # ───────────────────────────────────────────────
 # PAGE 1: INTRO + HOURLY & MONTHLY RIDERSHIP
 # ───────────────────────────────────────────────
+# ───────────────────────────────────────────────
+# PAGE 1: INTRO + HOURLY & MONTHLY RIDERSHIP
+# ───────────────────────────────────────────────
 if page == "About Citibike":
 
     st.title("🚴 CitiBike 2022: Understanding New York’s Bike Network")
@@ -60,100 +63,103 @@ This dashboard explores how, when, and where riders use the system to support sm
 1. **Seasonal Scaling:** How much should the fleet be **scaled back between November and April** to match lower demand while reducing maintenance costs?  
 2. **Network Expansion:** How can data guide the decision on **adding new stations** along high-demand **waterfront routes**?  
 3. **Redistribution Strategy:** What operational strategies can ensure bikes remain **available at the busiest stations**, especially during peak morning and evening hours?  
-
     """)
+
     # --- 🏙️ Top 15 Most Popular Start Stations ---
-st.markdown("### 🏙️ Top 15 Most Popular Start Stations in New York")
+    st.markdown("### 🏙️ Top 15 Most Popular Start Stations in New York")
 
-st.markdown("""
-The analysis begins by examining overall **CitiBike activity** across New York City to identify **where most trips start**.  
-The chart below shows the **15 most popular start stations** in 2022 — areas with the **highest ridership volumes** throughout the year.  
+    st.markdown("""
+    The analysis begins by examining overall **CitiBike activity** across New York City to identify **where most trips start**.  
+    The chart below shows the **15 most popular start stations** in 2022 — areas with the **highest ridership volumes** throughout the year.  
 
-These stations are mainly located in **central Manhattan**, close to business districts, parks, and major transportation hubs.  
-Understanding these high-demand areas provides a clear picture of the **core network structure** and highlights where maintaining a steady bike supply is essential to meet daily commuter demand.
-""")
+    These stations are mainly located in **central Manhattan**, close to business districts, parks, and major transportation hubs.  
+    Understanding these high-demand areas provides a clear picture of the **core network structure** and highlights where maintaining a steady bike supply is essential to meet daily commuter demand.
+    """)
 
-fig = go.Figure(
-    go.Bar(
-        x=top15['start_station_name'],
-        y=top15['trips_per_station'],
-        marker=dict(
-            color=top15['trips_per_station'],
-            colorscale='Blues',
-            showscale=True,
-            colorbar=dict(title='Trip Count')
-        ),
-        text=top15['trips_per_station'],
-        textposition='outside'
+    fig = go.Figure(
+        go.Bar(
+            x=top15['start_station_name'],
+            y=top15['trips_per_station'],
+            marker=dict(
+                color=top15['trips_per_station'],
+                colorscale='Blues',
+                showscale=True,
+                colorbar=dict(title='Trip Count')
+            ),
+            text=top15['trips_per_station'],
+            textposition='outside'
+        )
     )
-)
 
-fig.update_layout(
-    xaxis_title='Station Name',
-    yaxis_title='Number of Trips',
-    plot_bgcolor='white',
-    paper_bgcolor='white',
-    font=dict(color='black', size=11),
-    xaxis=dict(tickangle=-45, categoryorder='total descending'),
-    height=600,
-    margin=dict(l=40, r=40, t=80, b=120),
-    title_x=0.5
-)
+    fig.update_layout(
+        xaxis_title='Station Name',
+        yaxis_title='Number of Trips',
+        plot_bgcolor='white',
+        paper_bgcolor='white',
+        font=dict(color='black', size=11),
+        xaxis=dict(tickangle=-45, categoryorder='total descending'),
+        height=600,
+        margin=dict(l=40, r=40, t=80, b=120),
+        title_x=0.5
+    )
 
-st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, use_container_width=True)
 
+    # --- Divider between charts ---
+    st.markdown("---")
 
-# --- Divider between charts ---
-st.markdown("---")
+    # --- 🕒 Hourly and Monthly CitiBike Demand ---
+    st.markdown("### 🕒 Hourly and Monthly CitiBike Demand")
 
+    st.markdown("""
+    The heatmap visualizes how **CitiBike demand** varies by hour and month in **2022**.  
+    These patterns highlight the **commuter-driven nature** of CitiBike use and the need for **efficient bike redistribution** during rush hours, especially in summer months.
+    """)
 
-# --- 🕒 Hourly and Monthly CitiBike Demand ---
-st.markdown("### 🕒 Hourly and Monthly CitiBike Demand")
+    # Prepare data
+    df_heat["hour"] = df_heat["hour"].astype(str)
+    df_heat["month"] = pd.Categorical(
+        df_heat["month"],
+        categories=[
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ],
+        ordered=True
+    )
 
-st.markdown("""
-The heatmap visualizes how **CitiBike demand** varies by hour and month in **2022**.  
-These patterns highlight the **commuter-driven nature** of CitiBike use and the need for **efficient bike redistribution** during rush hours, especially in summer months.
-""")
+    # Plotly heatmap
+    fig = px.density_heatmap(
+        df_heat,
+        x="hour",
+        y="month",
+        z="rides",
+        color_continuous_scale="Blues",
+        title="CitiBike Rides by Hour and Month (2022)"
+    )
 
-# Prepare data
-df_heat["hour"] = df_heat["hour"].astype(str)
-df_heat["month"] = pd.Categorical(
-    df_heat["month"],
-    categories=[
-        "January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
-    ],
-    ordered=True
-)
+    fig.update_layout(
+        template="plotly_white",
+        title_x=0.5,
+        font=dict(size=14),
+        coloraxis_colorbar=dict(title="Number of Rides"),
+        margin=dict(l=80, r=60, t=60, b=60)
+    )
 
-# Plotly heatmap
-fig = px.density_heatmap(
-    df_heat,
-    x="hour",
-    y="month",
-    z="rides",
-    color_continuous_scale="Blues",
-    title="CitiBike Rides by Hour and Month (2022)"
-)
+    # Force discrete hourly scale (no binning)
+    fig.update_xaxes(
+        type='category',
+        categoryorder='array',
+        categoryarray=[str(h) for h in range(24)]
+    )
 
-fig.update_layout(
-    template="plotly_white",
-    title_x=0.5,
-    font=dict(size=14),
-    coloraxis_colorbar=dict(title="Number of Rides"),
-    margin=dict(l=80, r=60, t=60, b=60)
-)
-
-# Force discrete hourly scale (no binning)
-fig.update_xaxes(
-    type='category',
-    categoryorder='array',
-    categoryarray=[str(h) for h in range(24)]
-)
-
-st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, use_container_width=True)
 
 
+# ───────────────────────────────────────────────
+# PAGE 2: MEMBER VS CASUAL PATTERNS
+# ───────────────────────────────────────────────
+elif page == "Members vs Casual Users Patterns":
+    st.title("👥 Members vs Casual Users Ride Patterns")
 
 
 
