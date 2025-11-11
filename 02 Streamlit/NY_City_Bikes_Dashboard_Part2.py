@@ -239,9 +239,38 @@ elif page == "Identifying Main Routes and Problem Stations":
                       font=dict(color='black', size=11), margin=dict(l=220, r=40, t=80, b=40))
     st.plotly_chart(fig, use_container_width=True)
 
+
 # ───────────────────────────────────────────────
 # PAGE 5: PREDICTIVE REBALANCING STRATEGY
 # ───────────────────────────────────────────────
 elif page == "Predictive Rebalancing Strategy":
     st.title("🔁 Predictive Rebalancing Strategy")
-    st.markdown
+    st.markdown("""
+    Introduces **dynamic redistribution** and **predictive scheduling** for morning (7–9 AM) 
+    and evening (5–7 PM) peaks to prevent shortages and overflow.
+    """)
+
+# ───────────────────────────────────────────────
+# PAGE 6: WATERFRONT EXPANSION OPPORTUNITIES
+# ───────────────────────────────────────────────
+elif page == "Waterfront Expansion Opportunities":
+    st.title("🌊 Waterfront Expansion Opportunities")
+    st.markdown("""
+    Explore **spatial demand clusters** along **Hudson and East River** to identify where 
+    new stations could relieve congestion and serve leisure riders.
+    """)
+
+# ───────────────────────────────────────────────
+# PAGE 7: RECOMMENDATIONS
+# ───────────────────────────────────────────────
+elif page == "Recommendations":
+    st.title("💡 Strategic Recommendations")
+
+    st.markdown("""
+    - **Scale Back Fleet During Off-Season (Nov–Apr)** → reduce active bikes by **30–40%**  
+    - **Expand Docking Stations Along the Waterfront** → target **Hudson & East River corridors**  
+    - **Implement Predictive Redistribution** → rebalance **7–9 AM & 5–7 PM**  
+    - **Prioritize Top 600 Stations** covering **80% of trips**  
+    - **Adjust Maintenance & Staffing** in line with seasonal demand
+    """)
+
