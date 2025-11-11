@@ -26,8 +26,16 @@ st.set_page_config(page_title="CitiBike 2022", layout="wide")
 st.sidebar.title("Dashboard Navigation")
 page = st.sidebar.radio(
     "Go to:",
-    ["About Citibike", "Member vs Casual Patterns", "Weather Impact", "Identifying Main Routes and Problem Stations", "Recommendations"]
-)
+    [
+        "About Citibike",
+        "Member vs Casual Patterns",
+        "Weather Impact",
+        "Identifying Main Routes and Problem Stations",
+        "Fleet Optimization (Nov–Apr)",
+        "Waterfront Expansion Opportunities",
+        "Predictive Rebalancing Strategy",
+        "Recommendations"
+    ])
 
 # ───────────────────────────────────────────────
 # LOAD DATA
