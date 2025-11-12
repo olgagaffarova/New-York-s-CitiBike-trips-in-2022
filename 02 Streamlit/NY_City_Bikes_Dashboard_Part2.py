@@ -175,9 +175,7 @@ elif page == "Member vs Casual Patterns":
 # ───────────────────────────────────────────────
 # PAGE 3: WEATHER IMPACT + FLEET OPTIMIZATION
 # ───────────────────────────────────────────────
-# ───────────────────────────────────────────────
-# PAGE 3: WEATHER IMPACT + FLEET OPTIMIZATION
-# ───────────────────────────────────────────────
+
 elif page == "Weather Impact and Fleet Optimization (Nov–Apr)":
     st.title("🌦️ Weather Impact and Fleet Optimization (Nov–Apr)")
 
@@ -185,6 +183,11 @@ elif page == "Weather Impact and Fleet Optimization (Nov–Apr)":
     This section analyzes how **temperature** and **rainfall** influence ridership, 
     and recommends **fleet reduction by 30–40% during November–April**.
     """)
+	# Ensure month order for proper chronological sorting 
+	month_order = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+
 
     # ============================================================================
     # 1. DAILY BIKE RIDES VS TEMPERATURE
