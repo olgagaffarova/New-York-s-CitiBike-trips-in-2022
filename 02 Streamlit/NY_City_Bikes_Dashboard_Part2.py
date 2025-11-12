@@ -374,8 +374,8 @@ elif page == "Waterfront Expansion Opportunities":
     fig = go.Figure(data=[sankey_data])
     fig.update_layout(
         title="Top Waterfront Origin → Destination Flows (Stations with Highest Trip Pressure)",
-        height=700,
-        font=dict(size=12),
+        height=900,
+        font=dict(size=14),
         plot_bgcolor="white"
     )
     st.plotly_chart(fig, use_container_width=True)
