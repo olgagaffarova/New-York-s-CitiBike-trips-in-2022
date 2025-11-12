@@ -373,7 +373,7 @@ elif page == "Waterfront Expansion Opportunities":
             source=[node_index[s] for s in top_flows["start_station_name"]],
             target=[node_index[e] for e in top_flows["end_station_name"]],
             value=top_flows["value"],
-			color='lightblue'  
+			color='steelblue'  
         )
     )
 
@@ -383,7 +383,7 @@ elif page == "Waterfront Expansion Opportunities":
     fig.update_layout(
         title="Top Waterfront Origin → Destination Flows (Stations with Highest Trip Pressure)",
         height=800,
-        font=dict(size=13, color="black"),
+        font=dict(size=14, color="black"),
 		paper_bgcolor='rgba(0,0,0,0)',  # Transparent background
 		plot_bgcolor='rgba(0,0,0,0)'     # Transparent plot area
     )
