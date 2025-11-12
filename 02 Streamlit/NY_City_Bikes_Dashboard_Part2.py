@@ -49,7 +49,7 @@ df_heat = pd.read_csv('02 Streamlit/df_heat.csv', index_col=0)
 df_daily_precipitations = pd.read_csv('02 Streamlit/df_daily_precipitations.csv', index_col=0, parse_dates=True)
 hours_member_casual = pd.read_csv('02 Streamlit/hours_member_casual.csv', index_col=0)
 monthly_waterfront = pd.read_csv('02 Streamlit/monthly_waterfront.csv', index_col=0)
-
+waterfront_trips = pd.read_csv('02 Streamlit/waterfront_trips.csv', index_col=0)
 
 
 # Define unified color palette
