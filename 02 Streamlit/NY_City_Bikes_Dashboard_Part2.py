@@ -175,6 +175,9 @@ elif page == "Member vs Casual Patterns":
 # ───────────────────────────────────────────────
 # PAGE 3: WEATHER IMPACT + FLEET OPTIMIZATION
 # ───────────────────────────────────────────────
+# ───────────────────────────────────────────────
+# PAGE 3: WEATHER IMPACT + FLEET OPTIMIZATION
+# ───────────────────────────────────────────────
 elif page == "Weather Impact and Fleet Optimization (Nov–Apr)":
     st.title("🌦️ Weather Impact and Fleet Optimization (Nov–Apr)")
 
@@ -183,6 +186,9 @@ elif page == "Weather Impact and Fleet Optimization (Nov–Apr)":
     and recommends **fleet reduction by 30–40% during November–April**.
     """)
 
+    # ============================================================================
+    # 1. DAILY BIKE RIDES VS TEMPERATURE
+    # ============================================================================
     fig = make_subplots(specs=[[{"secondary_y": True}]])
     fig.add_trace(go.Scatter(x=df_group['date'], y=df_group['bike_rides_daily'], name='Bike Rides',
                              mode='lines', line=dict(color=blue, width=2)), secondary_y=False)
@@ -197,6 +203,9 @@ elif page == "Weather Impact and Fleet Optimization (Nov–Apr)":
     fig.update_yaxes(title_text="Average Temperature (°C)", secondary_y=True)
     st.plotly_chart(fig, use_container_width=True)
 
+    # ============================================================================
+    # 2. DAILY BIKE RIDES VS PRECIPITATION
+    # ============================================================================
     st.subheader("Daily Bike Rides and Precipitation (2022)")
     figp = make_subplots(specs=[[{"secondary_y": True}]])
     figp.add_trace(go.Scatter(x=df_daily_precipitations.index, y=df_daily_precipitations['bike_rides_daily'],
@@ -212,11 +221,82 @@ elif page == "Weather Impact and Fleet Optimization (Nov–Apr)":
     figp.update_yaxes(title_text="Total Precipitation (mm)", secondary_y=True)
     st.plotly_chart(figp, use_container_width=True)
 
+    # ============================================================================
+    # 3. SEASONAL FLEET REDUCTION DASHBOARD (STATIC)
+    # ============================================================================
+    st.markdown("### Fleet Scaling Analysis — Nov–Apr")
+
+    sns.set_style("whitegrid")
+    plt.rcParams['figure.figsize'] = (16, 12)
+
+    fig, gs = plt.subplots(3, 2, figsize=(18, 12))
+    gs = fig.add_gridspec(3, 2, hspace=0.3, wspace=0.3)
+
+    bike_colors = {'electric_bike': '#FF6B6B', 'classic_bike': '#4ECDC4', 'docked_bike': '#95E1D3'}
+    bike_types = monthly_type['rideable_type'].unique()
+
+    # 1. Line chart — monthly demand
+    ax1 = fig.add_subplot(gs[0, :])
+    for bike_type in bike_types:
+        data = monthly_type[monthly_type['rideable_type'] == bike_type]
+        ax1.plot(data['month'], data['demand_vs_peak_%'], marker='o', linewidth=2.5, markersize=8,
+                 label=bike_type.replace('_', ' ').title(), color=bike_colors.get(bike_type, '#333'))
+    ax1.axhline(y=100, color='green', linestyle='--', alpha=0.5)
+    ax1.axhline(y=50, color='orange', linestyle='--', alpha=0.5)
+    ax1.fill_between(range(len(month_order)), 0, 100, where=np.isin(month_order, low_season),
+                     alpha=0.1, color='blue')
+    ax1.set_title('Monthly Demand Patterns by Bike Type', fontsize=14, fontweight='bold', pad=20)
+    plt.setp(ax1.xaxis.get_majorticklabels(), rotation=45, ha='right')
+
+    # 2. Heatmap — reduction recommendations
+    ax2 = fig.add_subplot(gs[1, :])
+    pivot_data = monthly_type.pivot(index='rideable_type', columns='month', values='fleet_reduction_%')
+    pivot_data.index = pivot_data.index.str.replace('_', ' ').str.title()
+    sns.heatmap(pivot_data, annot=True, fmt='.0f', cmap='RdYlGn_r', cbar_kws={'label': 'Fleet Reduction %'},
+                linewidths=0.5, linecolor='white', vmin=0, vmax=100, ax=ax2)
+    ax2.set_title('Fleet Reduction Recommendations (%) — Heatmap View', fontsize=14, fontweight='bold', pad=20)
+
+    # 3. Bar chart — low-season average reduction
+    ax3 = fig.add_subplot(gs[2, 0])
+    low_avg = low_season_type.groupby('rideable_type')['fleet_reduction_%'].mean().sort_values()
+    colors = [bike_colors.get(bt, '#333') for bt in low_avg.index]
+    bars = ax3.barh(low_avg.index.str.replace('_', ' ').str.title(), low_avg.values, color=colors, edgecolor='black')
+    for i, (bar, val) in enumerate(zip(bars, low_avg.values)):
+        ax3.text(val + 1, i, f'{val:.1f}%', va='center', fontweight='bold')
+    ax3.set_title('Low-Season Average Reduction (Nov–Apr)', fontsize=12, fontweight='bold')
+
+    # 4. Stacked area — ride volume by type
+    ax4 = fig.add_subplot(gs[2, 1])
+    pivot_rides = monthly_type.pivot(index='month', columns='rideable_type', values='total_rides').fillna(0)
+    pivot_rides.plot.area(ax=ax4, alpha=0.7,
+                          color=[bike_colors.get(col, '#333') for col in pivot_rides.columns],
+                          linewidth=2)
+    ax4.set_title('Ride Volume Distribution by Type', fontsize=12, fontweight='bold')
+    ax4.legend(title='Bike Type', labels=[col.replace('_', ' ').title() for col in pivot_rides.columns])
+    plt.setp(ax4.xaxis.get_majorticklabels(), rotation=45, ha='right')
+    ax4.grid(True, alpha=0.3)
+
+    fig.suptitle('🚴 FLEET SCALING DASHBOARD — Q1 Analysis: Low-Season Reduction Strategy',
+                 fontsize=16, fontweight='bold', y=0.995)
+    plt.tight_layout()
+    st.pyplot(fig, use_container_width=True)
+
+    # ============================================================================
+    # 4. SUMMARY INSIGHTS
+    # ============================================================================
     st.markdown("""
+    **Key Takeaways:**
+    - Ridership declines sharply with lower temperatures and heavy rainfall.  
+    - Electric bikes maintain relatively higher winter usage than classic or docked bikes.  
+    - Optimal reduction: **35% fleet scale-back** (avg across types) between **Nov–Apr**.  
+    - Reallocate saved maintenance resources toward **spring readiness** and **dock repair**.
+
     **Recommendation:**  
-    Reduce active bikes by **30–40% between November–April** to match lower ridership, 
-    cutting storage and maintenance costs without affecting service.
+    Reduce active bikes by **30–40% between November–April** to match seasonal demand, 
+    minimizing costs without affecting availability.
     """)
+
+
 
 # ───────────────────────────────────────────────
 # PAGE 4: IDENTIFYING MAIN ROUTES AND PROBLEM STATIONS
