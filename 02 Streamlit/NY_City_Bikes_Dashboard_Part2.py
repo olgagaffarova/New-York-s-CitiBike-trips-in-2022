@@ -1,7 +1,6 @@
 ############################################################
 # 🗽 NYC CITIBIKE 2022 DASHBOARD
 # Author: Olga Gaffarova
-# Goal: Reduce bike shortages by 50% at top 20% busiest stations
 ############################################################
 
 import streamlit as st
@@ -22,11 +21,21 @@ plt.style.use('dark_background')
 
 st.set_page_config(page_title="CitiBike 2022", layout="wide")
 
-# Sidebar Navigation
+# ───────────────────────────────────────────────
+# SIDEBAR NAVIGATION (UPDATED STRUCTURE)
+# ───────────────────────────────────────────────
 st.sidebar.title("Dashboard Navigation")
 page = st.sidebar.radio(
     "Go to:",
-    ["About Citibike", "Member vs Casual Patterns", "Weather Impact", "Identifying Main Routes and Problem Stations", "Recommendations"]
+    [
+        "About Citibike",
+        "Member vs Casual Patterns",
+        "Weather Impact and Fleet Optimization (Nov–Apr)",
+        "Identifying Main Routes and Problem Stations",
+        "Predictive Rebalancing Strategy",
+        "Waterfront Expansion Opportunities",
+        "Recommendations"
+    ]
 )
 
 # ───────────────────────────────────────────────
@@ -40,30 +49,29 @@ df_heat = pd.read_csv('02 Streamlit/df_heat.csv', index_col=0)
 df_daily_precipitations = pd.read_csv('02 Streamlit/df_daily_precipitations.csv', index_col=0, parse_dates=True)
 hours_member_casual = pd.read_csv('02 Streamlit/hours_member_casual.csv', index_col=0)
 
+# Define unified color palette
+blue = "#0ea5e9"
+orange = "#f97316"
+bluescale = "Blues"
 
 # ───────────────────────────────────────────────
-# PAGE 1: INTRO + HOURLY & MONTHLY RIDERSHIP
+# PAGE 1: ABOUT CITIBIKE
 # ───────────────────────────────────────────────
 if page == "About Citibike":
 
     st.title("🚴 CitiBike 2022: Understanding New York’s Bike Network")
 
-    # --- Intro text ---
     st.markdown("""
-    **Goal:** Reduce bike shortages by up to **50%** in 2023 at the **top 20% busiest stations**, 
-    which together handle **80% of all CitiBike demand**, by optimizing redistribution.
-
-    Since **2013**, New York City’s *CitiBike* has grown into a network of **33,000 bikes**
-    and **4,600 docking stations** across **Manhattan**, **Brooklyn**, and **Queens**.
-    
-    This dashboard explores CitiBike’s 2022 usage data to understand:
-    - When people ride (seasonal and weather effects)  
-    - Where the busiest routes are (Pareto analysis)  
-    - Which stations face shortages or overflow (imbalance analysis)
+    ### **Project Objective**
+    This analysis examines **CitiBike’s 2022 ridership** to improve **bike availability**, optimize **fleet management**, 
+    and identify **expansion opportunities** across New York City.
     """)
 
-    # --- Top 15 stations bar chart ---
-    st.markdown("### 🏙️ Top 15 Most Popular Start Stations in New York")
+    st.markdown("""
+    #### Top 15 Most Popular Start Stations
+    The following chart highlights the **15 busiest start stations**, mostly in **central Manhattan**, 
+    where daily commuter demand is highest.
+    """)
 
     fig = go.Figure(
         go.Bar(
@@ -71,7 +79,7 @@ if page == "About Citibike":
             y=top15['trips_per_station'],
             marker=dict(
                 color=top15['trips_per_station'],
-                colorscale='Blues',
+                colorscale=bluescale,
                 showscale=True,
                 colorbar=dict(title='Trip Count')
             ),
@@ -81,6 +89,7 @@ if page == "About Citibike":
     )
 
     fig.update_layout(
+        title="Top 15 Most Popular Start Stations in New York",
         xaxis_title='Station Name',
         yaxis_title='Number of Trips',
         plot_bgcolor='white',
@@ -88,303 +97,180 @@ if page == "About Citibike":
         font=dict(color='black', size=11),
         xaxis=dict(tickangle=-45, categoryorder='total descending'),
         height=600,
-        margin=dict(l=40, r=40, t=80, b=120)
+        margin=dict(l=40, r=40, t=80, b=120),
+        title_x=0.5
     )
-
     st.plotly_chart(fig, use_container_width=True)
 
-    # --- Divider between charts ---
     st.markdown("---")
+    st.markdown("### Hourly and Monthly CitiBike Demand")
 
-    # --- Hourly & Monthly Heatmap section ---
-    st.markdown("### 🕒 Hourly and Monthly CitiBike Demand")
+    df_heat["hour"] = df_heat["hour"].astype(str)
+    df_heat["month"] = pd.Categorical(
+        df_heat["month"],
+        categories=[
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ],
+        ordered=True
+    )
 
-    st.markdown("""
-    The heatmap visualizes how **CitiBike demand** varies by hour and month in **2022**.  
-    Morning (**7–9 a.m.**) and evening (**5–7 p.m.**) peaks dominate across all seasons, with the highest activity between **June and August**.  
-    These patterns highlight the **commuter-driven nature** of CitiBike use and the need for **efficient bike redistribution** during rush hours, especially in summer months.
-    """)
-
-    # Order months chronologically
-    month_order = [
-        "January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
-    ]
-    df_heat["month"] = pd.Categorical(df_heat["month"], categories=month_order, ordered=True)
-
-    # --- Plotly heatmap ---
     fig = px.density_heatmap(
         df_heat,
         x="hour",
         y="month",
         z="rides",
-        color_continuous_scale="Blues",
-        title="CitiBike Rides by Hour and Month (2022)"
+        color_continuous_scale=bluescale
     )
 
     fig.update_layout(
+        title="CitiBike Rides by Hour and Month (2022)",
         template="plotly_white",
         title_x=0.5,
         font=dict(size=14),
         coloraxis_colorbar=dict(title="Number of Rides"),
         margin=dict(l=80, r=60, t=60, b=60)
     )
-
+    fig.update_xaxes(type='category', categoryorder='array', categoryarray=[str(h) for h in range(24)])
     st.plotly_chart(fig, use_container_width=True)
-
-
 
 # ───────────────────────────────────────────────
 # PAGE 2: MEMBER VS CASUAL PATTERNS
 # ───────────────────────────────────────────────
-
 elif page == "Member vs Casual Patterns":
-    st.title("👥 Member vs Casual User Ride Patterns")
+    st.title("👥 Member vs Casual User Patterns")
 
     st.markdown("""
-    This section compares the **hourly usage patterns** of CitiBike members and casual users,
-    further broken down by the **type of bike** used (classic, electric, or docked).  
-    Members show strong commuting peaks on weekdays, while casual users favor late morning
-    and afternoon leisure rides.
+    This section compares **hourly ride behavior** for **members vs casual users**, 
+    with breakdown by **bike type (classic vs electric)**.
     """)
 
-    # --- Plotly Facet Bar Chart by Member Type and Bike Type ---
     fig = px.bar(
         hours_member_casual,
         x='hour',
         y='ride_id',
-        color='rideable_type',         # adds bike type breakdown
-        facet_col='member_casual',     # members vs casual
-        labels={
-            'hour': 'Hour of Day',
-            'ride_id': 'Number of Rides',
-            'rideable_type': 'Bike Type'
-        },
-        title='Hourly Ride Patterns by User Type and Bike Type',
-        color_discrete_sequence=px.colors.qualitative.Set2  # soft, distinct colors
+        color='rideable_type',
+        facet_col='member_casual',
+        labels={'hour': 'Hour of Day', 'ride_id': 'Number of Rides', 'rideable_type': 'Bike Type'},
+        color_discrete_sequence=[blue, orange]
     )
 
     fig.update_layout(
-        barmode='stack',              # stack bike types in each hour
+        barmode='stack',
         showlegend=True,
         height=550,
         margin=dict(t=80, l=40, r=40, b=40),
         title_font=dict(size=16),
         legend_title_text='Bike Type'
     )
-
     fig.update_xaxes(dtick=1)
-
     st.plotly_chart(fig, use_container_width=True)
 
-
 # ───────────────────────────────────────────────
-# PAGE 3: SEASONALITY & WEATHER
+# PAGE 3: WEATHER IMPACT + FLEET OPTIMIZATION
 # ───────────────────────────────────────────────
+elif page == "Weather Impact and Fleet Optimization (Nov–Apr)":
+    st.title("🌦️ Weather Impact and Fleet Optimization (Nov–Apr)")
 
-elif page == "Weather Impact":
-    st.title("Weather Impact on CitiBike Demand")
     st.markdown("""
-    This section explores how **temperature** and **precipitation** affect CitiBike ridership.  
-    Colder or rainy days tend to reduce daily rides, while warm and dry conditions encourage more cycling.
+    This section analyzes how **temperature** and **rainfall** influence ridership, 
+    and recommends **fleet reduction by 30–40% during November–April**.
     """)
 
-    # --- DAILY RIDES VS AVERAGE TEMPERATURE ---
-    st.markdown("### Daily Bike Rides and Average Temperature (2022)")
     fig = make_subplots(specs=[[{"secondary_y": True}]])
-
-    # Left Y-axis — Bike Rides
-    fig.add_trace(
-        go.Scatter(
-            x=df_group['date'],
-            y=df_group['bike_rides_daily'],
-            name='Bike Rides',
-            mode='lines',
-            line=dict(color='#0ea5e9', width=2)
-        ),
-        secondary_y=False
-    )
-
-    # Right Y-axis — Average Temperature
-    fig.add_trace(
-        go.Scatter(
-            x=df_daily_weather['date'],
-            y=df_daily_weather['avgTemp'],
-            name='Avg Temperature (°C)',
-            mode='lines',
-            line=dict(color='#a855f7', width=2, dash='dot')
-        ),
-        secondary_y=True
-    )
-
-    fig.update_layout(
-        template='plotly_white',
-        hovermode='x unified',
-        legend=dict(orientation='h', yanchor='bottom', y=1.02, xanchor='right', x=1),
-        height=600,
-        margin=dict(l=40, r=40, t=80, b=40)
-    )
-
+    fig.add_trace(go.Scatter(x=df_group['date'], y=df_group['bike_rides_daily'], name='Bike Rides',
+                             mode='lines', line=dict(color=blue, width=2)), secondary_y=False)
+    fig.add_trace(go.Scatter(x=df_daily_weather['date'], y=df_daily_weather['avgTemp'],
+                             name='Avg Temperature (°C)', mode='lines',
+                             line=dict(color=orange, width=2, dash='dot')), secondary_y=True)
+    fig.update_layout(template='plotly_white', hovermode='x unified',
+                      legend=dict(orientation='h', yanchor='bottom', y=1.02, xanchor='right', x=1),
+                      height=600, margin=dict(l=40, r=40, t=80, b=40))
     fig.update_xaxes(title_text="Date")
     fig.update_yaxes(title_text="Number of Bike Rides", secondary_y=False)
     fig.update_yaxes(title_text="Average Temperature (°C)", secondary_y=True)
     st.plotly_chart(fig, use_container_width=True)
-    
-    # ================================================================
-    # DAILY RIDES VS PRECIPITATION
-    # ================================================================
+
     st.subheader("Daily Bike Rides and Precipitation (2022)")
+    figp = make_subplots(specs=[[{"secondary_y": True}]])
+    figp.add_trace(go.Scatter(x=df_daily_precipitations.index, y=df_daily_precipitations['bike_rides_daily'],
+                              name='Bike Rides', mode='lines', line=dict(color=blue, width=2)), secondary_y=False)
+    figp.add_trace(go.Scatter(x=df_daily_precipitations.index, y=df_daily_precipitations['daily_rain_mm'],
+                              name='Total Precipitation (mm)', mode='lines',
+                              line=dict(color=orange, width=2, dash='dot')), secondary_y=True)
+    figp.update_layout(template='plotly_white', hovermode='x unified',
+                       legend=dict(orientation='h', yanchor='bottom', y=1.02, xanchor='right', x=1),
+                       height=600, margin=dict(l=40, r=40, t=80, b=40))
+    figp.update_xaxes(title_text="Date")
+    figp.update_yaxes(title_text="Number of Bike Rides", secondary_y=False)
+    figp.update_yaxes(title_text="Total Precipitation (mm)", secondary_y=True)
+    st.plotly_chart(figp, use_container_width=True)
 
-    fig_precip = make_subplots(specs=[[{"secondary_y": True}]])
-
-    # Left Y-axis — Bike Rides
-    fig_precip.add_trace(
-        go.Scatter(
-            x=df_daily_precipitations.index,
-            y=df_daily_precipitations['bike_rides_daily'],
-            name='Bike Rides',
-            mode='lines',
-            line=dict(color='#0ea5e9', width=2)
-        ),
-        secondary_y=False
-    )
-
-    # Right Y-axis — Precipitation
-    fig_precip.add_trace(
-        go.Scatter(
-            x=df_daily_precipitations.index,
-            y=df_daily_precipitations['daily_rain_mm'],
-            name='Total Precipitation (mm)',
-            mode='lines',
-            line=dict(color='#a855f7', width=2, dash='dot')
-        ),
-        secondary_y=True
-    )
-
-    fig_precip.update_layout(
-        title='Daily Bike Rides and Total Precipitation — 2022',
-        template='plotly_white',
-        hovermode='x unified',
-        legend=dict(orientation='h', yanchor='bottom', y=1.02, xanchor='right', x=1),
-        height=600,
-        margin=dict(l=40, r=40, t=80, b=40)
-    )
-
-    fig_precip.update_xaxes(title_text="Date")
-    fig_precip.update_yaxes(title_text="Number of Bike Rides", secondary_y=False)
-    fig_precip.update_yaxes(title_text="Total Precipitation (mm)", secondary_y=True)
-
-    st.plotly_chart(fig_precip, use_container_width=True)
-
-
-
-
-
-
-# ───────────────────────────────────────────────
-# PAGE 4: Identifying Main Routes and Problem Stations 
-# ───────────────────────────────────────────────
-elif page == "Identifying Main Routes and Problem Stations":
-    st.title("Pareto Analysis: Top 14% Routes Covering 80% of Trips")
     st.markdown("""
-    Applying the **Pareto Principle (80/20 rule)** helps focus on the most significant routes.  
-    The **top 14% of all routes** in 2022 account for **80% of total CitiBike trips**.  
-    These high-traffic routes reveal where rebalancing and optimization bring the most benefit.
+    **Recommendation:**  
+    Reduce active bikes by **30–40% between November–April** to match lower ridership, 
+    cutting storage and maintenance costs without affecting service.
     """)
 
-    st.markdown("### Aggregated Trip Flows in New York (Pareto Ratio)")
+# ───────────────────────────────────────────────
+# PAGE 4: IDENTIFYING MAIN ROUTES AND PROBLEM STATIONS
+# ───────────────────────────────────────────────
+elif page == "Identifying Main Routes and Problem Stations":
+    st.title("🗺️ Main Routes and Problem Stations")
+
+    st.markdown("""
+    The **top 14% of all routes** account for **80% of trips**.  
+    This analysis identifies those key corridors and stations with persistent imbalances.
+    """)
+
     path_to_html = "02 Streamlit/nyc_bike_map.html"
     with open(path_to_html, "r", encoding="utf-8") as f:
         html_data = f.read()
     st.components.v1.html(html_data, height=900, scrolling=True)
 
-    st.title("🚲 Identifying Problem Stations and Strategic Recommendations")
-    st.markdown("""
-    This section identifies **stations with persistent bike shortages or overflows**  
-    using the **mean net flow** (rentals − returns) metric across 2022.
-    
-    - **Positive net flow → Donor stations** (bikes leave → shortage risk)  
-    - **Negative net flow → Receiver stations** (bikes accumulate → overflow risk)
-    """)
-
-    # ───────────────────────────────────────────────
-    # STATION IMBALANCE
-    # ───────────────────────────────────────────────
-    st.title("CitiBike Station Imbalance (Rentals − Returns)")
-
-    fig = go.Figure()
-
-    # Color stations by net flow: red = shortage, blue = overflow
-    colors = [
-        'tomato' if x > 0 else 'royalblue'
-        for x in donors_receivers['mean_net_flow']
-    ]
-
-    fig.add_trace(go.Bar(
-        y=donors_receivers['station_name'],
-        x=donors_receivers['mean_net_flow'],
-        orientation='h',
-        marker_color=colors,
-        text=donors_receivers['mean_net_flow'].round(1),
-        textposition='outside',
-    ))
-
-    fig.update_layout(
-        title="CitiBike Station Imbalance (Positive = Shortage Risk, Negative = Overflow)",
-        xaxis_title="Mean Net Flow (Rentals − Returns)",
-        yaxis_title="Station",
-        height=800,
-        plot_bgcolor='white',
-        paper_bgcolor='white',
-        font=dict(color='black', size=11),
-        xaxis=dict(
-            zeroline=True,
-            zerolinewidth=2,
-            zerolinecolor='black'
-        ),
-        showlegend=False,
-        margin=dict(l=220, r=40, t=80, b=40)
-    )
-
+    st.markdown("### CitiBike Station Imbalance (Rentals − Returns)")
+    colors = ['tomato' if x > 0 else blue for x in donors_receivers['mean_net_flow']]
+    fig = go.Figure(go.Bar(y=donors_receivers['station_name'], x=donors_receivers['mean_net_flow'],
+                           orientation='h', marker_color=colors,
+                           text=donors_receivers['mean_net_flow'].round(1), textposition='outside'))
+    fig.update_layout(title="Station Imbalance (Positive = Shortage, Negative = Overflow)",
+                      xaxis_title="Mean Net Flow", yaxis_title="Station",
+                      height=800, plot_bgcolor='white', paper_bgcolor='white',
+                      font=dict(color='black', size=11), margin=dict(l=220, r=40, t=80, b=40))
     st.plotly_chart(fig, use_container_width=True)
 
 
 # ───────────────────────────────────────────────
-# PAGE 5: RECOMMENDATIONS
+# PAGE 5: PREDICTIVE REBALANCING STRATEGY
+# ───────────────────────────────────────────────
+elif page == "Predictive Rebalancing Strategy":
+    st.title("🔁 Predictive Rebalancing Strategy")
+    st.markdown("""
+    Introduces **dynamic redistribution** and **predictive scheduling** for morning (7–9 AM) 
+    and evening (5–7 PM) peaks to prevent shortages and overflow.
+    """)
+
+# ───────────────────────────────────────────────
+# PAGE 6: WATERFRONT EXPANSION OPPORTUNITIES
+# ───────────────────────────────────────────────
+elif page == "Waterfront Expansion Opportunities":
+    st.title("🌊 Waterfront Expansion Opportunities")
+    st.markdown("""
+    Explore **spatial demand clusters** along **Hudson and East River** to identify where 
+    new stations could relieve congestion and serve leisure riders.
+    """)
+
+# ───────────────────────────────────────────────
+# PAGE 7: RECOMMENDATIONS
 # ───────────────────────────────────────────────
 elif page == "Recommendations":
     st.title("💡 Strategic Recommendations")
 
     st.markdown("""
-    ### 1️⃣ Scale Back Fleet During Off-Season (Nov–Apr)
-    Reduce active bikes by **30–40%**, matching seasonal demand drops while lowering maintenance and storage costs.  
-    This aligns supply with reduced winter ridership and helps free up resources for high-demand months.
-
-    ### 2️⃣ Expand Docking Stations Along the Waterfront
-    High trip density along riverside routes (Hudson & East River) indicates strong potential for **new docking points**.  
-    Expanding capacity in these zones will ease congestion at inner-city stations and attract more leisure riders.
-
-    ### 3️⃣ Implement Predictive Redistribution
-    Rebalance bikes between **7–9 AM** and **5–7 PM** — from overflow to shortage areas — using existing fleet data.  
-    Integrating weather and demand forecasts can make daily relocation more efficient and responsive.
-
-    ### 4️⃣ Focus on Top Imbalance Clusters
-    Prioritize the **~600 busiest stations** (covering 80% of all rides) for redistribution scheduling.  
-    Targeting this core network can improve reliability and rider satisfaction with minimal resource expansion.
+    - **Scale Back Fleet During Off-Season (Nov–Apr)** → reduce active bikes by **30–40%**  
+    - **Expand Docking Stations Along the Waterfront** → target **Hudson & East River corridors**  
+    - **Implement Predictive Redistribution** → rebalance **7–9 AM & 5–7 PM**  
+    - **Prioritize Top 600 Stations** covering **80% of trips**  
+    - **Adjust Maintenance & Staffing** in line with seasonal demand
     """)
-
-    st.markdown("---")
-    st.subheader("🔍 Suggested Directions for Future Analysis")
-    st.markdown("""
-    **• Transport Service Disruptions**  
-    Incorporate data on temporary construction, maintenance, or street closures — especially at night — to assess their impact on trip volume and route selection.
-
-    **• Event and Seasonal Planning**  
-    Cross-reference trip data with **city event calendars** (concerts, parades, sports games, festivals) to anticipate demand surges and pre-position bikes in nearby zones.
-
-    **• Integration with Other Mobility Data**  
-    Combine CitiBike data with public transport usage (MTA turnstile or bus ridership) to explore multimodal patterns and support city-wide mobility optimization.
-    """)
-
-
 
