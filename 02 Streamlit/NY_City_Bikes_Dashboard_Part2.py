@@ -349,51 +349,35 @@ elif page == "Waterfront Expansion Opportunities":
     The Sankey diagram highlights **the top 20 waterfront routes** with the highest trip counts.  
     These OD pairs indicate **pressure zones** where additional docks could balance supply and ease congestion.
     """)
-
     # --- Data prep ---
     top_flows = waterfront_trips.head(20)
     nodes = list(set(top_flows['start_station_name']).union(top_flows['end_station_name']))
     node_index = {station: idx for idx, station in enumerate(nodes)}
 
-    # Color start vs end stations differently
-    node_colors = [
-        "#1f77b4" if n in top_flows['start_station_name'].values else "#2ca02c"
-        for n in nodes
-    ]
-    node_colors = list(node_colors)
-
-    # --- Sankey data ---
+    # --- Sankey Chart ---
     sankey_data = dict(
-        type='sankey',
-        arrangement='snap',
-        node=dict(
-            pad=25,
-            thickness=10,
-            line=dict(color="black", width=0.5),
-            label=nodes,
-            color=node_colors
-        ),
-        link=dict(
-            source=[node_index[s] for s in top_flows["start_station_name"]],
-            target=[node_index[e] for e in top_flows["end_station_name"]],
-            value=top_flows["value"],
-            color="rgba(255,127,14,0.6)"
-        )
+    type='sankey',
+    node=dict(
+        pad=20,
+        thickness=15,
+        line=dict(color="black", width=0.5),
+        label=nodes
+    ),
+    link=dict(
+        source=[node_index[s] for s in top_flows["start_station_name"]],
+        target=[node_index[e] for e in top_flows["end_station_name"]],
+        value=top_flows["value"]
     )
+)
 
-    # --- Figure layout ---
-    fig = go.Figure(data=[sankey_data])
-    fig.update_layout(
-        title="Top Waterfront Origin → Destination Flows (Stations with Highest Trip Pressure)",
-        height=900,
-        font=dict(size=14, color="black"),
-        plot_bgcolor="white",
-        paper_bgcolor="white"
-    )
+     fig_sankey = go.Figure(data=[sankey_data])
 
-    st.plotly_chart(fig, use_container_width=True)
+    fig_sankey.update_layout(
+    title="Top Waterfront Origin → Destination Flows (Stations with highest trip pressure)",
+    height=800
+)
 
-    
+    st.plotly_chart(fig_sankey, use_container_width=True)
 
 
 # ───────────────────────────────────────────────
