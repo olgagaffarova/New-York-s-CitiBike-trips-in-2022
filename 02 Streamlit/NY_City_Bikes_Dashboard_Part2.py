@@ -339,46 +339,116 @@ elif page == "Waterfront Expansion Opportunities":
     )
     fig.update_yaxes(range=[0.10, 0.30], gridcolor="lightgray")
     st.plotly_chart(fig, use_container_width=True)
-        
-	# ============================================================================
-	# HOTSPOT FLOWS — Sankey Diagram (validated version)
-	# ============================================================================
-	st.markdown("### Top Waterfront Origin → Destination Flows")
+	    # ============================================================================
+    # HOTSPOT FLOWS — Sankey Diagram
+    # ============================================================================
+    st.markdown("### Top Waterfront Origin → Destination Flows")
 
-	st.markdown("""
-	The Sankey diagram highlights **the top 20 waterfront routes** with the highest trip counts.  
-	These OD pairs indicate **pressure zones** where additional docks could balance supply and ease congestion.
-	""")
-	# --- Data prep ---
-	top_flows = waterfront_trips.head(20)
-	nodes = list(set(top_flows['start_station_name']).union(top_flows['end_station_name']))
-	node_index = {station: idx for idx, station in enumerate(nodes)}
+    st.markdown("""
+    The Sankey diagram below highlights **the top 20 waterfront routes** with the highest trip counts.  
+    Each connection represents a major flow of trips between two waterfront stations, indicating 
+    **pressure zones** where additional docks could balance supply and ease congestion.
+    """)
 
-	# --- Sankey Chart ---
-	sankey_data = dict(
-	type='sankey',
-	node=dict(
-		pad=20,
-		thickness=15,
-		line=dict(color="black", width=0.5),
-		label=nodes
-	),
-	link=dict(
-		source=[node_index[s] for s in top_flows["start_station_name"]],
-		target=[node_index[e] for e in top_flows["end_station_name"]],
-		value=top_flows["value"]
-	)
-)
+    # take top 20 busiest OD pairs
+    top_flows = waterfront_trips.head(20)
 
-	 fig_sankey = go.Figure(data=[sankey_data])
+    # build node labels
+    nodes = list(set(top_flows['start_station_name']).union(top_flows['end_station_name']))
 
-	fig_sankey.update_layout(
-	title="Top Waterfront Origin → Destination Flows (Stations with highest trip pressure)",
-	height=800
-)
-	
-	    st.plotly_chart(fig_sankey, use_container_width=True)
-	
+    # map station names to index positions
+    node_index = {station: idx for idx, station in enumerate(nodes)}
+
+    # create Sankey structure
+    sankey_data = dict(
+        type='sankey',
+        node=dict(
+            pad=20,
+            thickness=15,
+            line=dict(color="black", width=0.5),
+            label=nodes
+        ),
+        link=dict(
+            source=[node_index[s] for s in top_flows["start_station_name"]],
+            target=[node_index[e] for e in top_flows["end_station_name"]],
+            value=top_flows["value"],
+            color="rgba(255,127,14,0.5)"
+        )
+    )
+
+    fig = go.Figure(data=[sankey_data])
+
+    fig.update_layout(
+        title="Top Waterfront Origin → Destination Flows (Stations with Highest Trip Pressure)",
+        height=800,
+        font=dict(size=13, color="black"),
+        plot_bgcolor="white",
+        paper_bgcolor="white"
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
+
+    # ============================================================================
+    # ORIGIN–DESTINATION MATRIX (HEATMAP) — FIXED LABEL CUT-OFF
+    # ============================================================================
+    st.markdown("### Origin–Destination Matrix — Top Waterfront Routes")
+
+    st.markdown("""
+    The matrix below shows **trip volumes between the busiest waterfront station pairs**.  
+    Darker cells indicate stronger flow intensity (higher trip counts).
+    """)
+
+    import plotly.express as px
+    import pandas as pd
+
+    # Create a pivot table: rows = start stations, columns = end stations
+    df_matrix = top_flows.pivot_table(
+        index='start_station_name',
+        columns='end_station_name',
+        values='value',
+        fill_value=0
+    )
+
+    # Optional: sort by total flow
+    df_matrix = df_matrix.loc[df_matrix.sum(axis=1).sort_values(ascending=False).index]
+
+    # Optional: shorten labels slightly (if very long)
+    df_matrix.index = [name[:25] + "..." if len(name) > 25 else name for name in df_matrix.index]
+    df_matrix.columns = [name[:25] + "..." if len(name) > 25 else name for name in df_matrix.columns]
+
+    # Create heatmap
+    fig = px.imshow(
+        df_matrix,
+        color_continuous_scale='Oranges',
+        aspect='auto',
+        labels=dict(x="Destination Station", y="Origin Station", color="Trips"),
+        title="Origin–Destination Matrix — Top Waterfront Routes"
+    )
+
+    # --- Layout tweaks for readability ---
+    fig.update_layout(
+        width=1000,
+        height=600,
+        margin=dict(l=200, r=200, t=80, b=200),
+        xaxis=dict(
+            showticklabels=True,
+            tickangle=90,
+            tickfont=dict(size=11, color="black"),
+            automargin=True
+        ),
+        yaxis=dict(
+            showticklabels=True,
+            tickfont=dict(size=11, color="black"),
+            automargin=True
+        ),
+        title=dict(font=dict(size=22, color="black")),
+        plot_bgcolor='white',
+        paper_bgcolor='white'
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
+
+
 
 # ───────────────────────────────────────────────
 # PAGE 7: RECOMMENDATIONS
