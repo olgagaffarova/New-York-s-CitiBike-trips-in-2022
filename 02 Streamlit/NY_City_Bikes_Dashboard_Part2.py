@@ -353,6 +353,7 @@ elif page == "Waterfront Expansion Opportunities":
     top_flows = waterfront_trips.head(20)
     nodes = list(set(top_flows['start_station_name']).union(top_flows['end_station_name']))
     node_index = {station: idx for idx, station in enumerate(nodes)}
+    
     # Color start vs. end stations differently
     node_colors = [
         "#1f77b4" if n in top_flows['start_station_name'].values else "#2ca02c"
@@ -366,7 +367,8 @@ elif page == "Waterfront Expansion Opportunities":
             thickness=15,
             line=dict(color="black", width=0.5),
             label=nodes,
-            color=["#1f77b4"] * len(nodes)
+            color=node_colors,
+            font=dict(color="black", size=13)
         ),
         link=dict(
             source=[node_index[s] for s in top_flows["start_station_name"]],
