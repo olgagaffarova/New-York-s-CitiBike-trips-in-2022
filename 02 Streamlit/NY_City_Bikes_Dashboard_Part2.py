@@ -340,42 +340,42 @@ elif page == "Waterfront Expansion Opportunities":
     fig.update_yaxes(range=[0.10, 0.30], gridcolor="lightgray")
     st.plotly_chart(fig, use_container_width=True)
         
-	    # ============================================================================
-	    # HOTSPOT FLOWS — Sankey Diagram (validated version)
-	    # ============================================================================
-	    st.markdown("### Top Waterfront Origin → Destination Flows")
-	
-	    st.markdown("""
-	    The Sankey diagram highlights **the top 20 waterfront routes** with the highest trip counts.  
-	    These OD pairs indicate **pressure zones** where additional docks could balance supply and ease congestion.
-	    """)
-	    # --- Data prep ---
-	    top_flows = waterfront_trips.head(20)
-	    nodes = list(set(top_flows['start_station_name']).union(top_flows['end_station_name']))
-	    node_index = {station: idx for idx, station in enumerate(nodes)}
-	
-	    # --- Sankey Chart ---
-	    sankey_data = dict(
-	    type='sankey',
-	    node=dict(
-	        pad=20,
-	        thickness=15,
-	        line=dict(color="black", width=0.5),
-	        label=nodes
-	    ),
-	    link=dict(
-	        source=[node_index[s] for s in top_flows["start_station_name"]],
-	        target=[node_index[e] for e in top_flows["end_station_name"]],
-	        value=top_flows["value"]
-	    )
+	# ============================================================================
+	# HOTSPOT FLOWS — Sankey Diagram (validated version)
+	# ============================================================================
+	st.markdown("### Top Waterfront Origin → Destination Flows")
+
+	st.markdown("""
+	The Sankey diagram highlights **the top 20 waterfront routes** with the highest trip counts.  
+	These OD pairs indicate **pressure zones** where additional docks could balance supply and ease congestion.
+	""")
+	# --- Data prep ---
+	top_flows = waterfront_trips.head(20)
+	nodes = list(set(top_flows['start_station_name']).union(top_flows['end_station_name']))
+	node_index = {station: idx for idx, station in enumerate(nodes)}
+
+	# --- Sankey Chart ---
+	sankey_data = dict(
+	type='sankey',
+	node=dict(
+		pad=20,
+		thickness=15,
+		line=dict(color="black", width=0.5),
+		label=nodes
+	),
+	link=dict(
+		source=[node_index[s] for s in top_flows["start_station_name"]],
+		target=[node_index[e] for e in top_flows["end_station_name"]],
+		value=top_flows["value"]
 	)
-	
-	     fig_sankey = go.Figure(data=[sankey_data])
-	
-	    fig_sankey.update_layout(
-	    title="Top Waterfront Origin → Destination Flows (Stations with highest trip pressure)",
-	    height=800
-	)
+)
+
+	 fig_sankey = go.Figure(data=[sankey_data])
+
+	fig_sankey.update_layout(
+	title="Top Waterfront Origin → Destination Flows (Stations with highest trip pressure)",
+	height=800
+)
 	
 	    st.plotly_chart(fig_sankey, use_container_width=True)
 	
