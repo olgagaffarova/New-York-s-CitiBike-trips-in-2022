@@ -367,8 +367,8 @@ elif page == "Waterfront Expansion Opportunities":
         type='sankey',
         arrangement='snap',
         node=dict(
-            pad=15,
-            thickness=15,
+            pad=25,
+            thickness=10,
             line=dict(color="black", width=0.5),
             label=nodes,
             color=node_colors
