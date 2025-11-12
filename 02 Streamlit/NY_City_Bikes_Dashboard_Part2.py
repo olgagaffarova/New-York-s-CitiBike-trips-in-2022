@@ -353,6 +353,11 @@ elif page == "Waterfront Expansion Opportunities":
     top_flows = waterfront_trips.head(20)
     nodes = list(set(top_flows['start_station_name']).union(top_flows['end_station_name']))
     node_index = {station: idx for idx, station in enumerate(nodes)}
+    # Color start vs. end stations differently
+    node_colors = [
+        "#1f77b4" if n in top_flows['start_station_name'].values else "#2ca02c"
+        for n in nodes
+    ]
 
     sankey_data = dict(
         type='sankey',
