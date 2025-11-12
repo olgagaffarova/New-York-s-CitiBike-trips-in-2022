@@ -311,8 +311,8 @@ elif page == "Waterfront Expansion Opportunities":
 
     # Line for demand (orange)
     fig.add_trace(go.Scatter(
-        x=monthly_demand["month"],
-        y=monthly_demand["monthly_demand_share"],
+        x=monthly_waterfront["month"],
+        y=monthly_waterfront["monthly_demand_share"],
         mode="lines+markers",
         name="Monthly Demand (% of trips touching waterfront)",
         line=dict(width=3, color="#ff7f0e"),
@@ -321,8 +321,8 @@ elif page == "Waterfront Expansion Opportunities":
 
     # Flat dashed line for supply (blue)
     fig.add_trace(go.Scatter(
-        x=monthly_demand["month"],
-        y=monthly_demand["supply_share"],
+        x=monthly_waterfront["month"],
+        y=monthly_waterfront["supply_share"],
         mode="lines",
         name="Waterfront Supply (% of stations on waterfront)",
         line=dict(width=4, dash="dash", color="#1f77b4")
