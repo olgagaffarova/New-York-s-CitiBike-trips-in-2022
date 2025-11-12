@@ -278,7 +278,7 @@ elif page == "Waterfront Expansion Opportunities":
     2. Calculate **Supply** → % of all stations located near the water  
     3. Calculate **Demand** → % of trips that start *or* end near the water  
     4. Perform **Gap Analysis** → If demand exceeds supply, the waterfront is underserved  
-    5. Identify **Peak-Hour Pressure Points** to support targeted expansion
+    5. Identify **Peak-Months** to support targeted expansion
     """)
 
     # ============================================================================
@@ -479,7 +479,7 @@ elif page == "Waterfront Expansion Opportunities":
 # PAGE 7: RECOMMENDATIONS
 # ───────────────────────────────────────────────
 elif page == "Recommendations":
-    st.title("💡 Strategic Recommendations")
+    st.title("Strategic Recommendations")
 
     st.markdown("""
     - **Scale Back Fleet During Off-Season (Nov–Apr)** → reduce active bikes by **30–40%**  
