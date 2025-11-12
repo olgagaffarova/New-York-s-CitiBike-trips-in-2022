@@ -339,9 +339,9 @@ elif page == "Waterfront Expansion Opportunities":
     )
     fig.update_yaxes(range=[0.10, 0.30], gridcolor="lightgray")
     st.plotly_chart(fig, use_container_width=True)
-
+        
     # ============================================================================
-    # HOTSPOT FLOWS 
+    # HOTSPOT FLOWS — Sankey Diagram (validated version)
     # ============================================================================
     st.markdown("### Top Waterfront Origin → Destination Flows")
 
@@ -350,42 +350,51 @@ elif page == "Waterfront Expansion Opportunities":
     These OD pairs indicate **pressure zones** where additional docks could balance supply and ease congestion.
     """)
 
+    # --- Data prep ---
     top_flows = waterfront_trips.head(20)
     nodes = list(set(top_flows['start_station_name']).union(top_flows['end_station_name']))
     node_index = {station: idx for idx, station in enumerate(nodes)}
 
-    # Color start vs. end stations differently
+    # Color start vs end stations differently
     node_colors = [
-    "#1f77b4" if n in top_flows['start_station_name'].values else "#2ca02c"
-    for n in nodes
-]
+        "#1f77b4" if n in top_flows['start_station_name'].values else "#2ca02c"
+        for n in nodes
+    ]
+    node_colors = list(node_colors)
+
+    # --- Sankey data ---
     sankey_data = dict(
-    type='sankey',
-    node=dict(
-        pad=15,
-        thickness=15,
-        line=dict(color="black", width=0.5),
-        label=nodes,
-        color=node_colors,
-        font=dict(size=13, color="black")  # station names in black
-    ),
-    link=dict(
-        source=[node_index[s] for s in top_flows["start_station_name"]],
-        target=[node_index[e] for e in top_flows["end_station_name"]],
-        value=top_flows["value"],
-        color="#ff7f0e"
+        type='sankey',
+        arrangement='snap',
+        node=dict(
+            pad=15,
+            thickness=15,
+            line=dict(color="black", width=0.5),
+            label=nodes,
+            color=node_colors,
+            font=dict(size=13, color="black")
+        ),
+        link=dict(
+            source=[node_index[s] for s in top_flows["start_station_name"]],
+            target=[node_index[e] for e in top_flows["end_station_name"]],
+            value=top_flows["value"],
+            color="rgba(255,127,14,0.6)"
+        )
     )
-)
+
+    # --- Figure layout ---
     fig = go.Figure(data=[sankey_data])
     fig.update_layout(
-    title="Top Waterfront Origin → Destination Flows (Stations with Highest Trip Pressure)",
-    height=900,
-    font=dict(size=14, color="black"),
-    plot_bgcolor="white"
-)
+        title="Top Waterfront Origin → Destination Flows (Stations with Highest Trip Pressure)",
+        height=900,
+        font=dict(size=14, color="black"),
+        plot_bgcolor="white",
+        paper_bgcolor="white"
+    )
+
     st.plotly_chart(fig, use_container_width=True)
 
-
+    
 
 
 # ───────────────────────────────────────────────
