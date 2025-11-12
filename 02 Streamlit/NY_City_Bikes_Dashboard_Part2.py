@@ -367,7 +367,9 @@ elif page == "Waterfront Expansion Opportunities":
             thickness=15,
             line=dict(color="black", width=0.5),
             label=nodes,
-			color='orange'
+			color='orange',
+			hoverlabel=dict(font=dict(color="black"))
+
         ),
         link=dict(
             source=[node_index[s] for s in top_flows["start_station_name"]],
@@ -378,14 +380,13 @@ elif page == "Waterfront Expansion Opportunities":
     )
 
     fig = go.Figure(data=[sankey_data])
-	
 
     fig.update_layout(
         title="Top Waterfront Origin → Destination Flows (Stations with Highest Trip Pressure)",
         height=800,
-        font=dict(size=14, color="black"),
-		paper_bgcolor='rgba(0,0,0,0)',  # Transparent background
-		plot_bgcolor='rgba(0,0,0,0)'     # Transparent plot area
+        font=dict(size=15, color="black", family="Arial"),
+		paper_bgcolor='white',  # Transparent background
+		plot_bgcolor='white'     # Transparent plot area
     )
 
     st.plotly_chart(fig, use_container_width=True)
