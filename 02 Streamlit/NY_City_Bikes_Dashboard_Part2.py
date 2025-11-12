@@ -364,7 +364,7 @@ elif page == "Waterfront Expansion Opportunities":
         type='sankey',
         node=dict(
             pad=20,
-            thickness=15,
+            thickness=10,
             line=dict(color="black", width=0.5),
             label=nodes,
 			color='orange',
@@ -383,7 +383,7 @@ elif page == "Waterfront Expansion Opportunities":
 
     fig.update_layout(
         title="Top Waterfront Origin → Destination Flows (Stations with Highest Trip Pressure)",
-        height=800,
+        height=1000,
         font=dict(size=15, color="black", family="Arial"),
 		paper_bgcolor='white',  # Transparent background
 		plot_bgcolor='white'     # Transparent plot area
