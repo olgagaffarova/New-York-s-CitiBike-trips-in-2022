@@ -48,6 +48,9 @@ donors_receivers = pd.read_csv('02 Streamlit/donors_receivers.csv', index_col=0)
 df_heat = pd.read_csv('02 Streamlit/df_heat.csv', index_col=0)
 df_daily_precipitations = pd.read_csv('02 Streamlit/df_daily_precipitations.csv', index_col=0, parse_dates=True)
 hours_member_casual = pd.read_csv('02 Streamlit/hours_member_casual.csv', index_col=0)
+monthly_waterfront = pd.read_csv('02 Streamlit/monthly_waterfront.csv', index_col=0)
+
+
 
 # Define unified color palette
 blue = "#0ea5e9"
@@ -250,15 +253,163 @@ elif page == "Predictive Rebalancing Strategy":
     and evening (5–7 PM) peaks to prevent shortages and overflow.
     """)
 
+
 # ───────────────────────────────────────────────
 # PAGE 6: WATERFRONT EXPANSION OPPORTUNITIES
 # ───────────────────────────────────────────────
 elif page == "Waterfront Expansion Opportunities":
-    st.title("🌊 Waterfront Expansion Opportunities")
+    st.title("Waterfront Expansion Opportunities")
     st.markdown("""
     Explore **spatial demand clusters** along **Hudson and East River** to identify where 
     new stations could relieve congestion and serve leisure riders.
     """)
+
+    # ============================================================================
+    # QUESTION & APPROACH
+    # ============================================================================
+    st.markdown("### **Question:** How to determine how many more stations to add along the water?")
+    st.markdown("""
+    **Approach Overview:**  
+    This analysis applies a **supply-demand framework** to identify capacity gaps.
+
+    **Methodology:**
+    1. Define *waterfront stations* based on longitude thresholds  
+       *(Hudson River: < -74.01, East River: > -73.95)*
+    2. Calculate **Supply** → % of all stations located near the water  
+    3. Calculate **Demand** → % of trips that start *or* end near the water  
+    4. Perform **Gap Analysis** → If demand exceeds supply, the waterfront is underserved  
+    5. Identify **Peak-Hour Pressure Points** to support targeted expansion
+    """)
+
+    # ============================================================================
+    # KEPLER MAP
+    # ============================================================================
+    st.markdown("### Waterfront Station Distribution (≤ 400m from Shoreline)")
+    st.markdown("""
+    The map below displays all **stations located within 400 meters of the shoreline**.  
+    These stations are classified as *waterfront locations* and represent the **supply base** for this analysis.
+    """)
+    kepler_html_path = "02 Streamlit/waterfront_stations_kepler.html"
+    with open(kepler_html_path, "r", encoding="utf-8") as f:
+        st.components.v1.html(f.read(), height=600)
+
+    # --- SUPPLY ANALYSIS SUMMARY ---
+    st.markdown("""
+    ---
+    ### **SUPPLY ANALYSIS (shoreline-based)**
+    *Total stations:* 1,757  
+    *Waterfront stations (≤ 400m):* 268  
+    *Waterfront supply share:* **15.3%**
+    """)
+
+    # ============================================================================
+    # DEMAND VS SUPPLY CHART
+    # ============================================================================
+    st.markdown("### Waterfront Demand vs Supply — Monthly Comparison")
+
+    fig = go.Figure()
+
+    # Line for demand (orange)
+    fig.add_trace(go.Scatter(
+        x=monthly_demand["month"],
+        y=monthly_demand["monthly_demand_share"],
+        mode="lines+markers",
+        name="Monthly Demand (% of trips touching waterfront)",
+        line=dict(width=3, color="#ff7f0e"),
+        marker=dict(size=8, color="#ff7f0e")
+    ))
+
+    # Flat dashed line for supply (blue)
+    fig.add_trace(go.Scatter(
+        x=monthly_demand["month"],
+        y=monthly_demand["supply_share"],
+        mode="lines",
+        name="Waterfront Supply (% of stations on waterfront)",
+        line=dict(width=4, dash="dash", color="#1f77b4")
+    ))
+
+    fig.update_layout(
+        title="Waterfront Demand vs Supply — By Month",
+        yaxis_tickformat=".0%",
+        xaxis_title="Month",
+        yaxis_title="% of Network",
+        height=500,
+        legend=dict(title="Metrics"),
+        plot_bgcolor="white"
+    )
+    fig.update_yaxes(range=[0.10, 0.30], gridcolor="lightgray")
+    st.plotly_chart(fig, use_container_width=True)
+
+    # ============================================================================
+    # GAP INDICATORS
+    # ============================================================================
+    st.markdown("### Gap Analysis Summary")
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        fig = go.Figure(go.Indicator(
+            mode="number+delta",
+            value=demand_share,
+            delta={'reference': supply_share, 'relative': True, 'valueformat': ".1%"},
+            number={'valueformat': '.1%'},
+            title={"text": "Waterfront Demand vs Supply<br><span style='font-size:14px'>Gap (Demand - Supply)</span>"}
+        ))
+        fig.update_layout(height=300)
+        st.plotly_chart(fig, use_container_width=True)
+
+    with col2:
+        fig = go.Figure(go.Indicator(
+            mode="number",
+            value=estimated_missing_stations,
+            title={"text": "Estimated Additional Waterfront Stations Needed"},
+            number={'suffix': " stations"}
+        ))
+        fig.update_layout(height=300)
+        st.plotly_chart(fig, use_container_width=True)
+
+    # ============================================================================
+    # HOTSPOT FLOWS 
+    # ============================================================================
+    st.markdown("### Top Waterfront Origin → Destination Flows")
+
+    st.markdown("""
+    The Sankey diagram highlights **the top 20 waterfront routes** with the highest trip counts.  
+    These OD pairs indicate **pressure zones** where additional docks could balance supply and ease congestion.
+    """)
+
+    top_flows = waterfront_trips.head(20)
+    nodes = list(set(top_flows['start_station_name']).union(top_flows['end_station_name']))
+    node_index = {station: idx for idx, station in enumerate(nodes)}
+
+    sankey_data = dict(
+        type='sankey',
+        node=dict(
+            pad=15,
+            thickness=15,
+            line=dict(color="black", width=0.5),
+            label=nodes,
+            color=["#1f77b4"] * len(nodes)
+        ),
+        link=dict(
+            source=[node_index[s] for s in top_flows["start_station_name"]],
+            target=[node_index[e] for e in top_flows["end_station_name"]],
+            value=top_flows["value"],
+            color="#ff7f0e"
+        )
+    )
+
+    fig = go.Figure(data=[sankey_data])
+    fig.update_layout(
+        title="Top Waterfront Origin → Destination Flows (Stations with Highest Trip Pressure)",
+        height=700,
+        font=dict(size=12),
+        plot_bgcolor="white"
+    )
+    st.plotly_chart(fig, use_container_width=True)
+
+
+
 
 # ───────────────────────────────────────────────
 # PAGE 7: RECOMMENDATIONS
