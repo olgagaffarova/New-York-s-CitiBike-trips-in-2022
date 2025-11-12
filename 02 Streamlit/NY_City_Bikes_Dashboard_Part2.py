@@ -447,6 +447,28 @@ elif page == "Waterfront Expansion Opportunities":
     )
 
     st.plotly_chart(fig, use_container_width=True)
+	st.markdown("""
+    ---
+    ### Recommendation — Waterfront Expansion
+
+    **Finding:**  
+    Waterfront stations make up only **15.3%** of the entire network, while nearly **24% of all trips** start or end near the riverside.  
+    This indicates a **demand–supply gap of approximately 9 percentage points**.
+
+    **Recommendation:**  
+    To close this gap, CitiBike should add around **150 new docking stations** along the **Hudson River** and **East River**.  
+    Expansion should prioritize **high-pressure OD corridors** highlighted in the Sankey diagram — for example:  
+    - *Soissons Landing ↔ Vesey St & Church St*  
+    - *Roosevelt Island ↔ Pier 40 — Hudson River Park*  
+
+    **Expected Impact:**  
+    - Reduce bike shortages at popular leisure and commuter waterfront routes  
+    - Improve accessibility for weekend and tourist riders  
+    - Balance network capacity between inner-city and riverside zones  
+
+    ---
+    """)
+	
 
 
 
