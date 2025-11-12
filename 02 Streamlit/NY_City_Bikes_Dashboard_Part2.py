@@ -184,10 +184,6 @@ elif page == "Weather Impact and Fleet Optimization (Nov–Apr)":
     and recommends **fleet reduction by 30–40% during November–April**.
     """)
 	
-	month_order = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
-	]
 
 
     # ============================================================================
@@ -238,6 +234,7 @@ elif page == "Weather Impact and Fleet Optimization (Nov–Apr)":
 
     bike_colors = {'electric_bike': '#FF6B6B', 'classic_bike': '#4ECDC4', 'docked_bike': '#95E1D3'}
     bike_types = monthly_type['rideable_type'].unique()
+	month_order = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
     # 1. Line chart — monthly demand
     ax1 = fig.add_subplot(gs[0, :])
