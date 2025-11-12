@@ -229,21 +229,7 @@ elif page == "Weather Impact and Fleet Optimization (Nov–Apr)":
     # ============================================================================
     st.markdown("### Fleet Scaling Analysis — Nov–Apr")
 
-    
     plt.rcParams['figure.figsize'] = (16, 12)
-	low_season_summary = (
-		low_season_type.groupby('rideable_type')
-    .agg({
-        'fleet_reduction_%': 'mean',  # Average reduction across low season
-        'total_rides': 'sum'
-    })
-    .round(1)
-    .rename(columns={
-        'fleet_reduction_%': 'avg_fleet_reduction_%',
-        'total_rides': 'total_low_season_rides'
-    })
-    )
-
 
     fig, gs = plt.subplots(3, 2, figsize=(18, 12))
     gs = fig.add_gridspec(3, 2, hspace=0.3, wspace=0.3)
