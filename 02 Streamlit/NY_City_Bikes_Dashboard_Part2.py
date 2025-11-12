@@ -364,7 +364,7 @@ elif page == "Waterfront Expansion Opportunities":
         type='sankey',
         node=dict(
             pad=20,
-            thickness=20,
+            thickness=15,
             line=dict(color="black", width=0.5),
             label=nodes,
 			color='orange',
@@ -400,9 +400,6 @@ elif page == "Waterfront Expansion Opportunities":
     The matrix below shows **trip volumes between the busiest waterfront station pairs**.  
     Darker cells indicate stronger flow intensity (higher trip counts).
     """)
-
-    import plotly.express as px
-    import pandas as pd
 
     # Create a pivot table: rows = start stations, columns = end stations
     df_matrix = top_flows.pivot_table(
