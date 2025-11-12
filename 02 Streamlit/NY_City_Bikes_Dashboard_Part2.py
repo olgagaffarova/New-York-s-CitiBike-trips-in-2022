@@ -368,7 +368,7 @@ elif page == "Waterfront Expansion Opportunities":
             line=dict(color="black", width=0.5),
             label=nodes,
             color=node_colors,
-            font=dict(color="black", size=13)
+            font=dict(size=13, color="black")
         ),
         link=dict(
             source=[node_index[s] for s in top_flows["start_station_name"]],
