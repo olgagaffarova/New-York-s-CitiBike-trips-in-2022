@@ -22,6 +22,7 @@ plt.style.use('dark_background')
 
 st.set_page_config(page_title="CitiBike 2022", layout="wide")
 
+
 # ───────────────────────────────────────────────
 # SIDEBAR NAVIGATION (UPDATED STRUCTURE)
 # ───────────────────────────────────────────────
@@ -53,7 +54,10 @@ monthly_waterfront = pd.read_csv('02 Streamlit/monthly_waterfront.csv', index_co
 waterfront_trips = pd.read_csv('02 Streamlit/waterfront_trips.csv', index_col=0)
 monthly_type = pd.read_csv('02 Streamlit/fleet_reduction.csv', index_col=0)
 
-
+month_order = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+]
 
 # Define unified color palette
 blue = "#0ea5e9"
@@ -233,11 +237,7 @@ elif page == "Weather Impact and Fleet Optimization (Nov–Apr)":
 
     bike_colors = {'electric_bike': '#FF6B6B', 'classic_bike': '#4ECDC4', 'docked_bike': '#95E1D3'}
     bike_types = monthly_type['rideable_type'].unique()
-	month_order = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
-	]
-	
+
     # 1. Line chart — monthly demand
     ax1 = fig.add_subplot(gs[0, :])
     for bike_type in bike_types:
