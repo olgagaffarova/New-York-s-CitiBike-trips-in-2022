@@ -58,6 +58,19 @@ month_order = [
     'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'
 ]
+low_season_summary = (
+    low_season_type.groupby('rideable_type')
+    .agg({
+        'fleet_reduction_%': 'mean',   # Average reduction across low season
+        'total_rides': 'sum'            # Total rides during low season
+    })
+    .round(1)
+    .rename(columns={
+        'fleet_reduction_%': 'avg_fleet_reduction_%',
+        'total_rides': 'total_low_season_rides'
+    })
+    .reset_index()
+)
 
 # Define unified color palette
 blue = "#0ea5e9"
