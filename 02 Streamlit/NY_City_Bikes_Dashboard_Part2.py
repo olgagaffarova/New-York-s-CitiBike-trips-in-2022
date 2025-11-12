@@ -341,34 +341,6 @@ elif page == "Waterfront Expansion Opportunities":
     st.plotly_chart(fig, use_container_width=True)
 
     # ============================================================================
-    # GAP INDICATORS
-    # ============================================================================
-    st.markdown("### Gap Analysis Summary")
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-        fig = go.Figure(go.Indicator(
-            mode="number+delta",
-            value=demand_share,
-            delta={'reference': supply_share, 'relative': True, 'valueformat': ".1%"},
-            number={'valueformat': '.1%'},
-            title={"text": "Waterfront Demand vs Supply<br><span style='font-size:14px'>Gap (Demand - Supply)</span>"}
-        ))
-        fig.update_layout(height=300)
-        st.plotly_chart(fig, use_container_width=True)
-
-    with col2:
-        fig = go.Figure(go.Indicator(
-            mode="number",
-            value=estimated_missing_stations,
-            title={"text": "Estimated Additional Waterfront Stations Needed"},
-            number={'suffix': " stations"}
-        ))
-        fig.update_layout(height=300)
-        st.plotly_chart(fig, use_container_width=True)
-
-    # ============================================================================
     # HOTSPOT FLOWS 
     # ============================================================================
     st.markdown("### Top Waterfront Origin → Destination Flows")
