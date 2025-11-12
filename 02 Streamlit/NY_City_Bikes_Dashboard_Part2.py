@@ -231,12 +231,12 @@ elif page == "Weather Impact and Fleet Optimization (Nov–Apr)":
     # ============================================================================
     st.markdown("### Fleet Scaling Analysis — Nov–Apr")
 
-    plt.rcParams['figure.figsize'] = (16, 12)
+    plt.rcParams['figure.figsize'] = (22, 14)
 
     fig, gs = plt.subplots(3, 2, figsize=(18, 12))
     gs = fig.add_gridspec(3, 2, hspace=0.3, wspace=0.3)
 
-    bike_colors = {'electric_bike': '#FF6B6B', 'classic_bike': '#4ECDC4', 'docked_bike': '#95E1D3'}
+    bike_colors = {'electric_bike': '#FF6B6B', 'classic_bike': '#4ECDC4'}
     bike_types = monthly_type['rideable_type'].unique()
 
     # 1. Line chart — monthly demand
