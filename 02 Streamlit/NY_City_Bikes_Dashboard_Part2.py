@@ -381,8 +381,7 @@ elif page == "Waterfront Expansion Opportunities":
     fig.update_layout(
         title="Top Waterfront Origin → Destination Flows (Stations with Highest Trip Pressure)",
         height=800,
-        font=dict(size=13, color="black"),
-        plot_bgcolor="white"
+        font=dict(size=13, color="black")
     )
 
     st.plotly_chart(fig, use_container_width=True)
