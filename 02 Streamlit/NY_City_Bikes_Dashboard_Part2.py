@@ -53,24 +53,12 @@ hours_member_casual = pd.read_csv('02 Streamlit/hours_member_casual.csv', index_
 monthly_waterfront = pd.read_csv('02 Streamlit/monthly_waterfront.csv', index_col=0)
 waterfront_trips = pd.read_csv('02 Streamlit/waterfront_trips.csv', index_col=0)
 monthly_type = pd.read_csv('02 Streamlit/fleet_reduction.csv', index_col=0)
+low_season_summary = pd.read_csv('02 Streamlit/low_season_summary.csv', index_col=0)
 
 month_order = [
     'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'
 ]
-low_season_summary = (
-    low_season_type.groupby('rideable_type')
-    .agg({
-        'fleet_reduction_%': 'mean',   # Average reduction across low season
-        'total_rides': 'sum'            # Total rides during low season
-    })
-    .round(1)
-    .rename(columns={
-        'fleet_reduction_%': 'avg_fleet_reduction_%',
-        'total_rides': 'total_low_season_rides'
-    })
-    .reset_index()
-)
 
 # Define unified color palette
 blue = "#0ea5e9"
