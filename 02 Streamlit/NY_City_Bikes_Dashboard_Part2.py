@@ -54,6 +54,7 @@ monthly_waterfront = pd.read_csv('02 Streamlit/monthly_waterfront.csv', index_co
 waterfront_trips = pd.read_csv('02 Streamlit/waterfront_trips.csv', index_col=0)
 monthly_type = pd.read_csv('02 Streamlit/fleet_reduction.csv', index_col=0)
 low_season = pd.read_csv('02 Streamlit/low_season_summary.csv', index_col=0)
+low_season_type = pd.read_csv('02 Streamlit/low_season_type.csv', index_col=0)
 
 month_order = [
     'January', 'February', 'March', 'April', 'May', 'June',
