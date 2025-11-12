@@ -448,8 +448,13 @@ elif page == "Waterfront Expansion Opportunities":
 
     st.plotly_chart(fig, use_container_width=True)
 	
-	st.markdown("""
-	### Recommendation — Waterfront Expansion
+	# ============================================================================
+    # RECOMMENDATION — WATERFRONT EXPANSION
+    # ============================================================================
+    st.markdown("""
+    ---
+    ### Recommendation — Waterfront Expansion
+
     **Finding:**  
     Waterfront stations make up only **15.3%** of the entire network, while nearly **24% of all trips** start or end near the riverside.  
     This indicates a **demand–supply gap of approximately 9 percentage points**.
@@ -464,8 +469,9 @@ elif page == "Waterfront Expansion Opportunities":
     - Reduce bike shortages at popular leisure and commuter waterfront routes  
     - Improve accessibility for weekend and tourist riders  
     - Balance network capacity between inner-city and riverside zones  
+
+    ---
     """)
-	
 
 
 
