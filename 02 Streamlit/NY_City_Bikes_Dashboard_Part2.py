@@ -461,8 +461,7 @@ elif page == "Weather Impact and Fleet Optimization (Nov–Apr)":
     )
 
     st.plotly_chart(fig4, use_container_width=True)
-    
-	st.subheader("Ride Volume Distribution by Type")
+	
     month_order = ['January','February','March','April','May','June',
                'July','August','September','October','November','December']
     
