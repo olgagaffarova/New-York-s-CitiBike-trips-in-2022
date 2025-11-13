@@ -146,7 +146,7 @@ if page == "About Citibike":
     st.plotly_chart(fig, use_container_width=True)
 
 
-    st.title("👥 Member vs Casual User Patterns")
+	st.markdown("### Member vs Casual User Patterns")
 
     st.markdown("""
     This section compares **hourly ride behavior** for **members vs casual users**, 
