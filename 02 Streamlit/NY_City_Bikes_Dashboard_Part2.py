@@ -183,121 +183,308 @@ elif page == "Member vs Casual Patterns":
 # ───────────────────────────────────────────────
 
 elif page == "Weather Impact and Fleet Optimization (Nov–Apr)":
+
+    # ------------------------------------------------------------
+    # PAGE TITLE + INTRO
+    # ------------------------------------------------------------
     st.title("🌦️ Weather Impact and Fleet Optimization (Nov–Apr)")
 
     st.markdown("""
-    This section analyzes how **temperature** and **rainfall** influence ridership, 
-    and recommends **fleet reduction by 30–40% during November–April**.
+    Understanding how **weather patterns** influence CitiBike ridership is essential for
+    determining how many bikes should remain active during the **low season (November–April)**.
+
+    This page answers three key questions:
+
+    **1. How do temperature shifts influence ridership?**  
+    → Strong positive correlation.
+
+    **2. How does rainfall affect daily usage?**  
+    → Immediate ridership drop during rain days.
+
+    **3. Given these patterns, how much should we scale back the fleet in winter?**  
+    → Recommended **30–40% reduction** based on demand.
+
+    Below you’ll find the analysis broken into four sections:  
+    **(A) Temperature impact**, **(B) Rainfall impact**,  
+    **(C) Seasonal demand modeling**, and  
+    **(D) Fleet reduction recommendations**.
     """)
-	
 
-    # ============================================================================
-    # 1. DAILY BIKE RIDES VS TEMPERATURE
-    # ============================================================================
-    fig = make_subplots(specs=[[{"secondary_y": True}]])
-    fig.add_trace(go.Scatter(x=df_group['date'], y=df_group['bike_rides_daily'], name='Bike Rides',
-                             mode='lines', line=dict(color=blue, width=2)), secondary_y=False)
-    fig.add_trace(go.Scatter(x=df_daily_weather['date'], y=df_daily_weather['avgTemp'],
-                             name='Avg Temperature (°C)', mode='lines',
-                             line=dict(color=orange, width=2, dash='dot')), secondary_y=True)
-    fig.update_layout(template='plotly_white', hovermode='x unified',
-                      legend=dict(orientation='h', yanchor='bottom', y=1.02, xanchor='right', x=1),
-                      height=600, margin=dict(l=40, r=40, t=80, b=40))
-    fig.update_xaxes(title_text="Date")
-    fig.update_yaxes(title_text="Number of Bike Rides", secondary_y=False)
-    fig.update_yaxes(title_text="Average Temperature (°C)", secondary_y=True)
-    st.plotly_chart(fig, use_container_width=True)
+    # COLOR PALETTE
+    blue = "#1f77b4"
+    orange = "#ff7f0e"
+    light_blue = "#84c2ff"
+    light_orange = "#ffb87a"
 
-    # ============================================================================
-    # 2. DAILY BIKE RIDES VS PRECIPITATION
-    # ============================================================================
-    st.subheader("Daily Bike Rides and Precipitation (2022)")
-    figp = make_subplots(specs=[[{"secondary_y": True}]])
-    figp.add_trace(go.Scatter(x=df_daily_precipitations.index, y=df_daily_precipitations['bike_rides_daily'],
-                              name='Bike Rides', mode='lines', line=dict(color=blue, width=2)), secondary_y=False)
-    figp.add_trace(go.Scatter(x=df_daily_precipitations.index, y=df_daily_precipitations['daily_rain_mm'],
-                              name='Total Precipitation (mm)', mode='lines',
-                              line=dict(color=orange, width=2, dash='dot')), secondary_y=True)
-    figp.update_layout(template='plotly_white', hovermode='x unified',
-                       legend=dict(orientation='h', yanchor='bottom', y=1.02, xanchor='right', x=1),
-                       height=600, margin=dict(l=40, r=40, t=80, b=40))
-    figp.update_xaxes(title_text="Date")
-    figp.update_yaxes(title_text="Number of Bike Rides", secondary_y=False)
-    figp.update_yaxes(title_text="Total Precipitation (mm)", secondary_y=True)
-    st.plotly_chart(figp, use_container_width=True)
 
-    # ============================================================================
-    # 3. SEASONAL FLEET REDUCTION DASHBOARD 
-    # ============================================================================
-    st.markdown("### Fleet Scaling Analysis — Nov–Apr")
 
-    plt.rcParams['figure.figsize'] = (22, 14)
+    # ============================================================
+    # A. DAILY BIKE RIDES VS TEMPERATURE
+    # ============================================================
 
-    fig, gs = plt.subplots(3, 2, figsize=(18, 12))
-    gs = fig.add_gridspec(3, 2, hspace=0.3, wspace=0.3)
+    st.markdown("## A. Temperature Impact on Daily Ridership")
 
-    bike_colors = {'electric_bike': '#FF6B6B', 'classic_bike': '#4ECDC4'}
-    bike_types = monthly_type['rideable_type'].unique()
+    st.markdown("""
+    Temperature is the **strongest seasonal predictor** of bike demand.  
+    As temperatures rise through spring and summer, ridership increases sharply.
+    Once temperatures fall below **10°C**, ridership consistently declines.
 
-    # 1. Line chart — monthly demand
-    ax1 = fig.add_subplot(gs[0, :])
-    for bike_type in bike_types:
-        data = monthly_type[monthly_type['rideable_type'] == bike_type]
-        ax1.plot(data['month'], data['demand_vs_peak_%'], marker='o', linewidth=2.5, markersize=8,
-                 label=bike_type.replace('_', ' ').title(), color=bike_colors.get(bike_type, '#333'))
-    ax1.axhline(y=100, color='green', linestyle='--', alpha=0.5)
-    ax1.axhline(y=50, color='orange', linestyle='--', alpha=0.5)
-    ax1.fill_between(range(len(month_order)), 0, 100, where=np.isin(month_order, low_season),
-                     alpha=0.1, color='blue')
-    ax1.set_title('Monthly Demand Patterns by Bike Type', fontsize=14, fontweight='bold', pad=20)
-    plt.setp(ax1.xaxis.get_majorticklabels(), rotation=45, ha='right')
+    👉 This helps define **when low season begins and ends**.
+    """)
 
-    # 2. Heatmap — reduction recommendations
-    ax2 = fig.add_subplot(gs[1, :])
+    fig_temp = make_subplots(specs=[[{"secondary_y": True}]])
+
+    fig_temp.add_trace(go.Scatter(
+        x=df_group['date'],
+        y=df_group['bike_rides_daily'],
+        name="Bike Rides",
+        mode='lines',
+        line=dict(color=blue, width=2)
+    ), secondary_y=False)
+
+    fig_temp.add_trace(go.Scatter(
+        x=df_daily_weather['date'],
+        y=df_daily_weather['avgTemp'],
+        name="Avg Temperature (°C)",
+        mode='lines',
+        line=dict(color=orange, width=2, dash='dot')
+    ), secondary_y=True)
+
+    fig_temp.update_layout(
+        template='plotly_white',
+        hovermode='x unified',
+        title="Daily Bike Rides vs Temperature (2022)",
+        height=550,
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+    )
+
+    fig_temp.update_xaxes(title="Date")
+    fig_temp.update_yaxes(title="Number of Bike Rides", secondary_y=False)
+    fig_temp.update_yaxes(title="Average Temperature (°C)", secondary_y=True)
+
+    st.plotly_chart(fig_temp, use_container_width=True)
+
+
+
+    # ============================================================
+    # B. DAILY BIKE RIDES VS PRECIPITATION
+    # ============================================================
+
+    st.markdown("## B. Rainfall Impact on Daily Ridership")
+
+    st.markdown("""
+    Rainfall acts as a **short-term disruptor**:  
+    even a few millimeters of rain can cause a noticeable drop in ridership.
+
+    Unlike temperature, which shapes **seasonal trends**,  
+    rainfall creates **daily fluctuations** that operators must respond to.
+    """)
+
+    fig_rain = make_subplots(specs=[[{"secondary_y": True}]])
+
+    fig_rain.add_trace(go.Scatter(
+        x=df_daily_precipitations.index,
+        y=df_daily_precipitations['bike_rides_daily'],
+        name="Bike Rides",
+        mode='lines',
+        line=dict(color=blue, width=2)
+    ), secondary_y=False)
+
+    fig_rain.add_trace(go.Scatter(
+        x=df_daily_precipitations.index,
+        y=df_daily_precipitations['daily_rain_mm'],
+        name="Total Precipitation (mm)",
+        mode='lines',
+        line=dict(color=orange, width=2, dash='dot')
+    ), secondary_y=True)
+
+    fig_rain.update_layout(
+        title="Daily Bike Rides and Precipitation (2022)",
+        template="plotly_white",
+        hovermode="x unified",
+        height=550,
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+    )
+
+    fig_rain.update_xaxes(title="Date")
+    fig_rain.update_yaxes(title="Number of Bike Rides", secondary_y=False)
+    fig_rain.update_yaxes(title="Total Precipitation (mm)", secondary_y=True)
+
+    st.plotly_chart(fig_rain, use_container_width=True)
+
+
+
+    # ============================================================
+    # C. SEASONAL FLEET SCALING — MODELING DEMAND
+    # ============================================================
+
+    st.markdown("## C. Seasonal Demand Patterns (Identifying Low Season)")
+
+    st.markdown("""
+    Using temperature and ridership patterns, we estimate demand relative to peak season
+    for each bike type.
+
+    - **Classic bikes** decline most sharply in winter.  
+    - **Electric bikes** retain stronger winter usage.  
+    - **Low season months** clearly fall between **November–April**.
+
+    These curves allow us to convert demand patterns into **monthly reduction targets**.
+    """)
+
+    fig1 = go.Figure()
+
+    for bt in monthly_type['rideable_type'].unique():
+        df_bt = monthly_type[monthly_type['rideable_type'] == bt]
+        fig1.add_trace(go.Scatter(
+            x=df_bt['month'],
+            y=df_bt['demand_vs_peak_%'],
+            mode='lines+markers',
+            name=bt.replace("_", " ").title(),
+            line=dict(width=3, color=blue if "classic" in bt else orange)
+        ))
+
+    fig1.update_layout(
+        title="Monthly Demand Patterns by Bike Type",
+        template="plotly_white",
+        xaxis_title="Month",
+        yaxis_title="Demand vs Peak (%)",
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+        height=450,
+    )
+
+    st.plotly_chart(fig1, use_container_width=True)
+
+
+
+    # ============================================================
+    # D. FLEET REDUCTION RECOMMENDATIONS
+    # ============================================================
+
+    st.markdown("## D. Recommended Fleet Reduction (Nov–Apr)")
+
+    st.markdown("""
+    Based on monthly demand and the strength of each bike type during winter,
+    we calculate **optimal fleet reduction percentages**.
+
+    The heatmap below shows reduction recommendations **per month, per bike type**.
+    """)
+
+    # HEATMAP
     pivot_data = monthly_type.pivot(index='rideable_type', columns='month', values='fleet_reduction_%')
     pivot_data.index = pivot_data.index.str.replace('_', ' ').str.title()
-    sns.heatmap(pivot_data, annot=True, fmt='.0f', cmap='RdYlGn_r', cbar_kws={'label': 'Fleet Reduction %'},
-                linewidths=0.5, linecolor='white', vmin=0, vmax=100, ax=ax2)
-    ax2.set_title('Fleet Reduction Recommendations (%) — Heatmap View', fontsize=14, fontweight='bold', pad=20)
 
-    # 3. Bar chart — low-season average reduction
-    ax3 = fig.add_subplot(gs[2, 0])
-    low_avg = low_season_type.groupby('rideable_type')['fleet_reduction_%'].mean().sort_values()
-    colors = [bike_colors.get(bt, '#333') for bt in low_avg.index]
-    bars = ax3.barh(low_avg.index.str.replace('_', ' ').str.title(), low_avg.values, color=colors, edgecolor='black')
-    for i, (bar, val) in enumerate(zip(bars, low_avg.values)):
-        ax3.text(val + 1, i, f'{val:.1f}%', va='center', fontweight='bold')
-    ax3.set_title('Low-Season Average Reduction (Nov–Apr)', fontsize=12, fontweight='bold')
+    fig2 = go.Figure(
+        data=go.Heatmap(
+            z=pivot_data.values,
+            x=pivot_data.columns,
+            y=pivot_data.index,
+            colorscale='RdYlGn_r',
+            colorbar=dict(title="Fleet Reduction %"),
+            showscale=True
+        )
+    )
 
-    # 4. Stacked area — ride volume by type
-    ax4 = fig.add_subplot(gs[2, 1])
-    pivot_rides = monthly_type.pivot(index='month', columns='rideable_type', values='total_rides').fillna(0)
-    pivot_rides.plot.area(ax=ax4, alpha=0.7,
-                          color=[bike_colors.get(col, '#333') for col in pivot_rides.columns],
-                          linewidth=2)
-    ax4.set_title('Ride Volume Distribution by Type', fontsize=12, fontweight='bold')
-    ax4.legend(title='Bike Type', labels=[col.replace('_', ' ').title() for col in pivot_rides.columns])
-    plt.setp(ax4.xaxis.get_majorticklabels(), rotation=45, ha='right')
-    ax4.grid(True, alpha=0.3)
+    fig2.update_layout(
+        title="Fleet Reduction Recommendations (%) — Heatmap View",
+        template="plotly_white",
+        height=450,
+    )
 
-    fig.suptitle('🚴 FLEET SCALING DASHBOARD — Q1 Analysis: Low-Season Reduction Strategy',
-                 fontsize=16, fontweight='bold', y=0.995)
-    plt.tight_layout()
-    st.pyplot(fig, use_container_width=True)
+    st.plotly_chart(fig2, use_container_width=True)
 
-    # ============================================================================
-    # 4. SUMMARY INSIGHTS
-    # ============================================================================
+
+
+    # ============================================================
+    # Average reduction bar chart
+    # ============================================================
+
     st.markdown("""
-    **Key Takeaways:**
-    - Ridership declines sharply with lower temperatures and heavy rainfall.  
-    - Electric bikes maintain relatively higher winter usage than classic or docked bikes.  
-    - Optimal reduction: **35% fleet scale-back** (avg across types) between **Nov–Apr**.  
-    - Reallocate saved maintenance resources toward **spring readiness** and **dock repair**.
+    The next chart summarizes **average reduction during low season (Nov–Apr)**:
 
-    **Recommendation:**  
-    Reduce active bikes by **30–40% between November–April** to match seasonal demand, 
-    minimizing costs without affecting availability.
+    - Classic bikes → require **~58% reduction**  
+    - Electric bikes → require **~44% reduction**
+
+    This supports keeping more e-bikes active in winter.
+    """)
+
+    low_avg = low_season_type.groupby('rideable_type')['fleet_reduction_%'].mean().sort_values()
+    bt_labels = low_avg.index.str.replace("_", " ").str.title()
+
+    fig3 = go.Figure(go.Bar(
+        x=low_avg.values,
+        y=bt_labels,
+        orientation='h',
+        marker_color=[light_blue if "Classic" in lab else light_orange for lab in bt_labels]
+    ))
+
+    for i, v in enumerate(low_avg.values):
+        fig3.add_annotation(x=v + 1, y=i, text=f"{v:.1f}%", showarrow=False, font=dict(size=12))
+
+    fig3.update_layout(
+        title="Low-Season Average Reduction (Nov–Apr)",
+        xaxis_title="Fleet Reduction (%)",
+        template="plotly_white",
+        height=400
+    )
+
+    st.plotly_chart(fig3, use_container_width=True)
+
+
+
+    # ============================================================
+    # Ride volume by type (stacked area chart)
+    # ============================================================
+
+    st.markdown("""
+    This final chart visualizes monthly **ride volumes** by bike type.
+
+    It illustrates why electric bikes should remain more available in winter:
+    they continue to serve a large share of riders even in low temperatures.
+    """)
+
+    pivot_rides = monthly_type.pivot(index='month', columns='rideable_type', values='total_rides').fillna(0)
+
+    fig4 = go.Figure()
+
+    for bt in pivot_rides.columns:
+        fig4.add_trace(go.Scatter(
+            x=pivot_rides.index,
+            y=pivot_rides[bt],
+            stackgroup='one',
+            mode='lines',
+            name=bt.replace("_", " ").title(),
+            line=dict(width=0.5),
+            fillcolor=light_blue if "classic" in bt else light_orange
+        ))
+
+    fig4.update_layout(
+        title="Ride Volume Distribution by Type",
+        template="plotly_white",
+        xaxis_title="Month",
+        yaxis_title="Total Rides",
+        height=450,
+    )
+
+    st.plotly_chart(fig4, use_container_width=True)
+
+
+
+    # ============================================================
+    # SUMMARY INSIGHTS
+    # ============================================================
+
+    st.markdown("""
+    ---
+    ## 🔍 Key Takeaways
+
+    - Ridership **drops sharply** with falling temperatures and heavy rainfall.  
+    - Electric bikes retain **higher winter usage**, so they should remain more available.  
+    - **Low season = November → April**, confirmed by both temperature and demand curves.  
+    - Optimal fleet reduction: **30–40%** of bikes during this low season.  
+    - Savings can be redirected to **spring maintenance**, dock repairs, and battery readiness.
+
+    **Final Recommendation:**  
+    Scale back active bikes by **30–40% between November–April** to match demand while maintaining service reliability.
     """)
 
 
