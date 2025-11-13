@@ -437,31 +437,6 @@ elif page == "Weather Impact and Fleet Optimization (Nov–Apr)":
     they continue to serve a large share of riders even in low temperatures.
     """)
 
-    pivot_rides = monthly_type.pivot(index='month', columns='rideable_type', values='total_rides').fillna(0)
-
-    fig4 = go.Figure()
-
-    for bt in pivot_rides.columns:
-        fig4.add_trace(go.Scatter(
-            x=pivot_rides.index,
-            y=pivot_rides[bt],
-            stackgroup='one',
-            mode='lines',
-            name=bt.replace("_", " ").title(),
-            line=dict(width=0.5),
-            fillcolor=light_blue if "classic" in bt else light_orange
-        ))
-
-    fig4.update_layout(
-        title="Ride Volume Distribution by Type",
-        template="plotly_white",
-        xaxis_title="Month",
-        yaxis_title="Total Rides",
-        height=450,
-    )
-
-    st.plotly_chart(fig4, use_container_width=True)
-	
     month_order = ['January','February','March','April','May','June',
                'July','August','September','October','November','December']
     
@@ -498,6 +473,7 @@ elif page == "Weather Impact and Fleet Optimization (Nov–Apr)":
         )
     
     fig_area.update_layout(
+		title="Ride Volume Distribution by Type",
         template='plotly_white',
         height=420,
         legend=dict(orientation='h', yanchor='bottom', y=1.02, xanchor='right', x=1),
