@@ -558,6 +558,10 @@ to anticipate where bikes should be **added or removed** throughout the day.
 def get_data():
     url = "https://drive.google.com/uc?id=1ai7N88esxAunuUDLXErQE2S7QlaePgV7"
     return pd.read_csv(url)
+    df["month"] = df["month"].astype(int)
+    df["day"]   = df["day"].astype(int)
+    df["hour"]  = df["hour"].astype(int)
+    return df
 
 popular_stations = get_data()
 
