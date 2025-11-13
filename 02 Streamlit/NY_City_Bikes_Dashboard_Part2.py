@@ -147,7 +147,6 @@ if page == "About Citibike":
 
 
     st.markdown("""
-    Member vs Casual User Patterns
     This section compares **hourly ride behavior** for **members vs casual users**, 
     with breakdown by **bike type (classic vs electric)**.
     """)
@@ -163,6 +162,7 @@ if page == "About Citibike":
     )
 
     fig.update_layout(
+		title="Member vs Casual User Patterns",
         barmode='stack',
         showlegend=True,
         height=550,
