@@ -56,6 +56,15 @@ low_season = pd.read_csv('02 Streamlit/low_season_summary.csv', index_col=0)
 low_season_type = pd.read_csv('02 Streamlit/low_season_type.csv', index_col=0)
 popular_stations = pd.read_csv('02 Streamlit/popular_stations.csv', index_col=0)
 
+@st.cache_data
+def get_data():
+    url = "https://drive.google.com/uc?id=1ai7N88esxAunuUDLXErQE2S7QlaePgV7"
+    return pd.read_csv(url)
+
+popular_stations = get_data()
+st.dataframe(popular_stations.head())
+
+
 
 month_order = [
     'January', 'February', 'March', 'April', 'May', 'June',
