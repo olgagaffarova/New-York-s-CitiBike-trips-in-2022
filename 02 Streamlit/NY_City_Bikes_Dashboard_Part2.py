@@ -31,7 +31,6 @@ page = st.sidebar.radio(
     "Go to:",
     [
         "About Citibike",
-        "Member vs Casual Patterns",
         "Weather Impact and Fleet Optimization (Nov–Apr)",
         "Identifying Main Routes and Problem Stations",
         "Predictive Rebalancing Strategy",
@@ -146,10 +145,7 @@ if page == "About Citibike":
     fig.update_xaxes(type='category', categoryorder='array', categoryarray=[str(h) for h in range(24)])
     st.plotly_chart(fig, use_container_width=True)
 
-# ───────────────────────────────────────────────
-# PAGE 2: MEMBER VS CASUAL PATTERNS
-# ───────────────────────────────────────────────
-elif page == "Member vs Casual Patterns":
+
     st.title("👥 Member vs Casual User Patterns")
 
     st.markdown("""
@@ -179,7 +175,7 @@ elif page == "Member vs Casual Patterns":
     st.plotly_chart(fig, use_container_width=True)
 
 # ───────────────────────────────────────────────
-# PAGE 3: WEATHER IMPACT + FLEET OPTIMIZATION
+# PAGE 2: WEATHER IMPACT + FLEET OPTIMIZATION
 # ───────────────────────────────────────────────
 
 elif page == "Weather Impact and Fleet Optimization (Nov–Apr)":
