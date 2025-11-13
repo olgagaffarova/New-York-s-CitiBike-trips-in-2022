@@ -545,185 +545,186 @@ elif page == "Identifying Main Routes and Problem Stations":
 # PAGE 5: PREDICTIVE REBALANCING STRATEGY
 # ───────────────────────────────────────────────
 
-st.title("🔁 Predictive Rebalancing Strategy")
-st.markdown("""
-Introduces **dynamic redistribution** and **predictive scheduling** for **morning (7–9 AM)** 
-and **evening (5–7 PM)** peaks to prevent shortages and overflow.  
-The model below visualizes **daily net bike flow** at the busiest stations 
-to anticipate where bikes should be **added or removed** throughout the day.
-""")
-
-# ------------------------------------------------
-# Load dataset (from Google Drive, cached)
-# ------------------------------------------------
-@st.cache_data
-def load_pickle_from_drive():
-    url = "https://drive.google.com/uc?id=1pSfdeKyibPx6htFwsq6b5wkBtf3S6xMT"
-    response = requests.get(url)
-    response.raise_for_status()   # ensure download success
-    df = pickle.loads(response.content)
-    return df
-
-popular_stations = load_pickle_from_drive()
-
-# ------------------------------------------------
-# Sidebar filters
-# ------------------------------------------------
-st.sidebar.markdown("### 🔍 Filter View")
-
-# Month filter
-selected_month = st.sidebar.selectbox(
-    "Select Month:", 
-    sorted(popular_stations["month"].unique()),
-    format_func=lambda x: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
-                           "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][int(x)-1]
-)
-
-# Day filter (assuming 'day' is day of month or day of week)
-selected_day = st.sidebar.selectbox(
-    "Select Day:", 
-    sorted(popular_stations["day"].unique())
-)
-
-# Hour slider
-selected_hour = st.sidebar.slider(
-    "Select Hour (0–23):", 
-    min_value=int(popular_stations["hour"].min()), 
-    max_value=int(popular_stations["hour"].max()), 
-    value=8
-)
-
-# ------------------------------------------------
-# Filter dataset based on user selection
-# ------------------------------------------------
-filtered_df = popular_stations[
-    (popular_stations["month"] == selected_month) &
-    (popular_stations["day"] == selected_day) &
-    (popular_stations["hour"] == selected_hour)
-].copy()
-
-# ------------------------------------------------
-# Check if data exists for selection
-# ------------------------------------------------
-if filtered_df.empty:
-    st.warning("⚠️ No data available for this month, day, and hour combination. Please try different filters.")
-else:
-    # ------------------------------------------------
-    # Calculate inflow/outflow summary
-    # ------------------------------------------------
-    st.markdown("### 🚲 Net Bike Flow — Station-Level View")
-
-    # Negative net_flow = more bikes leaving (needs bikes added)
-    # Positive net_flow = more bikes arriving (needs bikes removed)
-    filtered_df["net_flow_status"] = filtered_df["net_flow"].apply(
-        lambda x: "Receiver (Needs Bikes)" if x < 0 else "Donor (Has Surplus)"
-    )
-
-    donor_sum = filtered_df[filtered_df["net_flow"] > 0]["net_flow"].sum()
-    receiver_sum = filtered_df[filtered_df["net_flow"] < 0]["net_flow"].sum()
-
-    col1, col2 = st.columns(2)
-    col1.metric("🚚 Total Bikes to Remove", f"{int(donor_sum)}")
-    col2.metric("📦 Total Bikes to Add", f"{int(abs(receiver_sum))}")
-
-    # ------------------------------------------------
-    # Sort and take top 20 stations by absolute net flow
-    # ------------------------------------------------
-    top_stations = filtered_df.sort_values(
-        "net_flow", 
-        ascending=True
-    ).head(20)
-
-    # ------------------------------------------------
-    # Plotly visualization
-    # ------------------------------------------------
-    fig = px.bar(
-        top_stations,
-        x="net_flow",
-        y="station",
-        orientation='h',
-        color="net_flow_status",
-        color_discrete_map={
-            "Donor (Has Surplus)": "#22c55e",
-            "Receiver (Needs Bikes)": "#ef4444"
-        },
-        title=f"Top 20 Stations — Net Bike Flow (Month: {selected_month}, Day: {selected_day}, Hour: {selected_hour}:00)",
-        hover_data={
-            "rides_started": True,
-            "rides_ended": True,
-            "total_activity": True,
-            "net_flow_status": False
-        },
-        labels={
-            "net_flow": "Net Bike Flow",
-            "station": "Station Name",
-            "rides_started": "Rides Started",
-            "rides_ended": "Rides Ended",
-            "total_activity": "Total Activity"
-        }
-    )
-
-    fig.update_layout(
-        xaxis_title="Net Bike Flow (Started - Ended)",
-        yaxis_title="Station Name",
-        title_x=0.05,
-        title_font=dict(size=18),
-        height=600,
-        plot_bgcolor="rgba(0,0,0,0)",
-        paper_bgcolor="rgba(0,0,0,0)",
-        legend_title_text="Station Status",
-        showlegend=True,
-        xaxis=dict(zeroline=True, zerolinewidth=2, zerolinecolor='gray')
-    )
-
-    st.plotly_chart(fig, use_container_width=True)
-
-    # ------------------------------------------------
-    # Detailed Table View
-    # ------------------------------------------------
-    st.markdown("### 📊 Detailed Station Data")
-    
-    # Prepare display dataframe
-    display_df = top_stations[['station', 'rides_started', 'rides_ended', 'net_flow', 'total_activity']].copy()
-    display_df['action_required'] = display_df['net_flow'].apply(
-        lambda x: f"ADD {abs(int(x))} bikes" if x < 0 else f"REMOVE {int(x)} bikes"
-    )
-    
-    # Rename columns for display
-    display_df.columns = ['Station', 'Rides Started', 'Rides Ended', 'Net Flow', 'Total Activity', 'Action Required']
-    
-    st.dataframe(
-        display_df,
-        use_container_width=True,
-        hide_index=True
-    )
-
-    # ------------------------------------------------
-    # Notes section
-    # ------------------------------------------------
-    st.markdown("""
-    ---
-    **Interpretation:**
-    - **Red bars (Receivers)** → Stations where more rides END than START — bikes are accumulating, need **removal**.
-    - **Green bars (Donors)** → Stations where more rides START than END — bikes are depleting, need **addition**.
-    - Negative net flow = needs bikes added (more departures than arrivals)
-    - Positive net flow = needs bikes removed (more arrivals than departures)
-
-    **Operational Takeaway:**  
-    Implement dynamic restocking runs during **6–7 AM** and **4–5 PM** based on forecasted net flow 
-    to maintain balanced availability across the network and prevent both shortages and overflow.
-    """)
-
-    # ------------------------------------------------
-    # Download option
-    # ------------------------------------------------
-    csv = display_df.to_csv(index=False)
-    st.download_button(
-        label="📥 Download Station Data as CSV",
-        data=csv,
-        file_name=f"bike_restocking_month{selected_month}_day{selected_day}_hour{selected_hour}.csv",
-        mime="text/csv"
-    )
+elif page == "Predictive Rebalancing Strategy":
+	st.title("🔁 Predictive Rebalancing Strategy")
+	st.markdown("""
+	Introduces **dynamic redistribution** and **predictive scheduling** for **morning (7–9 AM)** 
+	and **evening (5–7 PM)** peaks to prevent shortages and overflow.  
+	The model below visualizes **daily net bike flow** at the busiest stations 
+	to anticipate where bikes should be **added or removed** throughout the day.
+	""")
+	
+	# ------------------------------------------------
+	# Load dataset (from Google Drive, cached)
+	# ------------------------------------------------
+	@st.cache_data
+	def load_pickle_from_drive():
+	    url = "https://drive.google.com/uc?id=1pSfdeKyibPx6htFwsq6b5wkBtf3S6xMT"
+	    response = requests.get(url)
+	    response.raise_for_status()   # ensure download success
+	    df = pickle.loads(response.content)
+	    return df
+	
+	popular_stations = load_pickle_from_drive()
+	
+	# ------------------------------------------------
+	# Sidebar filters
+	# ------------------------------------------------
+	st.sidebar.markdown("### 🔍 Filter View")
+	
+	# Month filter
+	selected_month = st.sidebar.selectbox(
+	    "Select Month:", 
+	    sorted(popular_stations["month"].unique()),
+	    format_func=lambda x: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+	                           "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][int(x)-1]
+	)
+	
+	# Day filter (assuming 'day' is day of month or day of week)
+	selected_day = st.sidebar.selectbox(
+	    "Select Day:", 
+	    sorted(popular_stations["day"].unique())
+	)
+	
+	# Hour slider
+	selected_hour = st.sidebar.slider(
+	    "Select Hour (0–23):", 
+	    min_value=int(popular_stations["hour"].min()), 
+	    max_value=int(popular_stations["hour"].max()), 
+	    value=8
+	)
+	
+	# ------------------------------------------------
+	# Filter dataset based on user selection
+	# ------------------------------------------------
+	filtered_df = popular_stations[
+	    (popular_stations["month"] == selected_month) &
+	    (popular_stations["day"] == selected_day) &
+	    (popular_stations["hour"] == selected_hour)
+	].copy()
+	
+	# ------------------------------------------------
+	# Check if data exists for selection
+	# ------------------------------------------------
+	if filtered_df.empty:
+	    st.warning("⚠️ No data available for this month, day, and hour combination. Please try different filters.")
+	else:
+	    # ------------------------------------------------
+	    # Calculate inflow/outflow summary
+	    # ------------------------------------------------
+	    st.markdown("### 🚲 Net Bike Flow — Station-Level View")
+	
+	    # Negative net_flow = more bikes leaving (needs bikes added)
+	    # Positive net_flow = more bikes arriving (needs bikes removed)
+	    filtered_df["net_flow_status"] = filtered_df["net_flow"].apply(
+	        lambda x: "Receiver (Needs Bikes)" if x < 0 else "Donor (Has Surplus)"
+	    )
+	
+	    donor_sum = filtered_df[filtered_df["net_flow"] > 0]["net_flow"].sum()
+	    receiver_sum = filtered_df[filtered_df["net_flow"] < 0]["net_flow"].sum()
+	
+	    col1, col2 = st.columns(2)
+	    col1.metric("🚚 Total Bikes to Remove", f"{int(donor_sum)}")
+	    col2.metric("📦 Total Bikes to Add", f"{int(abs(receiver_sum))}")
+	
+	    # ------------------------------------------------
+	    # Sort and take top 20 stations by absolute net flow
+	    # ------------------------------------------------
+	    top_stations = filtered_df.sort_values(
+	        "net_flow", 
+	        ascending=True
+	    ).head(20)
+	
+	    # ------------------------------------------------
+	    # Plotly visualization
+	    # ------------------------------------------------
+	    fig = px.bar(
+	        top_stations,
+	        x="net_flow",
+	        y="station",
+	        orientation='h',
+	        color="net_flow_status",
+	        color_discrete_map={
+	            "Donor (Has Surplus)": "#22c55e",
+	            "Receiver (Needs Bikes)": "#ef4444"
+	        },
+	        title=f"Top 20 Stations — Net Bike Flow (Month: {selected_month}, Day: {selected_day}, Hour: {selected_hour}:00)",
+	        hover_data={
+	            "rides_started": True,
+	            "rides_ended": True,
+	            "total_activity": True,
+	            "net_flow_status": False
+	        },
+	        labels={
+	            "net_flow": "Net Bike Flow",
+	            "station": "Station Name",
+	            "rides_started": "Rides Started",
+	            "rides_ended": "Rides Ended",
+	            "total_activity": "Total Activity"
+	        }
+	    )
+	
+	    fig.update_layout(
+	        xaxis_title="Net Bike Flow (Started - Ended)",
+	        yaxis_title="Station Name",
+	        title_x=0.05,
+	        title_font=dict(size=18),
+	        height=600,
+	        plot_bgcolor="rgba(0,0,0,0)",
+	        paper_bgcolor="rgba(0,0,0,0)",
+	        legend_title_text="Station Status",
+	        showlegend=True,
+	        xaxis=dict(zeroline=True, zerolinewidth=2, zerolinecolor='gray')
+	    )
+	
+	    st.plotly_chart(fig, use_container_width=True)
+	
+	    # ------------------------------------------------
+	    # Detailed Table View
+	    # ------------------------------------------------
+	    st.markdown("### 📊 Detailed Station Data")
+	    
+	    # Prepare display dataframe
+	    display_df = top_stations[['station', 'rides_started', 'rides_ended', 'net_flow', 'total_activity']].copy()
+	    display_df['action_required'] = display_df['net_flow'].apply(
+	        lambda x: f"ADD {abs(int(x))} bikes" if x < 0 else f"REMOVE {int(x)} bikes"
+	    )
+	    
+	    # Rename columns for display
+	    display_df.columns = ['Station', 'Rides Started', 'Rides Ended', 'Net Flow', 'Total Activity', 'Action Required']
+	    
+	    st.dataframe(
+	        display_df,
+	        use_container_width=True,
+	        hide_index=True
+	    )
+	
+	    # ------------------------------------------------
+	    # Notes section
+	    # ------------------------------------------------
+	    st.markdown("""
+	    ---
+	    **Interpretation:**
+	    - **Red bars (Receivers)** → Stations where more rides END than START — bikes are accumulating, need **removal**.
+	    - **Green bars (Donors)** → Stations where more rides START than END — bikes are depleting, need **addition**.
+	    - Negative net flow = needs bikes added (more departures than arrivals)
+	    - Positive net flow = needs bikes removed (more arrivals than departures)
+	
+	    **Operational Takeaway:**  
+	    Implement dynamic restocking runs during **6–7 AM** and **4–5 PM** based on forecasted net flow 
+	    to maintain balanced availability across the network and prevent both shortages and overflow.
+	    """)
+	
+	    # ------------------------------------------------
+	    # Download option
+	    # ------------------------------------------------
+	    csv = display_df.to_csv(index=False)
+	    st.download_button(
+	        label="📥 Download Station Data as CSV",
+	        data=csv,
+	        file_name=f"bike_restocking_month{selected_month}_day{selected_day}_hour{selected_hour}.csv",
+	        mime="text/csv"
+	    )
 
 
 
