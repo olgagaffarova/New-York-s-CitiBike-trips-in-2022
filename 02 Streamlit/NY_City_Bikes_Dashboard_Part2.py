@@ -12,6 +12,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import warnings
 import numpy as np
+import requests
+import pickle
 warnings.filterwarnings('ignore')
 
 # ───────────────────────────────────────────────
@@ -555,15 +557,15 @@ to anticipate where bikes should be **added or removed** throughout the day.
 # Load dataset (from Google Drive, cached)
 # ------------------------------------------------
 @st.cache_data
-def get_data():
-    url = "https://drive.google.com/uc?id=1ai7N88esxAunuUDLXErQE2S7QlaePgV7"
-    return pd.read_csv(url)
-    df["month"] = df["month"].astype(int)
-    df["day"]   = df["day"].astype(int)
-    df["hour"]  = df["hour"].astype(int)
+def load_pickle_from_drive():
+    url = "https://drive.google.com/uc?id=1pSfdeKyibPx6htFwsq6b5wkBtf3S6xMT"
+   
+	response = requests.get(url)
+    response.raise_for_status()   # ensure download success
+    df = pickle.loads(response.content)
     return df
 
-popular_stations = get_data()
+popular_stations = load_pickle_from_drive()
 
 # ------------------------------------------------
 # Sidebar filters
