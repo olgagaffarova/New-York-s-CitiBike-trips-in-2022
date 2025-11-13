@@ -461,6 +461,55 @@ elif page == "Weather Impact and Fleet Optimization (Nov–Apr)":
     )
 
     st.plotly_chart(fig4, use_container_width=True)
+    
+	st.subheader("Ride Volume Distribution by Type")
+    month_order = ['January','February','March','April','May','June',
+               'July','August','September','October','November','December']
+    
+    # Prepare data (sum by month/type and enforce month order)
+    pivot_rides = (
+        monthly_type
+        .groupby(['month','rideable_type'], as_index=False)['total_rides']
+        .sum()
+    )
+    pivot_rides['month'] = pd.Categorical(pivot_rides['month'], categories=month_order, ordered=True)
+    pivot_rides = pivot_rides.sort_values('month')
+    
+    # Wide format for easy plotting
+    wide = pivot_rides.pivot(index='month', columns='rideable_type', values='total_rides').fillna(0)
+    
+    # Color map
+    bike_colors = {'electric_bike': '#FFB482', 'classic_bike': '#8FB9FF', 'docked_bike': '#BFE8D9'}
+    
+    fig_area = go.Figure()
+    
+    for col in wide.columns:
+        fig_area.add_trace(
+            go.Scatter(
+                x=wide.index.astype(str),
+                y=wide[col],
+                mode='lines',
+                line=dict(width=2),
+                stackgroup='one',                 # <- stacked totals on y-axis
+                name=col.replace('_',' ').title(),
+                hovertemplate='%{x}<br>%{y:,.0f} rides<extra></extra>',
+                fill='tonexty',
+                fillcolor=bike_colors.get(col, '#888'),
+            )
+        )
+    
+    fig_area.update_layout(
+        template='plotly_white',
+        height=420,
+        legend=dict(orientation='h', yanchor='bottom', y=1.02, xanchor='right', x=1),
+        margin=dict(l=40, r=20, t=30, b=40),
+    )
+    # Consistent units: axis + hover show raw counts (with thousands separators)
+    fig_area.update_yaxes(title_text='Total Rides', tickformat=',')   # 1,234,567
+    fig_area.update_xaxes(title_text='Month', categoryorder='array', categoryarray=month_order)
+    
+    st.plotly_chart(fig_area, use_container_width=True)
+    	
 
 
 
