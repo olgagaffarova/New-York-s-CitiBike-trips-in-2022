@@ -400,6 +400,9 @@ elif page == "Weather Impact and Fleet Optimization (Nov–Apr)":
     - Electric bikes → require **~44% reduction**
 
     This supports keeping more e-bikes active in winter.
+	Winter ridership drops to about 60–70% below peak for classic bikes and 40–50% below peak for electric bikes.
+	When combined and weighted by actual winter usage, the overall demand reduction equals ~32%.
+	Сonsidering daily variability and service reliability, this translates into a safe operational range of 30–40% fleet reduction.
     """)
 
     low_avg = low_season_type.groupby('rideable_type')['fleet_reduction_%'].mean().sort_values()
