@@ -56,6 +56,8 @@ waterfront_trips = pd.read_csv('02 Streamlit/waterfront_trips.csv', index_col=0)
 monthly_type = pd.read_csv('02 Streamlit/fleet_reduction.csv', index_col=0)
 low_season = pd.read_csv('02 Streamlit/low_season_summary.csv', index_col=0)
 low_season_type = pd.read_csv('02 Streamlit/low_season_type.csv', index_col=0)
+popular_stations = pd.read_parquet('02 Streamlit/popular_stations.parquet')
+
 
 
 month_order = [
@@ -554,19 +556,7 @@ elif page == "Predictive Rebalancing Strategy":
 	to anticipate where bikes should be **added or removed** throughout the day.
 	""")
 	
-	# ------------------------------------------------
-	# Load dataset (from Google Drive, cached)
-	# ------------------------------------------------
-	@st.cache_data
-	def load_pickle_from_drive():
-	    url = "https://drive.google.com/uc?id=1pSfdeKyibPx6htFwsq6b5wkBtf3S6xMT"
-	    response = requests.get(url)
-	    response.raise_for_status()   # ensure download success
-	    df = pickle.loads(response.content)
-	    return df
-	
-	popular_stations = load_pickle_from_drive()
-	
+
 	# ------------------------------------------------
 	# Sidebar filters
 	# ------------------------------------------------
