@@ -54,7 +54,6 @@ waterfront_trips = pd.read_csv('02 Streamlit/waterfront_trips.csv', index_col=0)
 monthly_type = pd.read_csv('02 Streamlit/fleet_reduction.csv', index_col=0)
 low_season = pd.read_csv('02 Streamlit/low_season_summary.csv', index_col=0)
 low_season_type = pd.read_csv('02 Streamlit/low_season_type.csv', index_col=0)
-popular_stations = pd.read_csv('02 Streamlit/popular_stations.csv', index_col=0)
 
 @st.cache_data
 def get_data():
