@@ -54,6 +54,8 @@ waterfront_trips = pd.read_csv('02 Streamlit/waterfront_trips.csv', index_col=0)
 monthly_type = pd.read_csv('02 Streamlit/fleet_reduction.csv', index_col=0)
 low_season = pd.read_csv('02 Streamlit/low_season_summary.csv', index_col=0)
 low_season_type = pd.read_csv('02 Streamlit/low_season_type.csv', index_col=0)
+popular_stations = pd.read_csv('02 Streamlit/popular_stations.csv', index_col=0)
+
 
 month_order = [
     'January', 'February', 'March', 'April', 'May', 'June',
@@ -542,11 +544,132 @@ elif page == "Identifying Main Routes and Problem Stations":
 # PAGE 5: PREDICTIVE REBALANCING STRATEGY
 # ───────────────────────────────────────────────
 elif page == "Predictive Rebalancing Strategy":
+
     st.title("🔁 Predictive Rebalancing Strategy")
     st.markdown("""
     Introduces **dynamic redistribution** and **predictive scheduling** for morning (7–9 AM) 
-    and evening (5–7 PM) peaks to prevent shortages and overflow.
+    and evening (5–7 PM) peaks to prevent station shortages and overflow.  
+    The model below visualizes **daily net bike flow** at the busiest stations 
+    to anticipate where bikes should be **added or removed** throughout the day.
     """)
+
+    # ------------------------------------------------
+    # Sidebar filters
+    # ------------------------------------------------
+    st.sidebar.subheader("Select Parameters")
+    month = st.sidebar.selectbox("Month", sorted(popular_stations["month"].unique()))
+    day = st.sidebar.selectbox(
+        "Day", sorted(popular_stations[popular_stations["month"] == month]["day"].unique())
+    )
+    hour = st.sidebar.selectbox("Hour of Day", sorted(popular_stations["hour"].unique()))
+
+    # ------------------------------------------------
+    # Filter for selected month/day/hour
+    # ------------------------------------------------
+    filtered = popular_stations[
+        (popular_stations["month"] == month)
+        & (popular_stations["day"] == day)
+        & (popular_stations["hour"] == hour)
+    ].copy()
+
+    if filtered.empty:
+        st.warning(f"No data available for {day:02d}/{month:02d} at {hour:02d}:00")
+    else:
+        # Sort by imbalance (biggest difference first)
+        filtered = filtered.sort_values("net_flow", ascending=False).head(20)
+
+        # Color mapping: red = Add bikes (positive), green = Remove bikes (negative)
+        filtered["color"] = filtered["net_flow"].apply(lambda x: "#ef4444" if x > 0 else "#22c55e")
+
+        # Hover info
+        filtered["hover"] = filtered.apply(
+            lambda r: f"<b>{r['station']}</b><br>"
+                      f"Started: {int(r['rides_started'])} rides<br>"
+                      f"Ended: {int(r['rides_ended'])} rides<br>"
+                      f"<b>{'Add' if r['net_flow']>0 else 'Remove'} "
+                      f"{abs(int(r['net_flow']))} bikes</b>",
+            axis=1,
+        )
+
+        # ------------------------------------------------
+        # Visualization
+        # ------------------------------------------------
+        fig = go.Figure()
+        fig.add_trace(
+            go.Bar(
+                y=filtered["station"],
+                x=filtered["net_flow"],
+                orientation="h",
+                marker=dict(color=filtered["color"]),
+                hovertemplate="%{customdata}<extra></extra>",
+                customdata=filtered["hover"],
+            )
+        )
+
+        fig.update_layout(
+            title=f"🚲 Daily Bike Balance — {day:02d}/{month:02d} at {hour:02d}:00",
+            xaxis_title="Net Flow (bikes)",
+            yaxis_title="Station",
+            height=650,
+            plot_bgcolor="white",
+            paper_bgcolor="#f0f9ff",
+            margin=dict(l=220, r=50, t=100, b=90),
+            font=dict(size=11),
+            annotations=[
+                dict(
+                    text="<b style='color:#ef4444;'>Red = Add Bikes</b> (more rides starting) | "
+                         "<b style='color:#22c55e;'>Green = Remove Bikes</b> (more rides ending)",
+                    xref="paper", yref="paper",
+                    x=0.5, y=-0.1, showarrow=False,
+                    font=dict(size=12), xanchor="center"
+                )
+            ],
+        )
+
+        st.plotly_chart(fig, use_container_width=True)
+
+        # ------------------------------------------------
+        # Summary table
+        # ------------------------------------------------
+        st.markdown("### 📋 Restocking Summary (Top 10 Stations)")
+        summary = filtered[["station", "rides_started", "rides_ended", "net_flow"]].copy()
+        summary["Action Required"] = summary["net_flow"].apply(
+            lambda x: f"ADD {abs(int(x))} bikes" if x > 0 else f"REMOVE {abs(int(x))} bikes"
+        )
+        summary = summary.rename(
+            columns={
+                "station": "Station",
+                "rides_started": "Rides Started",
+                "rides_ended": "Rides Ended",
+                "net_flow": "Net Flow",
+            }
+        )
+        st.dataframe(summary.head(10), use_container_width=True)
+
+    # ------------------------------------------------
+    # Analytical Notes
+    # ------------------------------------------------
+    st.markdown("""
+    ---
+    ### 🔍 Analytical Notes
+    - **Positive Net Flow (red):** More departures → stations lose bikes → need restocking.  
+    - **Negative Net Flow (green):** More arrivals → docks fill up → remove bikes.  
+    - Morning (7–9 AM) and evening (5–7 PM) hours show the highest imbalance,  
+      indicating optimal times for predictive redistribution.
+    - These hourly patterns form the foundation for **machine-learning-based 
+      rebalancing forecasts** using historical trip data.
+    """)
+
+
+
+
+
+
+
+
+
+
+
 
 
 # ───────────────────────────────────────────────
