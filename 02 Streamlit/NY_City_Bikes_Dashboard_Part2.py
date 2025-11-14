@@ -960,22 +960,23 @@ elif page == "Waterfront Expansion Opportunities":
     st.markdown("""
     ---
     ### Recommendation — Waterfront Expansion
-
     **Finding:**  
     Waterfront stations make up only **15.3%** of the entire network, while nearly **24% of all trips** start or end near the riverside.  
     This indicates a **demand–supply gap of approximately 9 percentage points**.
-
+    
     **Recommendation:**  
-    To close this gap, CitiBike should add around **150 new docking stations** along the **Hudson River** and **East River**.  
-    Expansion should prioritize **high-pressure OD corridors** highlighted in the Sankey diagram — for example:  
-    - *Soissons Landing ↔ Vesey St & Church St*  
-    - *Roosevelt Island ↔ Pier 40 — Hudson River Park*  
-
+    - To close this gap, CitiBike should add around **150 new docking stations** along the **Hudson River** and **East River**.  
+    - Expansion should prioritize **high-pressure OD corridors** highlighted in the Sankey diagram — for example:  
+    *Soissons Landing ↔ Vesey St & Church St*  
+    *Roosevelt Island ↔ Pier 40 — Hudson River Park*  
+    - Focus on Public Access Zones:
+    Prioritize WAP areas: Hunters Point, Newtown Creek, Harlem River – Core, Inwood, Harlem River – North, Harlem River – South, Flushing, Gowanus Canal.
+    Deploy new stations and redistribution resources before peak-demand months.
+    
     **Expected Impact:**  
     - Reduce bike shortages at popular leisure and commuter waterfront routes  
     - Improve accessibility for weekend and tourist riders  
     - Balance network capacity between inner-city and riverside zones  
-
     ---
     """)
 
