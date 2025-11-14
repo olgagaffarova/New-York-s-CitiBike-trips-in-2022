@@ -87,6 +87,8 @@ if page == "About Citibike":
     #### Top 15 Most Popular Start Stations
     The following chart highlights the **15 busiest start stations**, mostly in **central Manhattan**, 
     where daily commuter demand is highest.
+	- Busiest stations are concentrated in **central Manhattan** commuter and tourist zones.
+	- Top stations (e.g., *W 21 St & 6 Ave*) exceed **120k annual starts**.
     """)
 
     fig = go.Figure(
