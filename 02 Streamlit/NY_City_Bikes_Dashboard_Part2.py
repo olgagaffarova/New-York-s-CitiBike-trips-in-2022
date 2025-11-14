@@ -965,7 +965,7 @@ elif page == "Waterfront Expansion Opportunities":
     This indicates a **demand–supply gap of approximately 9 percentage points**.
     
     **Recommendation:**  
-    - To close this gap, CitiBike should add around **150 new docking stations** along the **Hudson River** and **East River**.  
+    - To close this gap, CitiBike should add new docking stations along the **Hudson River** and **East River**.  
     - Expansion should prioritize **high-pressure OD corridors** highlighted in the Sankey diagram — for example:  
     *Soissons Landing ↔ Vesey St & Church St*  
     *Roosevelt Island ↔ Pier 40 — Hudson River Park*  
