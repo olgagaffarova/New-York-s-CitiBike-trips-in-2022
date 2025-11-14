@@ -123,7 +123,7 @@ if page == "About Citibike":
     st.markdown("### Hourly and Monthly CitiBike Demand")
     st.markdown("""
     - Strong **seasonality**: highest demand from **June–September**, lowest in winter months.
-    - Daily peaks appear almost every month around **8–10 AM** and **4–7 PM**.
+    - Daily peaks appear almost every month around **8–9 AM** and **5–6 PM**.
     """)
 
 
@@ -160,6 +160,12 @@ if page == "About Citibike":
     st.markdown("""
     This section compares **hourly ride behavior** for **members vs casual users**, 
     with breakdown by **bike type (classic vs electric)**.
+    """)
+
+    st.markdown("""
+    - Casual riders peak **mid-day (2–5 PM)**, mostly leisure and tourism.
+    - Members show strong **commuter peaks (7–9 AM, 5–7 PM)**.
+    - Electric bikes are heavily used during commuter hours.
     """)
 
     fig = px.bar(
