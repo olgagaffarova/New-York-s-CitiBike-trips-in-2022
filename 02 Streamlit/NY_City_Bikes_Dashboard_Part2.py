@@ -167,7 +167,7 @@ if page == "About Citibike":
     st.markdown("""
     - Casual riders peak **mid-day (2–5 PM)**, mostly leisure and tourism.
     - Members show strong **commuter peaks (7–9 AM, 5–7 PM)**.
-    - Classic bikes are in the highest demand during the entire day.
+    - Classic bikes are in the highest demand during the entire day for both user types.
     """)
 
     fig = px.bar(
