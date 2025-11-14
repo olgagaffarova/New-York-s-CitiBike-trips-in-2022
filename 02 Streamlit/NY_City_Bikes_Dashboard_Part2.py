@@ -970,7 +970,7 @@ elif page == "Waterfront Expansion Opportunities":
     *Soissons Landing ↔ Vesey St & Church St*  
     *Roosevelt Island ↔ Pier 40 — Hudson River Park*  
     - Focus on Public Access Zones:
-    Prioritize WAP areas: Hunters Point, Newtown Creek, Harlem River – Core, Inwood, Harlem River – North, Harlem River – South, Flushing, Gowanus Canal.
+    Hunters Point, Newtown Creek, Harlem River – Core, Inwood, Harlem River – North, Harlem River – South, Flushing, Gowanus Canal.
     Deploy new stations and redistribution resources before peak-demand months.
     
     **Expected Impact:**  
