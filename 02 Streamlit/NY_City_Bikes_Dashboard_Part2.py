@@ -720,25 +720,7 @@ elif page == "Predictive Rebalancing Strategy":
         # ------------------------------------------------
         st.markdown("""
         ---
-        ### 📈 Business Interpretation
-        
-        **How to Read This Analysis:**
-        
-        1. **Donor Stations (Red/Negative)** 🚴‍♂️→→→
-           - These are **trip origin points** where riders pick up bikes
-           - More trips START here than END here
-           - Stations gradually **run out of bikes** throughout the day
-           - **Action needed:** DELIVER bikes to these stations
-           - *Example: Residential areas during morning rush hour*
-        
-        2. **Receiver Stations (Green/Positive)** →→→🏢
-           - These are **trip destination points** where riders drop off bikes
-           - More trips END here than START here
-           - Stations gradually **fill up** and may exceed capacity
-           - **Action needed:** COLLECT bikes from these stations
-           - *Example: Business districts during morning rush hour*
-        
-        **Operational Strategy:**
+        ### Operational Strategy:
         - Schedule rebalancing trucks **1 hour before** peak times:
           - **Morning prep (6–7 AM):** Position bikes at residential/transit hubs before commute
           - **Afternoon prep (4–5 PM):** Position bikes at business districts before evening rush
