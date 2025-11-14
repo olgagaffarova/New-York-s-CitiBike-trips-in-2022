@@ -764,21 +764,23 @@ elif page == "Waterfront Expansion Opportunities":
     This analysis applies a **supply-demand framework** to identify capacity gaps.
 
     **Methodology**:
-    **Define Waterfront Zones by using Waterfront Access Plans (WAPs)** with focus only on zones with legal public access for station placement:
-    Hunters Point
-    Newtown Creek
-    Harlem River – Core
-    Inwood
-    Harlem River – North
-    Harlem River – South
-    Flushing
-    Gowanus Canal
-    Supply-Demand Gap Analysis
+    **Define Waterfront Zones by using Waterfront Access Plans (WAPs)** 
+    with focus only on zones with legal public access for station placement:
     
-    **Supply** : Percentage of existing stations located in these WAP zones and within 400 meters of the shoreline are considered waterfront stations.
-    **Demand**: Percentage of trips that start or end in these zones
-    **Gap**: Areas where demand exceeds supply are underserved and ideal for new stations
+    - Hunters Point
+    - Newtown Creek
+    - Harlem River – Core
+    - Inwood
+    - Harlem River – North
+    - Harlem River – South
+    - Flushing
+    - Gowanus Canal
     
+    **Supply-Demand Gap Analysis**
+    Supply : Percentage of existing stations located in these WAP zones and within 400 meters of the shoreline are considered waterfront stations.
+    Demand: Percentage of trips that start or end in these zones
+    Gap: Areas where demand exceeds supply are underserved and ideal for new stations
+
     **Peak Month Analysis**
     Identify months with highest waterfront demand to guide expansion timing
         
