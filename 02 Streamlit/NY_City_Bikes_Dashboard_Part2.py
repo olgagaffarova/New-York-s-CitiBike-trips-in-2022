@@ -991,22 +991,22 @@ elif page == "Recommendations":
     
     st.markdown("""
     CitiBike Recommendations – Operational & Expansion Strategy
-    1. Fleet Management – Seasonal Adjustment
+    1. **Fleet Management – Seasonal Adjustment**
     - Ridership drops sharply in low season (Nov–Apr) due to cold temperatures and heavy rainfall.
     - Electric bikes retain higher usage; classic bikes see ~60–70% drop, e-bikes ~40–50% below peak.
     - Weighted fleet reduction: 30–40% during low season to balance cost savings and service reliability.
     - Maintain more e-bikes in winter to match residual demand.
     
-    2. Operational Strategy – Rebalancing Timing
+    2. **Operational Strategy – Rebalancing Timing**
     - Morning prep (6–7 AM): Position bikes at residential and transit hubs before the commute.
     - Afternoon prep (4–5 PM): Position bikes at business districts ahead of evening rush.
     - Optimize collection and delivery routes based on historical flows and real-time monitoring for weather or events.
     
-    3. Key Stations – Targeted Redistribution
+    3. **Key Stations – Targeted Redistribution**
     - Focus on the top 14% of stations generating ~80% of CitiBike demand.
     - Rebalancing these stations has the greatest system-wide impact on availability and congestion.
     
-    4. Waterfront Expansion – Closing Demand Gap
+    4. **Waterfront Expansion – Closing Demand Gap**
     - Current supply: Waterfront stations = 15.3% of network; Demand: ~24% of trips start or end near rivers → gap ~9%.
     - Recommendation: Add new docking stations along the Hudson and East Rivers.
     - Prioritize high-pressure OD corridors (from Sankey diagram), e.g.:
@@ -1015,7 +1015,7 @@ elif page == "Recommendations":
     - Focus only on Public Access Zones: Hunters Point, Newtown Creek, Harlem River – Core, Inwood, Harlem River – North, Harlem River – South, Flushing, Gowanus Canal.
     - Deploy new stations and redistribute bikes before peak-demand months.
     
-    Impact:
+    **Impact**:
     Improve system-wide availability, reduce congestion at high-demand stations, and better serve both commuters and leisure riders, while optimizing operations and seasonal fleet usage.
     
     """)
