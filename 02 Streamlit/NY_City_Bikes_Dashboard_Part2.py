@@ -754,8 +754,9 @@ elif page == "Waterfront Expansion Opportunities":
     st.title("Waterfront Expansion Opportunities")
     
     st.markdown("""
-    Explore **spatial demand clusters** along **Hudson and East River** to identify where 
-    new stations could relieve congestion and serve leisure riders.
+    In this part of our analysis we explored **spatial demand clusters** along **Hudson and East River** to identify where 
+    new stations could relieve congestion and serve Citibike riders.
+	
     **Objective**:
     Our approach focuses mainly on places where people are able to access the waterline. 
     To identify locations where new bike stations can relieve congestion and serve leisure riders.
@@ -764,9 +765,9 @@ elif page == "Waterfront Expansion Opportunities":
     This analysis applies a **supply-demand framework** to identify capacity gaps.
 
     **Methodology**:
-    **Define Waterfront Zones by using Waterfront Access Plans (WAPs)** 
-    with focus only on zones with legal public access for station placement:
-    
+    **Define Waterfront Zones by using Waterfront Access Plans (WAPs)**  
+    We focused on zones with **public access** to the waterline:
+
     - Hunters Point
     - Newtown Creek
     - Harlem River – Core
