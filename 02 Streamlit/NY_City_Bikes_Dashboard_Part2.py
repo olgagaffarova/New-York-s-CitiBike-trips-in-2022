@@ -550,9 +550,8 @@ elif page == "Identifying Main Routes and Problem Stations":
 # ───────────────────────────────────────────────
 # PAGE 5: PREDICTIVE REBALANCING STRATEGY
 # ───────────────────────────────────────────────
-
 elif page == "Predictive Rebalancing Strategy":
-	st.title("🔁 Predictive Rebalancing Strategy")
+    st.title("🔁 Predictive Rebalancing Strategy")
     
     st.markdown("""
     #### Bike redistribution
@@ -567,7 +566,7 @@ elif page == "Predictive Rebalancing Strategy":
     **Key Insight:** Stations where many trips START but few END become depleted (donors).  
     Stations where many trips END but few START become overcrowded (receivers).
     """)
-	
+
 
 	# ------------------------------------------------
 	# Sidebar filters
