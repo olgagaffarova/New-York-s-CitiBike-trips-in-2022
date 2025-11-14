@@ -555,6 +555,7 @@ elif page == "Predictive Rebalancing Strategy":
 	st.title("🔁 Predictive Rebalancing Strategy")
     
     st.markdown("""
+    #### Bike redistribution
     This page shows **dynamic bike redistribution needs** based on actual usage patterns.   
     By analyzing **net bike flow** at each station (departures minus arrivals), we can predict 
     where bikes need to be **delivered** or **collected** to maintain optimal availability. 
