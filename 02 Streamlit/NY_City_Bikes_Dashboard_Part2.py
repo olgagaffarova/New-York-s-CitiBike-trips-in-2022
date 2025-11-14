@@ -552,13 +552,19 @@ elif page == "Identifying Main Routes and Problem Stations":
 # PAGE 5: PREDICTIVE REBALANCING STRATEGY
 # ───────────────────────────────────────────────
 
+# ───────────────────────────────────────────────
+# PAGE 5: PREDICTIVE REBALANCING STRATEGY
+# ───────────────────────────────────────────────
+
 elif page == "Predictive Rebalancing Strategy":
 	st.title("🔁 Predictive Rebalancing Strategy")
 	st.markdown("""
-	Introduces **dynamic redistribution** and **predictive scheduling** for **morning (7–9 AM)** 
-	and **evening (5–7 PM)** peaks to prevent shortages and overflow.  
-	The model below visualizes **daily net bike flow** at the busiest stations 
-	to anticipate where bikes should be **added or removed** throughout the day.
+	This page shows **dynamic bike redistribution needs** based on actual usage patterns.  
+	By analyzing **net bike flow** at each station (departures minus arrivals), we can predict 
+	where bikes need to be **delivered** or **collected** to maintain optimal availability.
+	
+	**Key Insight:** Stations where many trips START but few END become depleted (donors).  
+	Stations where many trips END but few START become overcrowded (receivers).
 	""")
 	
 
@@ -607,28 +613,43 @@ elif page == "Predictive Rebalancing Strategy":
 	    # ------------------------------------------------
 	    # Calculate inflow/outflow summary
 	    # ------------------------------------------------
-	    st.markdown("### 🚲 Net Bike Flow — Station-Level View")
+	    st.markdown("### 🚲 Net Bike Flow Analysis")
+	    
+	    st.info("""
+	    **Understanding Net Flow:**  
+	    • **Negative values** (red) = More bikes LEAVE than arrive → Station becomes EMPTY → Needs bikes DELIVERED  
+	    • **Positive values** (green) = More bikes ARRIVE than leave → Station becomes FULL → Needs bikes COLLECTED
+	    """)
 	
-	    # Negative net_flow = more bikes leaving (needs bikes added)
-	    # Positive net_flow = more bikes arriving (needs bikes removed)
+	    # Negative net_flow = more bikes leaving (donor station, needs bikes added)
+	    # Positive net_flow = more bikes arriving (receiver station, needs bikes removed)
 	    filtered_df["net_flow_status"] = filtered_df["net_flow"].apply(
-	        lambda x: "Receiver (Needs Bikes)" if x < 0 else "Donor (Has Surplus)"
+	        lambda x: "Donor Station (Gets Empty)" if x < 0 else "Receiver Station (Gets Full)"
 	    )
 	
-	    donor_sum = filtered_df[filtered_df["net_flow"] > 0]["net_flow"].sum()
-	    receiver_sum = filtered_df[filtered_df["net_flow"] < 0]["net_flow"].sum()
+	    # Calculate rebalancing totals
+	    bikes_to_collect = filtered_df[filtered_df["net_flow"] > 0]["net_flow"].sum()
+	    bikes_to_deliver = abs(filtered_df[filtered_df["net_flow"] < 0]["net_flow"].sum())
 	
 	    col1, col2 = st.columns(2)
-	    col1.metric("🚚 Total Bikes to Remove", f"{int(donor_sum)}")
-	    col2.metric("📦 Total Bikes to Add", f"{int(abs(receiver_sum))}")
+	    col1.metric("📦 Bikes to Deliver", f"{int(bikes_to_deliver)}", 
+	                help="Total bikes needed at depleting stations")
+	    col2.metric("🚚 Bikes to Collect", f"{int(bikes_to_collect)}", 
+	                help="Total bikes to remove from overcrowded stations")
+	
+	    # Balance check
+	    if abs(bikes_to_deliver - bikes_to_collect) < 10:
+	        st.success("✅ System is roughly balanced — bikes collected can supply depleting stations")
+	    else:
+	        st.warning(f"⚠️ Imbalance detected: {abs(int(bikes_to_deliver - bikes_to_collect))} bike difference")
 	
 	    # ------------------------------------------------
 	    # Sort and take top 20 stations by absolute net flow
 	    # ------------------------------------------------
-	    top_stations = filtered_df.sort_values(
-	        "net_flow", 
-	        ascending=True
-	    ).head(20)
+	    top_stations = filtered_df.copy()
+	    top_stations['abs_net_flow'] = top_stations['net_flow'].abs()
+	    top_stations = top_stations.sort_values('abs_net_flow', ascending=False).head(20)
+	    top_stations = top_stations.sort_values('net_flow', ascending=True)  # For better visual ordering
 	
 	    # ------------------------------------------------
 	    # Plotly visualization
@@ -640,10 +661,10 @@ elif page == "Predictive Rebalancing Strategy":
 	        orientation='h',
 	        color="net_flow_status",
 	        color_discrete_map={
-	            "Donor (Has Surplus)": "#22c55e",
-	            "Receiver (Needs Bikes)": "#ef4444"
+	            "Donor Station (Gets Empty)": "#ef4444",      # Red for needs delivery
+	            "Receiver Station (Gets Full)": "#22c55e"     # Green for needs collection
 	        },
-	        title=f"Top 20 Stations — Net Bike Flow (Month: {selected_month}, Day: {selected_day}, Hour: {selected_hour}:00)",
+	        title=f"Top 20 Stations by Rebalancing Priority (Month: {selected_month}, Day: {selected_day}, Hour: {selected_hour}:00)",
 	        hover_data={
 	            "rides_started": True,
 	            "rides_ended": True,
@@ -651,23 +672,23 @@ elif page == "Predictive Rebalancing Strategy":
 	            "net_flow_status": False
 	        },
 	        labels={
-	            "net_flow": "Net Bike Flow",
+	            "net_flow": "Net Bike Flow (Departures - Arrivals)",
 	            "station": "Station Name",
-	            "rides_started": "Rides Started",
-	            "rides_ended": "Rides Ended",
+	            "rides_started": "Rides Started (Departures)",
+	            "rides_ended": "Rides Ended (Arrivals)",
 	            "total_activity": "Total Activity"
 	        }
 	    )
 	
 	    fig.update_layout(
-	        xaxis_title="Net Bike Flow (Started - Ended)",
+	        xaxis_title="Net Bike Flow: Negative = Needs Delivery | Positive = Needs Collection",
 	        yaxis_title="Station Name",
 	        title_x=0.05,
-	        title_font=dict(size=18),
-	        height=600,
+	        title_font=dict(size=16),
+	        height=700,
 	        plot_bgcolor="rgba(0,0,0,0)",
 	        paper_bgcolor="rgba(0,0,0,0)",
-	        legend_title_text="Station Status",
+	        legend_title_text="Station Type",
 	        showlegend=True,
 	        xaxis=dict(zeroline=True, zerolinewidth=2, zerolinecolor='gray')
 	    )
@@ -677,16 +698,19 @@ elif page == "Predictive Rebalancing Strategy":
 	    # ------------------------------------------------
 	    # Detailed Table View
 	    # ------------------------------------------------
-	    st.markdown("### 📊 Detailed Station Data")
+	    st.markdown("### 📊 Detailed Rebalancing Operations")
 	    
 	    # Prepare display dataframe
 	    display_df = top_stations[['station', 'rides_started', 'rides_ended', 'net_flow', 'total_activity']].copy()
-	    display_df['action_required'] = display_df['net_flow'].apply(
-	        lambda x: f"ADD {abs(int(x))} bikes" if x < 0 else f"REMOVE {int(x)} bikes"
+	    display_df['rebalancing_action'] = display_df['net_flow'].apply(
+	        lambda x: f"🚚 DELIVER {abs(int(x))} bikes" if x < 0 else f"📦 COLLECT {int(x)} bikes"
 	    )
+	    display_df['priority'] = display_df['net_flow'].abs()
+	    display_df = display_df.sort_values('priority', ascending=False)
 	    
 	    # Rename columns for display
-	    display_df.columns = ['Station', 'Rides Started', 'Rides Ended', 'Net Flow', 'Total Activity', 'Action Required']
+	    display_df = display_df[['station', 'rides_started', 'rides_ended', 'net_flow', 'total_activity', 'rebalancing_action']]
+	    display_df.columns = ['Station', 'Departures', 'Arrivals', 'Net Flow', 'Total Activity', 'Required Action']
 	    
 	    st.dataframe(
 	        display_df,
@@ -695,19 +719,39 @@ elif page == "Predictive Rebalancing Strategy":
 	    )
 	
 	    # ------------------------------------------------
-	    # Notes section
+	    # Business interpretation
 	    # ------------------------------------------------
 	    st.markdown("""
 	    ---
-	    **Interpretation:**
-	    - **Red bars (Receivers)** → Stations where more rides END than START — bikes are accumulating, need **removal**.
-	    - **Green bars (Donors)** → Stations where more rides START than END — bikes are depleting, need **addition**.
-	    - Negative net flow = needs bikes added (more departures than arrivals)
-	    - Positive net flow = needs bikes removed (more arrivals than departures)
-	
-	    **Operational Takeaway:**  
-	    Implement dynamic restocking runs during **6–7 AM** and **4–5 PM** based on forecasted net flow 
-	    to maintain balanced availability across the network and prevent both shortages and overflow.
+	    ### 📈 Business Interpretation
+	    
+	    **How to Read This Analysis:**
+	    
+	    1. **Donor Stations (Red/Negative)** 🚴‍♂️→→→
+	       - These are **trip origin points** where riders pick up bikes
+	       - More trips START here than END here
+	       - Stations gradually **run out of bikes** throughout the day
+	       - **Action needed:** DELIVER bikes to these stations
+	       - *Example: Residential areas during morning rush hour*
+	    
+	    2. **Receiver Stations (Green/Positive)** →→→🏢
+	       - These are **trip destination points** where riders drop off bikes
+	       - More trips END here than START here
+	       - Stations gradually **fill up** and may exceed capacity
+	       - **Action needed:** COLLECT bikes from these stations
+	       - *Example: Business districts during morning rush hour*
+	    
+	    **Operational Strategy:**
+	    - Schedule rebalancing trucks **1 hour before** peak times:
+	      - **Morning prep (6–7 AM):** Position bikes at residential/transit hubs before commute
+	      - **Afternoon prep (4–5 PM):** Position bikes at business districts before evening rush
+	    - Use this data to create **optimized collection and delivery routes**
+	    - Monitor real-time to adjust for weather, events, or anomalies
+	    
+	    **Cost-Benefit:**
+	    - Prevents **lost revenue** from empty stations (unsatisfied demand)
+	    - Prevents **operational issues** from overflow (bikes blocking sidewalks)
+	    - Improves **customer satisfaction** (bikes available when/where needed)
 	    """)
 	
 	    # ------------------------------------------------
@@ -715,19 +759,11 @@ elif page == "Predictive Rebalancing Strategy":
 	    # ------------------------------------------------
 	    csv = display_df.to_csv(index=False)
 	    st.download_button(
-	        label="📥 Download Station Data as CSV",
+	        label="📥 Download Rebalancing Plan as CSV",
 	        data=csv,
-	        file_name=f"bike_restocking_month{selected_month}_day{selected_day}_hour{selected_hour}.csv",
+	        file_name=f"rebalancing_plan_M{selected_month}_D{selected_day}_H{selected_hour}.csv",
 	        mime="text/csv"
 	    )
-
-
-
-
-
-
-
-
 
 
 
