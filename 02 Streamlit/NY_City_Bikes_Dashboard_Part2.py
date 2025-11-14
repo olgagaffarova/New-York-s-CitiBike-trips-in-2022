@@ -553,18 +553,18 @@ elif page == "Identifying Main Routes and Problem Stations":
 
 elif page == "Predictive Rebalancing Strategy":
 	st.title("🔁 Predictive Rebalancing Strategy")
-	st.markdown("""
-	This page shows **dynamic bike redistribution needs** based on actual usage patterns.   
-	By analyzing **net bike flow** at each station (departures minus arrivals), we can predict 
-	where bikes need to be **delivered** or **collected** to maintain optimal availability. 
+    st.markdown("""
+    This page shows **dynamic bike redistribution needs** based on actual usage patterns.   
+    By analyzing **net bike flow** at each station (departures minus arrivals), we can predict 
+    where bikes need to be **delivered** or **collected** to maintain optimal availability. 
     
     For every month, we compute the :80th percentile (top 20%): activity threshold. 
     We keep only the station-hours where activity is above this threshold. 
     These represent the operationally critical stations where rebalancing decisions matter most.
     
-	**Key Insight:** Stations where many trips START but few END become depleted (donors).  
-	Stations where many trips END but few START become overcrowded (receivers).
-	""")
+    **Key Insight:** Stations where many trips START but few END become depleted (donors).  
+    Stations where many trips END but few START become overcrowded (receivers).
+    """)
 	
 
 	# ------------------------------------------------
