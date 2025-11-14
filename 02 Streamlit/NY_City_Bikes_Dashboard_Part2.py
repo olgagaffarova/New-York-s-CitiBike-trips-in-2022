@@ -418,11 +418,11 @@ elif page == "Weather Impact and Fleet Optimization (Nov–Apr)":
 
     st.markdown("""
     The next chart summarizes **average reduction during low season (Nov–Apr)**:
-	
-	- Classic bikes → require **~58% reduction**  
-	- Electric bikes → require **~44% reduction**
-	
-	""")
+    
+    - Classic bikes → require **~58% reduction**  
+    - Electric bikes → require **~44% reduction**
+    
+    """)
 
     low_avg = low_season_type.groupby('rideable_type')['fleet_reduction_%'].mean().sort_values()
     bt_labels = low_avg.index.str.replace("_", " ").str.title()
