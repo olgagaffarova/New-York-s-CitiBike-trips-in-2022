@@ -1009,10 +1009,8 @@ elif page == "Recommendations":
     4. **Waterfront Expansion – Closing Demand Gap**
     - Current supply: Waterfront stations = 15.3% of network; Demand: ~24% of trips start or end near rivers → gap ~9%.
     - Recommendation: Add new docking stations along the Hudson and East Rivers.
-    - Prioritize high-pressure OD corridors (from Sankey diagram), e.g.:
-    Soissons Landing ↔️ Vesey St & Church St
-    Roosevelt Island ↔️ Pier 40 (Hudson River Park)
-    - Focus only on Public Access Zones: Hunters Point, Newtown Creek, Harlem River – Core, Inwood, Harlem River – North, Harlem River – South, Flushing, Gowanus Canal.
+    - Prioritize high-pressure OD corridors (from Sankey diagram), e.g.: **Soissons Landing ↔️ Vesey St & Church St, Roosevelt Island ↔️ Pier 40 (Hudson River Park)**
+    - Focus only on Public Access Zones: **Hunters Point, Newtown Creek, Harlem River – Core, Inwood, Harlem River – North, Harlem River – South, Flushing, Gowanus Canal**.
     - Deploy new stations and redistribute bikes before peak-demand months.
 
     **Impact**:
