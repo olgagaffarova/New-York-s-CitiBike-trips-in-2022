@@ -121,6 +121,11 @@ if page == "About Citibike":
 
     st.markdown("---")
     st.markdown("### Hourly and Monthly CitiBike Demand")
+    st.markdown("""
+    - Strong **seasonality**: highest demand from **June–September**, lowest in winter months.
+    - Daily peaks appear almost every month around **8–10 AM** and **4–7 PM**.
+    """)
+    
 
     df_heat["hour"] = df_heat["hour"].astype(str)
     df_heat["month"] = pd.Categorical(
