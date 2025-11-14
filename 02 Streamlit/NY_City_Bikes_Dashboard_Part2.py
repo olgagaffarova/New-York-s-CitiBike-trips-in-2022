@@ -547,11 +547,6 @@ elif page == "Identifying Main Routes and Problem Stations":
                       font=dict(color='black', size=11), margin=dict(l=220, r=40, t=80, b=40))
     st.plotly_chart(fig, use_container_width=True)
 
-
-# ───────────────────────────────────────────────
-# PAGE 5: PREDICTIVE REBALANCING STRATEGY
-# ───────────────────────────────────────────────
-
 # ───────────────────────────────────────────────
 # PAGE 5: PREDICTIVE REBALANCING STRATEGY
 # ───────────────────────────────────────────────
@@ -559,10 +554,14 @@ elif page == "Identifying Main Routes and Problem Stations":
 elif page == "Predictive Rebalancing Strategy":
 	st.title("🔁 Predictive Rebalancing Strategy")
 	st.markdown("""
-	This page shows **dynamic bike redistribution needs** based on actual usage patterns.  
+	This page shows **dynamic bike redistribution needs** based on actual usage patterns.   
 	By analyzing **net bike flow** at each station (departures minus arrivals), we can predict 
-	where bikes need to be **delivered** or **collected** to maintain optimal availability.
-	
+	where bikes need to be **delivered** or **collected** to maintain optimal availability. 
+    
+    For every month, we compute the :80th percentile (top 20%): activity threshold. 
+    We keep only the station-hours where activity is above this threshold. 
+    These represent the operationally critical stations where rebalancing decisions matter most.
+    
 	**Key Insight:** Stations where many trips START but few END become depleted (donors).  
 	Stations where many trips END but few START become overcrowded (receivers).
 	""")
