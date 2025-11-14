@@ -1014,7 +1014,7 @@ elif page == "Recommendations":
     Roosevelt Island ↔️ Pier 40 (Hudson River Park)
     - Focus only on Public Access Zones: Hunters Point, Newtown Creek, Harlem River – Core, Inwood, Harlem River – North, Harlem River – South, Flushing, Gowanus Canal.
     - Deploy new stations and redistribute bikes before peak-demand months.
-    
+
     **Impact**:
     Improve system-wide availability, reduce congestion at high-demand stations, and better serve both commuters and leisure riders, while optimizing operations and seasonal fleet usage.
     
