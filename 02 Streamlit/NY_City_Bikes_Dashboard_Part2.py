@@ -559,12 +559,10 @@ elif page == "Predictive Rebalancing Strategy":
     By analyzing **net bike flow** at each station (departures minus arrivals), we can predict 
     where bikes need to be **delivered** or **collected** to maintain optimal availability. 
     
-    For every month, we compute the :80th percentile (top 20%): activity threshold. 
+    For every month, we compute the **80th percentile (top 20%)** activity threshold. 
     We keep only the station-hours where activity is above this threshold. 
     These represent the operationally critical stations where rebalancing decisions matter most.
     
-    **Key Insight:** Stations where many trips START but few END become depleted (donors).  
-    Stations where many trips END but few START become overcrowded (receivers).
     """)
     
     # ------------------------------------------------
