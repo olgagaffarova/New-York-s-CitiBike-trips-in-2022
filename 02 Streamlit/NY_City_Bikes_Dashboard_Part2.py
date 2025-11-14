@@ -78,6 +78,10 @@ if page == "About Citibike":
     st.title("🚴 CitiBike 2022: Understanding New York’s Bike Network")
 
     st.markdown("""
+    ### **CitiBike System Overview – 2022**
+    Before diving into operational recommendations, let's explore the CitiBike system through 2022 data—understanding 
+    how people use it, when they ride, and what type of bike is in higher demand.
+
     ### **Project Objective**
     This analysis examines **CitiBike’s 2022 ridership** to improve **bike availability**, optimize **fleet management**, 
     and identify **expansion opportunities** across New York City.
