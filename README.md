@@ -1,9 +1,9 @@
 # New York’s Citi Bike 2022 — Strategic Dashboard Project
 
 ### **Project Overview**
-The goal of this project is to analyze user behavior and identify opportunities for optimizing the **distribution and expansion** of Citi Bike stations across the city.  
+The goal of this project is to examine CitiBike’s 2022 ridership to improve bike availability, optimize fleet management, and identify expansion opportunities across New York City.
 
-The dashboard that will be developed from this analysis will support the business strategy department in diagnosing **bike availability issues** and guiding **data-driven decisions** to ensure a balanced, sustainable, and efficient service network.
+The dashboard that will be developed from this analysis will support the business strategy department in diagnosing **bike availability issues** and guiding **data-driven decisions** to ensure a balanced and efficient service network.
 
 ---
 
@@ -21,7 +21,6 @@ The insights derived will feed into an **interactive strategic dashboard**, desi
 ### **Data Context**
 Since its launch in 2013, Citi Bike has grown into New York City’s largest bike-sharing program and one of the biggest worldwide.  
 Rising demand—especially since the COVID-19 pandemic—has exposed weaknesses in station capacity and bike distribution. Stations in busy commuter areas often run out of bikes, while others remain full, preventing returns.  
-
 This project investigates the causes of such imbalances and provides data-backed recommendations to improve operational efficiency and customer satisfaction.
 
 ---
@@ -34,8 +33,12 @@ This project investigates the causes of such imbalances and provides data-backed
 
 2. **NOAA Weather Data (LaGuardia Airport Station)**  
    Daily temperature and precipitation data collected using NOAA’s public API:  
-   [https://www.noaa.gov/](https://www.noaa.gov/)  
+   [https://www.noaa.gov/](https://www.noaa.gov/)
 
+3. **Waterfront Access Plans | NYC Open Data**  
+   [https://www.noaa.gov/](https://www.noaa.gov/](https://data.cityofnewyork.us/Environment/Waterfront-Access-Plans/d9z4-v86m)
+
+   
 ---
 
 ### **Tools and Technologies**
@@ -78,8 +81,6 @@ This project investigates the causes of such imbalances and provides data-backed
 ---
 
 ### **Deliverables**
-- A **clean and merged dataset** combining trip and weather data.  
-- A **series of visualizations** explaining key demand and distribution patterns.  
 - A **Streamlit dashboard** presenting insights interactively.  
 - A **recommendations summary** highlighting strategies for improving bike distribution and planning new stations.
 
