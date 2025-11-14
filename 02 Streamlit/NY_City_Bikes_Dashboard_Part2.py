@@ -550,7 +550,7 @@ elif page == "Identifying Main Routes and Problem Stations":
     # ───────────────────────────────────────────────
     # PAGE 5: PREDICTIVE REBALANCING STRATEGY
     # ───────────────────────────────────────────────
-    elif page == "Predictive Rebalancing Strategy":
+elif page == "Predictive Rebalancing Strategy":
     st.title("🔁 Predictive Rebalancing Strategy")
     
     st.markdown("""
