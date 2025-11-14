@@ -156,7 +156,7 @@ if page == "About Citibike":
     fig.update_xaxes(type='category', categoryorder='array', categoryarray=[str(h) for h in range(24)])
     st.plotly_chart(fig, use_container_width=True)
     
-    
+    st.markdown("---")
     st.markdown("### Hourly ride behavior for members and casual users")
     
     st.markdown("""
