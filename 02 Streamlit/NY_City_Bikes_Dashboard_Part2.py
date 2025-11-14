@@ -752,6 +752,7 @@ elif page == "Predictive Rebalancing Strategy":
 # ───────────────────────────────────────────────
 elif page == "Waterfront Expansion Opportunities":
     st.title("Waterfront Expansion Opportunities")
+    
     st.markdown("""
     Explore **spatial demand clusters** along **Hudson and East River** to identify where 
     new stations could relieve congestion and serve leisure riders.
@@ -759,8 +760,10 @@ elif page == "Waterfront Expansion Opportunities":
     Our approach focuses mainly on places where people are able to access the waterline. 
     To identify locations where new bike stations can relieve congestion and serve leisure riders.
     
+    **Approach Overview:**  
+    This analysis applies a **supply-demand framework** to identify capacity gaps.
+
     **Methodology**:
-    
     **Define Waterfront Zones by using Waterfront Access Plans (WAPs)** with focus only on zones with legal public access for station placement:
     Hunters Point
     Newtown Creek
@@ -776,29 +779,9 @@ elif page == "Waterfront Expansion Opportunities":
     **Demand**: Percentage of trips that start or end in these zones
     **Gap**: Areas where demand exceeds supply are underserved and ideal for new stations
     
-    Peak Month Analysis
+    **Peak Month Analysis**
     Identify months with highest waterfront demand to guide expansion timing
         
-    
-    
-        
-    """)
-
-    # ============================================================================
-    # QUESTION & APPROACH
-    # ============================================================================
-    st.markdown("### **Question:** How to determine how many more stations to add along the water?")
-    st.markdown("""
-    **Approach Overview:**  
-    This analysis applies a **supply-demand framework** to identify capacity gaps.
-
-    **Methodology:**
-    1. Define *waterfront stations* based on longitude thresholds  
-       *(Hudson River: < -74.01, East River: > -73.95)*
-    2. Calculate **Supply** → % of all stations located near the water  
-    3. Calculate **Demand** → % of trips that start *or* end near the water  
-    4. Perform **Gap Analysis** → If demand exceeds supply, the waterfront is underserved  
-    5. Identify **Peak-Months** to support targeted expansion
     """)
 
     # ============================================================================
