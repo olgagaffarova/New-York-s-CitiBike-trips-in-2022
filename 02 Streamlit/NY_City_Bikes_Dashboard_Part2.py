@@ -155,13 +155,15 @@ if page == "About Citibike":
     )
     fig.update_xaxes(type='category', categoryorder='array', categoryarray=[str(h) for h in range(24)])
     st.plotly_chart(fig, use_container_width=True)
-
-
+    
+    
+    st.markdown("### Hourly ride behavior for members and casual users")
+    
     st.markdown("""
     This section compares **hourly ride behavior** for **members vs casual users**, 
     with breakdown by **bike type (classic vs electric)**.
     """)
-
+    
     st.markdown("""
     - Casual riders peak **mid-day (2–5 PM)**, mostly leisure and tourism.
     - Members show strong **commuter peaks (7–9 AM, 5–7 PM)**.
