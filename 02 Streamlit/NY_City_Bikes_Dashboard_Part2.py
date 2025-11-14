@@ -567,11 +567,10 @@ elif page == "Predictive Rebalancing Strategy":
     Stations where many trips END but few START become overcrowded (receivers).
     """)
 
-
 	# ------------------------------------------------
 	# Sidebar filters
 	# ------------------------------------------------
-	st.sidebar.markdown("### 🔍 Filter View")
+    st.sidebar.markdown("### 🔍 Filter View")
 	
 	# Month filter
 	selected_month = st.sidebar.selectbox(
