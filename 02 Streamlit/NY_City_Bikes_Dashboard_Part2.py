@@ -474,8 +474,24 @@ elif page == "Identifying Main Routes and Problem Stations":
     st.title("🗺️ Main Routes and Problem Stations")
 
     st.markdown("""
-    The **top 14% of all routes** account for **80% of trips**.  
-    This analysis identifies those key corridors and stations with persistent imbalances.
+    ### Pareto Analysis of CitiBike Routes (80/20 Rule)
+    
+    To identify the key corridors that carry most of the system's traffic,  
+    I applied a **Pareto analysis** to all Origin → Destination (OD) routes.
+    
+    **Approach:**
+    1. Count total trips for every OD pair in the dataset.  
+    2. Sort all routes from highest to lowest volume.  
+    3. Calculate each route’s % contribution to total system traffic.  
+    4. Compute cumulative % to find the point where **80% of trips** is reached.
+    
+    **Result:**  
+    Only **14% of all routes** account for **80% of total CitiBike trips**.
+    
+    These high-traffic corridors (visualized on the map below) reveal:
+    - the main commuter pathways,
+    - areas with the highest operational pressure,
+    - priority corridors for rebalancing and infrastructure expansion.
     """)
 
     path_to_html = "02 Streamlit/nyc_bike_map.html"
@@ -484,6 +500,40 @@ elif page == "Identifying Main Routes and Problem Stations":
     st.components.v1.html(html_data, height=900, scrolling=True)
 
     st.markdown("### CitiBike Station Imbalance (Rentals − Returns)")
+
+    st.markdown("""
+    To identify stations that consistently run **out of bikes** or become **overfilled**, we calculated the **net flow** of bikes at every station:
+    
+    **Net Flow = Trips Starting at Station – Trips Ending at Station**
+    
+    - 🔵 **Positive net flow (blue):**  
+      More bikes **leave** than arrive → **shortage risk**  
+      → station needs **bike delivery**.
+    
+    - 🔴 **Negative net flow (red):**  
+      More bikes **arrive** than leave → **overflow risk**  
+      → station needs **bike removal**.
+    
+    **Approach:**
+    1. Group all rides by station.  
+    2. Count **starts** and **ends** for each station.  
+    3. Compute the **mean net flow** across the year.  
+    4. Rank stations to highlight the strongest imbalances.
+    
+    **What we learn:**
+    - Midtown stations such as **Broadway**, **Madison Ave**, and **West End Ave**  
+      show persistent *shortages*.  
+    - Downtown stations such as **Old Slip & South St** and **Washington Square E**  
+      accumulate bikes and frequently overflow.
+    
+    **Action:**  
+    By relocating bikes from **overflowing red stations → to shortage blue stations** CitiBike can:
+    - reduce shortages and full-dock issues
+    - improve rider experience  
+    - reduce redistribution truck mileage
+    """)
+
+    
     colors = ['tomato' if x > 0 else blue for x in donors_receivers['mean_net_flow']]
     fig = go.Figure(go.Bar(y=donors_receivers['station_name'], x=donors_receivers['mean_net_flow'],
                            orientation='h', marker_color=colors,
