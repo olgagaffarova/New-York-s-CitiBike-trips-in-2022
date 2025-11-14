@@ -477,7 +477,7 @@ elif page == "Identifying Main Routes and Problem Stations":
     ### Pareto Analysis of CitiBike Routes (80/20 Rule)
     
     To identify the key corridors that carry most of the system's traffic,  
-    I applied a **Pareto analysis** to all Origin → Destination (OD) routes.
+    We applied a **Pareto analysis** to all Origin → Destination (OD) routes.
     
     **Approach:**
     1. Count total trips for every OD pair in the dataset.  
@@ -502,8 +502,12 @@ elif page == "Identifying Main Routes and Problem Stations":
     st.markdown("### CitiBike Station Imbalance (Rentals − Returns)")
 
     st.markdown("""
-    To identify stations that consistently run **out of bikes** or become **overfilled**, we calculated the **net flow** of bikes at every station:
-    
+    To identify stations that consistently run out of bikes or become overfilled, 
+    we calculated the net flow of bikes for our top 14% most popular stations. 
+    Rebalancing these stations is crucial because this small group accounts for roughly 80% of overall Citi Bike demand, 
+    meaning that correcting their imbalance has the greatest impact on system-wide performance.
+    """)
+
     **Net Flow = Trips Starting at Station – Trips Ending at Station**
     
     - 🔵 **Positive net flow (blue):**  
