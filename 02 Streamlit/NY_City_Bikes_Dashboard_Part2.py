@@ -506,7 +506,6 @@ elif page == "Identifying Main Routes and Problem Stations":
     we calculated the net flow of bikes for our top 14% most popular stations. 
     Rebalancing these stations is crucial because this small group accounts for roughly 80% of overall Citi Bike demand, 
     meaning that correcting their imbalance has the greatest impact on system-wide performance.
-    """)
 
     **Net Flow = Trips Starting at Station – Trips Ending at Station**
     
