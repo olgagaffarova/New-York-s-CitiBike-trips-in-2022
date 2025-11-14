@@ -547,10 +547,10 @@ elif page == "Identifying Main Routes and Problem Stations":
                       font=dict(color='black', size=11), margin=dict(l=220, r=40, t=80, b=40))
     st.plotly_chart(fig, use_container_width=True)
 
-# ───────────────────────────────────────────────
-# PAGE 5: PREDICTIVE REBALANCING STRATEGY
-# ───────────────────────────────────────────────
-elif page == "Predictive Rebalancing Strategy":
+    # ───────────────────────────────────────────────
+    # PAGE 5: PREDICTIVE REBALANCING STRATEGY
+    # ───────────────────────────────────────────────
+    elif page == "Predictive Rebalancing Strategy":
     st.title("🔁 Predictive Rebalancing Strategy")
     
     st.markdown("""
@@ -566,206 +566,206 @@ elif page == "Predictive Rebalancing Strategy":
     **Key Insight:** Stations where many trips START but few END become depleted (donors).  
     Stations where many trips END but few START become overcrowded (receivers).
     """)
-
-	# ------------------------------------------------
-	# Sidebar filters
-	# ------------------------------------------------
+    
+    # ------------------------------------------------
+    # Sidebar filters
+    # ------------------------------------------------
     st.sidebar.markdown("### 🔍 Filter View")
-	
-	# Month filter
-	selected_month = st.sidebar.selectbox(
-	    "Select Month:", 
-	    sorted(popular_stations["month"].unique()),
-	    format_func=lambda x: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
-	                           "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][int(x)-1]
-	)
-	
-	# Day filter (assuming 'day' is day of month or day of week)
-	selected_day = st.sidebar.selectbox(
-	    "Select Day:", 
-	    sorted(popular_stations["day"].unique())
-	)
-	
-	# Hour slider
-	selected_hour = st.sidebar.slider(
-	    "Select Hour (0–23):", 
-	    min_value=int(popular_stations["hour"].min()), 
-	    max_value=int(popular_stations["hour"].max()), 
-	    value=8
-	)
-	
-	# ------------------------------------------------
-	# Filter dataset based on user selection
-	# ------------------------------------------------
-	filtered_df = popular_stations[
-	    (popular_stations["month"] == selected_month) &
-	    (popular_stations["day"] == selected_day) &
-	    (popular_stations["hour"] == selected_hour)
-	].copy()
-	
-	# ------------------------------------------------
-	# Check if data exists for selection
-	# ------------------------------------------------
-	if filtered_df.empty:
-	    st.warning("⚠️ No data available for this month, day, and hour combination. Please try different filters.")
-	else:
-	    # ------------------------------------------------
-	    # Calculate inflow/outflow summary
-	    # ------------------------------------------------
-	    st.markdown("### 🚲 Net Bike Flow Analysis")
-	    
-	    st.info("""
-	    **Understanding Net Flow:**  
-	    • **Negative values** (red) = More bikes LEAVE than arrive → Station becomes EMPTY → Needs bikes DELIVERED  
-	    • **Positive values** (green) = More bikes ARRIVE than leave → Station becomes FULL → Needs bikes COLLECTED
-	    """)
-	
-	    # Negative net_flow = more bikes leaving (donor station, needs bikes added)
-	    # Positive net_flow = more bikes arriving (receiver station, needs bikes removed)
-	    filtered_df["net_flow_status"] = filtered_df["net_flow"].apply(
-	        lambda x: "Donor Station (Gets Empty)" if x < 0 else "Receiver Station (Gets Full)"
-	    )
-	
-	    # Calculate rebalancing totals
-	    bikes_to_collect = filtered_df[filtered_df["net_flow"] > 0]["net_flow"].sum()
-	    bikes_to_deliver = abs(filtered_df[filtered_df["net_flow"] < 0]["net_flow"].sum())
-	
-	    col1, col2 = st.columns(2)
-	    col1.metric("📦 Bikes to Deliver", f"{int(bikes_to_deliver)}", 
-	                help="Total bikes needed at depleting stations")
-	    col2.metric("🚚 Bikes to Collect", f"{int(bikes_to_collect)}", 
-	                help="Total bikes to remove from overcrowded stations")
-	
-	    # Balance check
-	    if abs(bikes_to_deliver - bikes_to_collect) < 10:
-	        st.success("✅ System is roughly balanced — bikes collected can supply depleting stations")
-	    else:
-	        st.warning(f"⚠️ Imbalance detected: {abs(int(bikes_to_deliver - bikes_to_collect))} bike difference")
-	
-	    # ------------------------------------------------
-	    # Sort and take top 20 stations by absolute net flow
-	    # ------------------------------------------------
-	    top_stations = filtered_df.copy()
-	    top_stations['abs_net_flow'] = top_stations['net_flow'].abs()
-	    top_stations = top_stations.sort_values('abs_net_flow', ascending=False).head(20)
-	    top_stations = top_stations.sort_values('net_flow', ascending=True)  # For better visual ordering
-	
-	    # ------------------------------------------------
-	    # Plotly visualization
-	    # ------------------------------------------------
-	    fig = px.bar(
-	        top_stations,
-	        x="net_flow",
-	        y="station",
-	        orientation='h',
-	        color="net_flow_status",
-	        color_discrete_map={
-	            "Donor Station (Gets Empty)": "#ef4444",      # Red for needs delivery
-	            "Receiver Station (Gets Full)": "#22c55e"     # Green for needs collection
-	        },
-	        title=f"Top 20 Stations by Rebalancing Priority (Month: {selected_month}, Day: {selected_day}, Hour: {selected_hour}:00)",
-	        hover_data={
-	            "rides_started": True,
-	            "rides_ended": True,
-	            "total_activity": True,
-	            "net_flow_status": False
-	        },
-	        labels={
-	            "net_flow": "Net Bike Flow (Departures - Arrivals)",
-	            "station": "Station Name",
-	            "rides_started": "Rides Started (Departures)",
-	            "rides_ended": "Rides Ended (Arrivals)",
-	            "total_activity": "Total Activity"
-	        }
-	    )
-	
-	    fig.update_layout(
-	        xaxis_title="Net Bike Flow: Negative = Needs Delivery | Positive = Needs Collection",
-	        yaxis_title="Station Name",
-	        title_x=0.05,
-	        title_font=dict(size=16),
-	        height=700,
-	        plot_bgcolor="rgba(0,0,0,0)",
-	        paper_bgcolor="rgba(0,0,0,0)",
-	        legend_title_text="Station Type",
-	        showlegend=True,
-	        xaxis=dict(zeroline=True, zerolinewidth=2, zerolinecolor='gray')
-	    )
-	
-	    st.plotly_chart(fig, use_container_width=True)
-	
-	    # ------------------------------------------------
-	    # Detailed Table View
-	    # ------------------------------------------------
-	    st.markdown("### 📊 Detailed Rebalancing Operations")
-	    
-	    # Prepare display dataframe
-	    display_df = top_stations[['station', 'rides_started', 'rides_ended', 'net_flow', 'total_activity']].copy()
-	    display_df['rebalancing_action'] = display_df['net_flow'].apply(
-	        lambda x: f"🚚 DELIVER {abs(int(x))} bikes" if x < 0 else f"📦 COLLECT {int(x)} bikes"
-	    )
-	    display_df['priority'] = display_df['net_flow'].abs()
-	    display_df = display_df.sort_values('priority', ascending=False)
-	    
-	    # Rename columns for display
-	    display_df = display_df[['station', 'rides_started', 'rides_ended', 'net_flow', 'total_activity', 'rebalancing_action']]
-	    display_df.columns = ['Station', 'Departures', 'Arrivals', 'Net Flow', 'Total Activity', 'Required Action']
-	    
-	    st.dataframe(
-	        display_df,
-	        use_container_width=True,
-	        hide_index=True
-	    )
-	
-	    # ------------------------------------------------
-	    # Business interpretation
-	    # ------------------------------------------------
-	    st.markdown("""
-	    ---
-	    ### 📈 Business Interpretation
-	    
-	    **How to Read This Analysis:**
-	    
-	    1. **Donor Stations (Red/Negative)** 🚴‍♂️→→→
-	       - These are **trip origin points** where riders pick up bikes
-	       - More trips START here than END here
-	       - Stations gradually **run out of bikes** throughout the day
-	       - **Action needed:** DELIVER bikes to these stations
-	       - *Example: Residential areas during morning rush hour*
-	    
-	    2. **Receiver Stations (Green/Positive)** →→→🏢
-	       - These are **trip destination points** where riders drop off bikes
-	       - More trips END here than START here
-	       - Stations gradually **fill up** and may exceed capacity
-	       - **Action needed:** COLLECT bikes from these stations
-	       - *Example: Business districts during morning rush hour*
-	    
-	    **Operational Strategy:**
-	    - Schedule rebalancing trucks **1 hour before** peak times:
-	      - **Morning prep (6–7 AM):** Position bikes at residential/transit hubs before commute
-	      - **Afternoon prep (4–5 PM):** Position bikes at business districts before evening rush
-	    - Use this data to create **optimized collection and delivery routes**
-	    - Monitor real-time to adjust for weather, events, or anomalies
-	    
-	    **Cost-Benefit:**
-	    - Prevents **lost revenue** from empty stations (unsatisfied demand)
-	    - Prevents **operational issues** from overflow (bikes blocking sidewalks)
-	    - Improves **customer satisfaction** (bikes available when/where needed)
-	    """)
-	
-	    # ------------------------------------------------
-	    # Download option
-	    # ------------------------------------------------
-	    csv = display_df.to_csv(index=False)
-	    st.download_button(
-	        label="📥 Download Rebalancing Plan as CSV",
-	        data=csv,
-	        file_name=f"rebalancing_plan_M{selected_month}_D{selected_day}_H{selected_hour}.csv",
-	        mime="text/csv"
-	    )
-
-
-
+    
+    # Month filter
+    selected_month = st.sidebar.selectbox(
+        "Select Month:", 
+        sorted(popular_stations["month"].unique()),
+        format_func=lambda x: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+                               "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][int(x)-1]
+    )
+    
+    # Day filter (assuming 'day' is day of month or day of week)
+    selected_day = st.sidebar.selectbox(
+        "Select Day:", 
+        sorted(popular_stations["day"].unique())
+    )
+    
+    # Hour slider
+    selected_hour = st.sidebar.slider(
+        "Select Hour (0–23):", 
+        min_value=int(popular_stations["hour"].min()), 
+        max_value=int(popular_stations["hour"].max()), 
+        value=8
+    )
+    
+    # ------------------------------------------------
+    # Filter dataset based on user selection
+    # ------------------------------------------------
+    filtered_df = popular_stations[
+        (popular_stations["month"] == selected_month) &
+        (popular_stations["day"] == selected_day) &
+        (popular_stations["hour"] == selected_hour)
+    ].copy()
+    
+    # ------------------------------------------------
+    # Check if data exists for selection
+    # ------------------------------------------------
+    if filtered_df.empty:
+        st.warning("⚠️ No data available for this month, day, and hour combination. Please try different filters.")
+    else:
+        # ------------------------------------------------
+        # Calculate inflow/outflow summary
+        # ------------------------------------------------
+        st.markdown("### 🚲 Net Bike Flow Analysis")
+        
+        st.info("""
+        **Understanding Net Flow:**  
+        • **Negative values** (red) = More bikes LEAVE than arrive → Station becomes EMPTY → Needs bikes DELIVERED  
+        • **Positive values** (green) = More bikes ARRIVE than leave → Station becomes FULL → Needs bikes COLLECTED
+        """)
+    
+        # Negative net_flow = more bikes leaving (donor station, needs bikes added)
+        # Positive net_flow = more bikes arriving (receiver station, needs bikes removed)
+        filtered_df["net_flow_status"] = filtered_df["net_flow"].apply(
+            lambda x: "Donor Station (Gets Empty)" if x < 0 else "Receiver Station (Gets Full)"
+        )
+    
+        # Calculate rebalancing totals
+        bikes_to_collect = filtered_df[filtered_df["net_flow"] > 0]["net_flow"].sum()
+        bikes_to_deliver = abs(filtered_df[filtered_df["net_flow"] < 0]["net_flow"].sum())
+    
+        col1, col2 = st.columns(2)
+        col1.metric("📦 Bikes to Deliver", f"{int(bikes_to_deliver)}", 
+                    help="Total bikes needed at depleting stations")
+        col2.metric("🚚 Bikes to Collect", f"{int(bikes_to_collect)}", 
+                    help="Total bikes to remove from overcrowded stations")
+    
+        # Balance check
+        if abs(bikes_to_deliver - bikes_to_collect) < 10:
+            st.success("✅ System is roughly balanced — bikes collected can supply depleting stations")
+        else:
+            st.warning(f"⚠️ Imbalance detected: {abs(int(bikes_to_deliver - bikes_to_collect))} bike difference")
+    
+        # ------------------------------------------------
+        # Sort and take top 20 stations by absolute net flow
+        # ------------------------------------------------
+        top_stations = filtered_df.copy()
+        top_stations['abs_net_flow'] = top_stations['net_flow'].abs()
+        top_stations = top_stations.sort_values('abs_net_flow', ascending=False).head(20)
+        top_stations = top_stations.sort_values('net_flow', ascending=True)  # For better visual ordering
+    
+        # ------------------------------------------------
+        # Plotly visualization
+        # ------------------------------------------------
+        fig = px.bar(
+            top_stations,
+            x="net_flow",
+            y="station",
+            orientation='h',
+            color="net_flow_status",
+            color_discrete_map={
+                "Donor Station (Gets Empty)": "#ef4444",      # Red for needs delivery
+                "Receiver Station (Gets Full)": "#22c55e"     # Green for needs collection
+            },
+            title=f"Top 20 Stations by Rebalancing Priority (Month: {selected_month}, Day: {selected_day}, Hour: {selected_hour}:00)",
+            hover_data={
+                "rides_started": True,
+                "rides_ended": True,
+                "total_activity": True,
+                "net_flow_status": False
+            },
+            labels={
+                "net_flow": "Net Bike Flow (Departures - Arrivals)",
+                "station": "Station Name",
+                "rides_started": "Rides Started (Departures)",
+                "rides_ended": "Rides Ended (Arrivals)",
+                "total_activity": "Total Activity"
+            }
+        )
+    
+        fig.update_layout(
+            xaxis_title="Net Bike Flow: Negative = Needs Delivery | Positive = Needs Collection",
+            yaxis_title="Station Name",
+            title_x=0.05,
+            title_font=dict(size=16),
+            height=700,
+            plot_bgcolor="rgba(0,0,0,0)",
+            paper_bgcolor="rgba(0,0,0,0)",
+            legend_title_text="Station Type",
+            showlegend=True,
+            xaxis=dict(zeroline=True, zerolinewidth=2, zerolinecolor='gray')
+        )
+    
+        st.plotly_chart(fig, use_container_width=True)
+    
+        # ------------------------------------------------
+        # Detailed Table View
+        # ------------------------------------------------
+        st.markdown("### 📊 Detailed Rebalancing Operations")
+        
+        # Prepare display dataframe
+        display_df = top_stations[['station', 'rides_started', 'rides_ended', 'net_flow', 'total_activity']].copy()
+        display_df['rebalancing_action'] = display_df['net_flow'].apply(
+            lambda x: f"🚚 DELIVER {abs(int(x))} bikes" if x < 0 else f"📦 COLLECT {int(x)} bikes"
+        )
+        display_df['priority'] = display_df['net_flow'].abs()
+        display_df = display_df.sort_values('priority', ascending=False)
+        
+        # Rename columns for display
+        display_df = display_df[['station', 'rides_started', 'rides_ended', 'net_flow', 'total_activity', 'rebalancing_action']]
+        display_df.columns = ['Station', 'Departures', 'Arrivals', 'Net Flow', 'Total Activity', 'Required Action']
+        
+        st.dataframe(
+            display_df,
+            use_container_width=True,
+            hide_index=True
+        )
+    
+        # ------------------------------------------------
+        # Business interpretation
+        # ------------------------------------------------
+        st.markdown("""
+        ---
+        ### 📈 Business Interpretation
+        
+        **How to Read This Analysis:**
+        
+        1. **Donor Stations (Red/Negative)** 🚴‍♂️→→→
+           - These are **trip origin points** where riders pick up bikes
+           - More trips START here than END here
+           - Stations gradually **run out of bikes** throughout the day
+           - **Action needed:** DELIVER bikes to these stations
+           - *Example: Residential areas during morning rush hour*
+        
+        2. **Receiver Stations (Green/Positive)** →→→🏢
+           - These are **trip destination points** where riders drop off bikes
+           - More trips END here than START here
+           - Stations gradually **fill up** and may exceed capacity
+           - **Action needed:** COLLECT bikes from these stations
+           - *Example: Business districts during morning rush hour*
+        
+        **Operational Strategy:**
+        - Schedule rebalancing trucks **1 hour before** peak times:
+          - **Morning prep (6–7 AM):** Position bikes at residential/transit hubs before commute
+          - **Afternoon prep (4–5 PM):** Position bikes at business districts before evening rush
+        - Use this data to create **optimized collection and delivery routes**
+        - Monitor real-time to adjust for weather, events, or anomalies
+        
+        **Cost-Benefit:**
+        - Prevents **lost revenue** from empty stations (unsatisfied demand)
+        - Prevents **operational issues** from overflow (bikes blocking sidewalks)
+        - Improves **customer satisfaction** (bikes available when/where needed)
+        """)
+    
+        # ------------------------------------------------
+        # Download option
+        # ------------------------------------------------
+        csv = display_df.to_csv(index=False)
+        st.download_button(
+            label="📥 Download Rebalancing Plan as CSV",
+            data=csv,
+            file_name=f"rebalancing_plan_M{selected_month}_D{selected_day}_H{selected_hour}.csv",
+            mime="text/csv"
+        )
+    
+    
+    
 
 # ───────────────────────────────────────────────
 # PAGE 6: WATERFRONT EXPANSION OPPORTUNITIES
